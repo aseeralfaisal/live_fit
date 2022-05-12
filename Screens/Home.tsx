@@ -1,0 +1,236 @@
+import React, { useState, useEffect } from 'react'
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  Button,
+} from 'react-native'
+import Header from '../Components/Header'
+import { useColorScheme } from 'react-native-appearance'
+import { AnimatedCircularProgress } from 'react-native-circular-progress'
+import { Accelerometer } from 'expo-sensors'
+import { useNavigation, NavigationProp } from '@react-navigation/native'
+// import Menu from './Meals'
+// import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+// import * as icons from '@fortawesome/free-solid-svg-icons'
+
+type navigationList = {
+  FoodScan: undefined
+  Workouts: undefined
+  BMI: undefined
+  WalkSteps: undefined
+}
+export default function Home() {
+  const navigation = useNavigation<NavigationProp<navigationList>>()
+  let colorScheme = useColorScheme()
+
+  return (
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: '#fff',
+      }}
+    >
+      <Header />
+
+      <View style={styles.twoTileView}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.tileView}
+          onPress={() => navigation.navigate('FoodScan')}
+        >
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <View style={styles.roundbg}>
+              <Image
+                source={require('../assets/icons/tips.png')}
+                style={styles.circleIcon}
+              />
+              {/* <FontAwesomeIcon icon={icons.faBalanceScale} size={55} color='#555' /> */}
+            </View>
+            <Text style={styles.tileText}>Food Scan</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.tileView}
+          onPress={() => navigation.navigate('Workouts')}
+        >
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <View style={styles.roundbg}>
+              {/* <FontAwesome name='life-buoy' size={55} style={{ color: "#888" }} /> */}
+              <Image
+                source={require('../assets/icons/workout.png')}
+                style={styles.circleIcon}
+              />
+            </View>
+            <Text style={styles.tileText}>Workout</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.twoTileView}>
+        {/* <TouchableOpacity activeOpacity={0.7} style={styles.tileView}>
+          <View style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <View style={styles.roundbg}>
+              <Image source={require('../assets/icons/statistics.png')} style={styles.circleIcon} />
+            </View>
+            <Text style={styles.tileText}>Statistics</Text>
+          </View>
+        </TouchableOpacity> */}
+
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.tileView}
+          onPress={() => navigation.navigate('Map')}
+        >
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <View style={styles.roundbg}>
+              <Image
+                source={require('../assets/icons/tips.png')}
+                style={styles.circleIcon}
+              />
+            </View>
+            <Text style={styles.tileText}>Discover</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.twoTileView}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.tileView}
+          onPress={() => navigation.navigate('BMI')}
+        >
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <View style={styles.roundbg}>
+              <Image
+                source={require('../assets/icons/massindex.png')}
+                style={styles.circleIcon}
+              />
+            </View>
+            <Text style={styles.tileText}>Mass Index</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.tileView}
+          onPress={() => navigation.navigate('WalkSteps')}
+        >
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <View style={styles.roundbg}>
+              <Image
+                source={require('../assets/icons/walk.png')}
+                style={styles.circleIcon}
+              />
+            </View>
+            <Text style={styles.tileText}>Pedometer</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  twoTileView: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  tileView: {
+    width: 140,
+    borderRadius: 20,
+    height: 165,
+    margin: 12,
+    backgroundColor: '#ecf4f7',
+  },
+  circlesContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  tile: {
+    borderRadius: 25,
+    backgroundColor: 'rgb(80,120,200)',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: 330,
+  },
+  tileText: {
+    color: '#555',
+    alignSelf: 'center',
+    fontFamily: 'Comfortaa-Bold',
+    fontSize: 18,
+    marginTop: 14,
+  },
+  tileMenuIcon: {
+    height: 35,
+    width: 35,
+    marginHorizontal: 10,
+  },
+  roundbg: {
+    backgroundColor: '#fff',
+    borderRadius: 100,
+    width: 100,
+    height: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 14,
+  },
+  circleTile: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginHorizontal: 8,
+    borderRadius: 15,
+  },
+  circleIcon: {
+    // marginTop: 28,
+    width: 55,
+    height: 55,
+    resizeMode: 'contain',
+    tintColor: 'rgb(100,100,100)', //rgb(41, 171, 226) //rgb(255, 140, 83)
+  },
+  stepsText: {
+    color: 'rgb(80,80,80)',
+    alignSelf: 'center',
+    fontFamily: 'Comfortaa-Bold',
+    fontSize: 16,
+    marginVertical: 120,
+  },
+  icon: {
+    height: 70,
+    width: 70,
+    alignSelf: 'center',
+    marginHorizontal: 8,
+  },
+})

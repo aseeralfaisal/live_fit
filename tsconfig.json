@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "ES6",
+    "target": "ES6",
+    "declaration": true,
+    "outDir": "build",
+    "strict": true,
+    "jsx": "react-native",
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+  },
+  // "include": ["src/**/*"],
+  "extends": "expo/tsconfig.base"
+}
