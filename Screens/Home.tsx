@@ -89,6 +89,7 @@ export default function Home() {
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
+              marginLeft: 12
             }}
           >
             <View style={{ alignItems: 'center' }}>
@@ -120,7 +121,7 @@ export default function Home() {
             </View>
             <Image
               source={require('../assets/icons/workout_btn.png')}
-              style={{ resizeMode: 'contain', width: 40 }}
+              style={{ resizeMode: 'contain', width: 40, marginLeft: -10 }}
             />
           </View>
         </LinearGradient>
@@ -139,7 +140,7 @@ export default function Home() {
           >
             <Image
               source={require('../assets/icons/calories.png')}
-              style={{ resizeMode: 'contain', width: 70 }}
+              style={{ resizeMode: 'contain', width: 90 }}
             />
             <View style={{ marginHorizontal: 10 }}>
               <Text style={styles.textDark}>CALORIES</Text>
@@ -162,7 +163,7 @@ export default function Home() {
         >
           <Image
             source={require('../assets/icons/home_workout.png')}
-            style={{ resizeMode: 'contain', width: 70 }}
+            style={{ resizeMode: 'contain', width: 60, marginHorizontal: 14 }}
           />
           <View style={{ marginLeft: -30 }}>
             <Text style={styles.textDark}>Home Workout</Text>
