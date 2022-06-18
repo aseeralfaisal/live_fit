@@ -91,12 +91,6 @@ export default function Home() {
               alignItems: 'center',
             }}
           >
-            <View style={{ marginHorizontal: 10 }}>
-              <Text style={[styles.topbarText, { fontWeight: 'bold' }]}>
-                BMI (Body Mass Index)
-              </Text>
-              <Text style={styles.topbarText}>You have a normal weight</Text>
-            </View>
             <View style={{ alignItems: 'center' }}>
               <AnimatedCircularProgress
                 size={80}
@@ -113,22 +107,64 @@ export default function Home() {
                   fontSize: 20,
                 }}
               >
-                40
+                20
               </Text>
             </View>
+            <View style={{ marginHorizontal: 10 }}>
+              <Text style={[styles.topbarText, { fontWeight: 'bold' }]}>
+                Mass Index
+              </Text>
+              <Text style={[styles.topbarText, { width: 170 }]}>
+                You have a normal weight
+              </Text>
+            </View>
+            <Image
+              source={require('../assets/icons/workout_btn.png')}
+              style={{ resizeMode: 'contain', width: 40 }}
+            />
           </View>
         </LinearGradient>
       </TouchableOpacity>
+      <TouchableOpacity activeOpacity={0.5}>
+        <LinearGradient
+          colors={['#C58BF255', '#EEA4CE33']}
+          style={[styles.gradientBar, { height: 100, marginTop: 15 }]}
+        >
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Image
+              source={require('../assets/icons/calories.png')}
+              style={{ resizeMode: 'contain', width: 70 }}
+            />
+            <View style={{ marginHorizontal: 10 }}>
+              <Text style={styles.textDark}>CALORIES</Text>
+              <Text style={styles.textDarkLighter}>
+                In maintanance calories
+              </Text>
+            </View>
+          </View>
+          <Image
+            source={require('../assets/icons/workout_btn.png')}
+            style={{ resizeMode: 'contain', width: 40 }}
+          />
+        </LinearGradient>
+      </TouchableOpacity>
+
       <TouchableOpacity activeOpacity={0.5} style={{ marginTop: 20 }}>
         <LinearGradient
           colors={['#C58BF255', '#EEA4CE33']}
-          style={[styles.gradientBar]}
+          style={[styles.gradientBar, { height: 100 }]}
         >
           <Image
             source={require('../assets/icons/home_workout.png')}
-            style={{ resizeMode: 'contain', width: 72 }}
+            style={{ resizeMode: 'contain', width: 70 }}
           />
-          <View style={{ marginLeft: 10 }}>
+          <View style={{ marginLeft: -30 }}>
             <Text style={styles.textDark}>Home Workout</Text>
             <Text style={styles.textDarkLighter}>
               Burn calories simply by following the workouts
@@ -144,7 +180,7 @@ export default function Home() {
         <LineChart
           data={data}
           width={screenWidth}
-          height={220}
+          height={180}
           chartConfig={chartConfig}
         />
       </View>
@@ -163,9 +199,9 @@ const styles = StyleSheet.create({
   gradientBar: {
     padding: 15,
     borderRadius: 25,
-    marginHorizontal: 30,
-    height: 146,
-    width: '85%',
+    marginHorizontal: 20,
+    height: 130,
+    // width: '95%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',

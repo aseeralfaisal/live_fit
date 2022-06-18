@@ -122,9 +122,9 @@ export default function TabScreen() {
                 <Image
                   source={require('./assets/icons/search.png')}
                   style={{
-                    height: 120,
-                    width: 120,
-                    marginTop: -20,
+                    height: 110,
+                    width: 110,
+                    marginTop: -16,
                     resizeMode: 'contain',
                   }}
                 />
