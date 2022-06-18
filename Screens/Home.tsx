@@ -12,9 +12,20 @@ import { useColorScheme } from 'react-native-appearance'
 import { AnimatedCircularProgress } from 'react-native-circular-progress'
 import { Accelerometer } from 'expo-sensors'
 import { useNavigation, NavigationProp } from '@react-navigation/native'
-// import Menu from './Meals'
-// import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-// import * as icons from '@fortawesome/free-solid-svg-icons'
+import { LinearGradient } from 'expo-linear-gradient'
+import * as Progress from 'react-native-progress'
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import * as icons from '@fortawesome/free-solid-svg-icons'
+import {
+  LineChart,
+  BarChart,
+  PieChart,
+  ProgressChart,
+  ContributionGraph,
+  StackedBarChart,
+} from 'react-native-chart-kit'
+import { Dimensions } from 'react-native'
+const screenWidth = Dimensions.get('window').width - 50
 
 type navigationList = {
   FoodScan: undefined
@@ -23,8 +34,42 @@ type navigationList = {
   WalkSteps: undefined
 }
 export default function Home() {
+  const shadowStyle = {
+    width: 100,
+    height: 100,
+    color: '#000',
+    border: 2,
+    radius: 3,
+    opacity: 0.2,
+    x: 0,
+    y: 3,
+    style: { marginVertical: 5 },
+  }
+
   const navigation = useNavigation<NavigationProp<navigationList>>()
   let colorScheme = useColorScheme()
+
+  const data = {
+    labels: ['SAT', 'SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI'],
+    datasets: [
+      {
+        data: [1800, 1850, 2000, 1705, 1780, 1980],
+        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
+        strokeWidth: 4, // optional
+      },
+    ],
+    legend: ['Over eaten'],
+  }
+  const chartConfig = {
+    backgroundGradientFrom: '#1E2923',
+    backgroundGradientFromOpacity: 0,
+    backgroundGradientTo: '#08130D',
+    backgroundGradientToOpacity: 0.0,
+    color: (opacity = 1) => `#7B6F72`,
+    strokeWidth: 2, // optional, default 3
+    barPercentage: 0.5,
+    useShadowColorFromDataset: false,
+  }
 
   return (
     <View
@@ -34,203 +79,120 @@ export default function Home() {
       }}
     >
       <Header />
-
-      <View style={styles.twoTileView}>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={styles.tileView}
-          onPress={() => navigation.navigate('FoodScan')}
+      <TouchableOpacity activeOpacity={0.5}>
+        <LinearGradient
+          colors={['#92A3FD', '#9DCEFF']}
+          style={styles.gradientBar}
         >
           <View
             style={{
-              display: 'flex',
-              flexDirection: 'column',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
               alignItems: 'center',
             }}
           >
-            <View style={styles.roundbg}>
-              <Image
-                source={require('../assets/icons/tips.png')}
-                style={styles.circleIcon}
-              />
-              {/* <FontAwesomeIcon icon={icons.faBalanceScale} size={55} color='#555' /> */}
+            <View style={{ marginHorizontal: 10 }}>
+              <Text style={[styles.topbarText, { fontWeight: 'bold' }]}>
+                BMI (Body Mass Index)
+              </Text>
+              <Text style={styles.topbarText}>You have a normal weight</Text>
             </View>
-            <Text style={styles.tileText}>Food Scan</Text>
+            <View style={{ alignItems: 'center' }}>
+              <AnimatedCircularProgress
+                size={80}
+                width={14}
+                fill={40}
+                tintColor='#eeefff'
+                backgroundColor='#3d5875'
+              />
+              <Text
+                style={{
+                  position: 'absolute',
+                  marginTop: 25,
+                  color: '#fff',
+                  fontSize: 20,
+                }}
+              >
+                40
+              </Text>
+            </View>
           </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={styles.tileView}
-          onPress={() => navigation.navigate('Workouts')}
+        </LinearGradient>
+      </TouchableOpacity>
+      <TouchableOpacity activeOpacity={0.5} style={{ marginTop: 20 }}>
+        <LinearGradient
+          colors={['#C58BF255', '#EEA4CE33']}
+          style={[styles.gradientBar]}
         >
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <View style={styles.roundbg}>
-              {/* <FontAwesome name='life-buoy' size={55} style={{ color: "#888" }} /> */}
-              <Image
-                source={require('../assets/icons/workout.png')}
-                style={styles.circleIcon}
-              />
-            </View>
-            <Text style={styles.tileText}>Workout</Text>
+          <Image
+            source={require('../assets/icons/home_workout.png')}
+            style={{ resizeMode: 'contain', width: 72 }}
+          />
+          <View style={{ marginLeft: 10 }}>
+            <Text style={styles.textDark}>Home Workout</Text>
+            <Text style={styles.textDarkLighter}>
+              Burn calories simply by following the workouts
+            </Text>
           </View>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.twoTileView}>
-        {/* <TouchableOpacity activeOpacity={0.7} style={styles.tileView}>
-          <View style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <View style={styles.roundbg}>
-              <Image source={require('../assets/icons/statistics.png')} style={styles.circleIcon} />
-            </View>
-            <Text style={styles.tileText}>Statistics</Text>
-          </View>
-        </TouchableOpacity> */}
-
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={styles.tileView}
-          onPress={() => navigation.navigate('Map')}
-        >
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <View style={styles.roundbg}>
-              <Image
-                source={require('../assets/icons/tips.png')}
-                style={styles.circleIcon}
-              />
-            </View>
-            <Text style={styles.tileText}>Discover</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.twoTileView}>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={styles.tileView}
-          onPress={() => navigation.navigate('BMI')}
-        >
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <View style={styles.roundbg}>
-              <Image
-                source={require('../assets/icons/massindex.png')}
-                style={styles.circleIcon}
-              />
-            </View>
-            <Text style={styles.tileText}>Mass Index</Text>
-          </View>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={styles.tileView}
-          onPress={() => navigation.navigate('WalkSteps')}
-        >
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <View style={styles.roundbg}>
-              <Image
-                source={require('../assets/icons/walk.png')}
-                style={styles.circleIcon}
-              />
-            </View>
-            <Text style={styles.tileText}>Pedometer</Text>
-          </View>
-        </TouchableOpacity>
+          <Image
+            source={require('../assets/icons/workout_btn.png')}
+            style={{ resizeMode: 'contain', width: 40 }}
+          />
+        </LinearGradient>
+      </TouchableOpacity>
+      <View style={{ marginLeft: 20, marginTop: 10 }}>
+        <LineChart
+          data={data}
+          width={screenWidth}
+          height={220}
+          chartConfig={chartConfig}
+        />
       </View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  twoTileView: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  tileView: {
-    width: 140,
-    borderRadius: 20,
-    height: 165,
-    margin: 12,
-    backgroundColor: '#ecf4f7',
-  },
-  circlesContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  tile: {
-    borderRadius: 25,
-    backgroundColor: 'rgb(80,120,200)',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    width: 330,
-  },
-  tileText: {
-    color: '#555',
-    alignSelf: 'center',
-    fontFamily: 'Comfortaa-Bold',
-    fontSize: 18,
-    marginTop: 14,
-  },
-  tileMenuIcon: {
-    height: 35,
-    width: 35,
-    marginHorizontal: 10,
-  },
-  roundbg: {
-    backgroundColor: '#fff',
-    borderRadius: 100,
-    width: 100,
-    height: 100,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginTop: 14,
-  },
-  circleTile: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginHorizontal: 8,
-    borderRadius: 15,
-  },
-  circleIcon: {
-    // marginTop: 28,
-    width: 55,
-    height: 55,
-    resizeMode: 'contain',
-    tintColor: 'rgb(100,100,100)', //rgb(41, 171, 226) //rgb(255, 140, 83)
-  },
-  stepsText: {
-    color: 'rgb(80,80,80)',
-    alignSelf: 'center',
-    fontFamily: 'Comfortaa-Bold',
+  topbarText: {
     fontSize: 16,
-    marginVertical: 120,
+    color: '#fff',
+    alignSelf: 'flex-start',
+    marginHorizontal: 5,
+    marginVertical: 5,
   },
-  icon: {
-    height: 70,
-    width: 70,
-    alignSelf: 'center',
-    marginHorizontal: 8,
+  gradientBar: {
+    padding: 15,
+    borderRadius: 25,
+    marginHorizontal: 30,
+    height: 146,
+    width: '85%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  gradientBar2: {
+    padding: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 25,
+    marginHorizontal: 30,
+    height: 200,
+    width: '40%',
+    marginVertical: 20,
+  },
+  textLight: {
+    fontSize: 15,
+    color: '#fff',
+  },
+  textDark: {
+    fontSize: 16,
+    color: '#000',
+    fontWeight: '400',
+  },
+  textDarkLighter: {
+    fontSize: 15,
+    color: '#A4A9AD',
+    fontWeight: '400',
+    width: 160,
   },
 })

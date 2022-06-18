@@ -45,7 +45,7 @@ export default function WalkSteps() {
     >
       <Header />
       <>
-        <MapView
+        {/* <MapView
           region={regionValues}
           onLongPress={(e) => updatePinLocation(e)}
           style={styles.map}
@@ -64,18 +64,13 @@ export default function WalkSteps() {
             destination={destination}
             apikey={GOOGLE_MAPS_APIKEY}
           />
-        </MapView>
+        </MapView> */}
       </>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  // logo: {
-  //   height: 35,
-  //   width: 35,
-  //   marginHorizontal: 2,
-  // },
   map: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,

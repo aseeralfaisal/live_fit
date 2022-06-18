@@ -1,0 +1,148 @@
+import * as React from 'react'
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  Modal,
+} from 'react-native'
+import { StatusBar } from 'expo-status-bar'
+import { useColorScheme } from 'react-native-appearance'
+import { useNavigation, NavigationProp } from '@react-navigation/native'
+// import { AnimatedCircularProgress } from 'react-native-circular-progress'
+
+type NavigationList = {
+  about: undefined 
+}
+export default function Header() {
+  const navigation = useNavigation<NavigationProp<NavigationList>>()
+  let colorScheme = useColorScheme()
+
+  const [modal, setModal] = React.useState(false)
+
+  const [user, setUser] = React.useState('')
+  const [img, setImg] = React.useState(null)
+
+  return (
+    <>
+      <View style={styles.container}>
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginTop: '12%',
+            marginHorizontal: 40,
+          }}
+        >
+          <View>
+            <Image
+              source={require('../assets/icons/LIVEFIT-2.png')}
+              style={styles.logo}
+            />
+          </View>
+          <TouchableOpacity onPress={() => navigation.navigate('about')}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Image
+                source={
+                  img ? { uri: img } : require('../assets/icons/body.png')
+                }
+                resizeMode='contain'
+                style={styles.log}
+              />
+              <Text
+                style={{
+                  color: '#000',
+                  fontFamily: 'Comfortaa-Bold',
+                  fontSize: 20,
+                  marginHorizontal: 6,
+                }}
+              >
+                User
+              </Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        <Modal
+          animationType='fade'
+          transparent={true}
+          visible={modal}
+          onRequestClose={() => {
+            setModal(false)
+          }}
+        >
+          <View
+            style={{
+              backgroundColor: 'rgba(30,30,30,0.85)',
+              height: '100%',
+              width: '100%',
+            }}
+          >
+            <View style={styles.modal}>
+              <TouchableOpacity style={styles.btn}>
+                <Text style={styles.btnText}>Logout</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+
+        <StatusBar style='dark' />
+      </View>
+    </>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 0,
+    marginBottom: -15,
+  },
+  log: {
+    width: 35,
+    height: 35,
+    borderRadius: 50,
+    tintColor: 'rgb(100,100,100)',
+  },
+  logo: {
+    // height: 200,
+    width: 150,
+    resizeMode: 'contain',
+    marginHorizontal: 10,
+    marginTop: -45,
+    overflow: 'hidden',
+    shadowOffset: { width: 10, height: 10 },
+    shadowColor: '#000',
+    shadowOpacity: 1,
+  },
+  text: {
+    fontFamily: 'Comfortaa-Bold',
+    fontSize: 22,
+    color: '#1ABDFF',
+  },
+  btn: {
+    marginTop: 20,
+    paddingVertical: 10,
+    marginHorizontal: 25,
+    backgroundColor: '#FF8C53',
+    borderRadius: 20,
+  },
+  btnText: {
+    color: 'white',
+    alignSelf: 'center',
+    fontFamily: 'Comfortaa-Bold',
+    fontSize: 15,
+    paddingHorizontal: 40,
+  },
+  modal: {
+    alignItems: 'center',
+    backgroundColor: 'rgb(10,10,10)',
+    height: '80%',
+    marginVertical: '16%',
+    marginHorizontal: '10%',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'gray',
+  },
+})

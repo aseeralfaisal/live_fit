@@ -2,8 +2,9 @@ import * as React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import Home from './Screens/Home'
 import { useColorScheme } from 'react-native-appearance'
-import { StyleSheet, Image, View } from 'react-native'
+import { StyleSheet, Image, View, TouchableOpacity } from 'react-native'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import {
   createStackNavigator,
   StackNavigationProp,
@@ -13,10 +14,12 @@ import FoodScan from './Screens/FoodScan'
 import Workouts from './Screens/Workouts'
 import BMI from './Screens/BMI'
 import Map from './Screens/Map'
+import About from './Screens/About'
 
 type TabParamList = {
-  HomeStack: undefined
+  Home: undefined
   Calories: undefined
+  Workout: undefined
   About: undefined
 }
 type StackParamList = {
@@ -30,7 +33,7 @@ type StackParamList = {
 export default function TabScreen() {
   const [steps, setSteps] = React.useState(0)
 
-  const Tab = createMaterialBottomTabNavigator<TabParamList>()
+  const Tab = createBottomTabNavigator<TabParamList>()
   const Stack = createStackNavigator<StackParamList>()
   // const navigation = useNavigation<NavigationProp<StackParamList>>()
 
@@ -53,29 +56,57 @@ export default function TabScreen() {
   return (
     <NavigationContainer>
       <Tab.Navigator
-        initialRouteName='HomeStack'
-        sceneAnimationEnabled={false}
-        activeColor='rgb(80,80,80)'
-        barStyle={{ backgroundColor: 'rgb(250,250,250)' }}
-        shifting={true}
-        labeled={false}
+        initialRouteName='Home'
+        sceneContainerStyle={{
+          backgroundColor: 'rgb(250,250,250)',
+          shadowOpacity: 0,
+          borderRadius: 10,
+        }}
       >
         <Tab.Screen
-          name='HomeStack'
-          component={HomeStack}
+          name='Home'
+          component={Home}
           options={{
             tabBarLabel: 'HomeStack',
-            tabBarIcon: ({ color }) => (
+            headerShown: false,
+            tabBarShowLabel: false,
+            tabBarIcon: ({ focused, color }) => (
               <Image
-                source={require('./assets/icons/dashboard.png')}
+                source={
+                  !focused
+                    ? require('./assets/icons/dashboard.png')
+                    : require('./assets/icons/dashboard-active.png')
+                }
                 style={{
                   height: 30,
                   width: 30,
-                  tintColor: color,
+                  resizeMode: 'contain',
                 }}
               />
             ),
-            // tabBarColor: 'rgb(50,30,0)'
+          }}
+        />
+        <Tab.Screen
+          name='Workout'
+          component={Home}
+          options={{
+            tabBarLabel: 'HomeStack',
+            headerShown: false,
+            tabBarShowLabel: false,
+            tabBarIcon: ({ focused, color }) => (
+              <Image
+                source={
+                  !focused
+                    ? require('./assets/icons/workout.png')
+                    : require('./assets/icons/workout-active.png')
+                }
+                style={{
+                  height: 30,
+                  width: 30,
+                  resizeMode: 'contain',
+                }}
+              />
+            ),
           }}
         />
 
@@ -84,13 +115,37 @@ export default function TabScreen() {
           component={Home}
           options={{
             tabBarLabel: 'Calories',
+            tabBarShowLabel: false,
+            headerShown: false,
             tabBarIcon: ({ color }) => (
+              <TouchableOpacity activeOpacity={0.8}>
+                <Image
+                  source={require('./assets/icons/search.png')}
+                  style={{
+                    height: 120,
+                    width: 120,
+                    marginTop: -20,
+                    resizeMode: 'contain',
+                  }}
+                />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+        <Tab.Screen
+          name='Camera'
+          component={Home}
+          options={{
+            tabBarLabel: 'Camera',
+            tabBarShowLabel: false,
+            headerShown: false,
+            tabBarIcon: ({ focused, color }) => (
               <Image
-                source={require('./assets/icons/statistics.png')}
+                source={!focused ? require('./assets/icons/camera.png') : require('./assets/icons/camera-active.png')}
                 style={{
                   height: 30,
                   width: 30,
-                  tintColor: color,
+                  resizeMode: 'contain'
                 }}
               />
             ),
@@ -98,16 +153,18 @@ export default function TabScreen() {
         />
         <Tab.Screen
           name='About'
-          component={Home}
+          component={About}
           options={{
             tabBarLabel: 'Info',
-            tabBarIcon: ({ color }) => (
+            tabBarShowLabel: false,
+            headerShown: false,
+            tabBarIcon: ({ focused, color }) => (
               <Image
-                source={require('./assets/icons/body.png')}
+                source={!focused ? require('./assets/icons/user.png') : require('./assets/icons/user-active.png')}
                 style={{
                   height: 30,
                   width: 30,
-                  tintColor: color,
+                  resizeMode: 'contain'
                 }}
               />
             ),
