@@ -23,7 +23,7 @@ export default function App() {
   } else {
     return (
       <Provider store={store}>
-        <Login />
+        <TabScreen />
       </Provider>
     )
   }

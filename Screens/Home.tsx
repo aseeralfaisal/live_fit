@@ -150,7 +150,7 @@ export default function Home() {
           >
             <Image
               source={require('../assets/icons/calories.png')}
-              style={{ resizeMode: 'contain', width: 90 }}
+              style={{ resizeMode: 'contain', width: 80 }}
             />
             <View style={{ marginHorizontal: 10 }}>
               <Text style={styles.textDark}>Calories</Text>

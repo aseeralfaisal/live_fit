@@ -43,7 +43,6 @@ export default function TabScreen() {
       <View style={{ flex: 1, backgroundColor: 'rgba(80,80,80,0.3)' }}>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name='HomeMain' children={() => <Home />} />
-          {/* <Stack.Screen name='WalkSteps' children={() => <WalkSteps steps={steps} setSteps={setSteps} />} /> */}
           <Stack.Screen name='Map' children={() => <Map />} />
           <Stack.Screen name='Workouts' children={() => <Workouts />} />
           <Stack.Screen name='BMI' children={() => <BMI />} />
