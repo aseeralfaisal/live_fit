@@ -235,13 +235,13 @@ export default function Workouts() {
 const styles = StyleSheet.create({
   txt: {
     marginHorizontal: 8,
-    fontFamily: 'Comfortaa-Bold',
+    fontFamily: 'Poppins_Bold',
     color: 'rgb(80,80,80)',
     fontSize: 20,
   },
   titleTxt: {
     marginHorizontal: 8,
-    fontFamily: 'Comfortaa-Bold',
+    fontFamily: 'Poppins_Bold',
     color: 'rgb(80,80,80)',
     fontSize: 20,
     alignSelf: 'center',

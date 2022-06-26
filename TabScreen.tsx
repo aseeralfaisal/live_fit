@@ -21,9 +21,10 @@ type TabParamList = {
   Calories: undefined
   Workout: undefined
   About: undefined
+  FoodScan: undefined
 }
 type StackParamList = {
-  Home: undefined
+  HomeMain: undefined
   FoodScan: undefined
   Workouts: undefined
   BMI: undefined
@@ -41,7 +42,7 @@ export default function TabScreen() {
     return (
       <View style={{ flex: 1, backgroundColor: 'rgba(80,80,80,0.3)' }}>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name='Home' children={() => <Home />} />
+          <Stack.Screen name='HomeMain' children={() => <Home />} />
           {/* <Stack.Screen name='WalkSteps' children={() => <WalkSteps steps={steps} setSteps={setSteps} />} /> */}
           <Stack.Screen name='Map' children={() => <Map />} />
           <Stack.Screen name='Workouts' children={() => <Workouts />} />
@@ -62,10 +63,13 @@ export default function TabScreen() {
           shadowOpacity: 0,
           borderRadius: 10,
         }}
+        screenOptions={{
+          tabBarStyle: { width: '96%', borderRadius: 10, borderWidth: 0.1, marginBottom: 12, shadowColor: 'rgba(0,0,0,0.5)', alignSelf: 'center' },
+        }}
       >
         <Tab.Screen
           name='Home'
-          component={Home}
+          component={HomeStack}
           options={{
             tabBarLabel: 'HomeStack',
             headerShown: false,
@@ -88,7 +92,7 @@ export default function TabScreen() {
         />
         <Tab.Screen
           name='Workout'
-          component={Home}
+          component={Workouts}
           options={{
             tabBarLabel: 'HomeStack',
             headerShown: false,
@@ -112,7 +116,7 @@ export default function TabScreen() {
 
         <Tab.Screen
           name='Calories'
-          component={Home}
+          component={HomeStack}
           options={{
             tabBarLabel: 'Calories',
             tabBarShowLabel: false,
@@ -124,7 +128,7 @@ export default function TabScreen() {
                   style={{
                     height: 110,
                     width: 110,
-                    marginTop: -16,
+                    marginTop: -12,
                     resizeMode: 'contain',
                   }}
                 />
@@ -133,19 +137,23 @@ export default function TabScreen() {
           }}
         />
         <Tab.Screen
-          name='Camera'
-          component={Home}
+          name='FoodScan'
+          component={HomeStack}
           options={{
             tabBarLabel: 'Camera',
             tabBarShowLabel: false,
             headerShown: false,
             tabBarIcon: ({ focused, color }) => (
               <Image
-                source={!focused ? require('./assets/icons/camera.png') : require('./assets/icons/camera-active.png')}
+                source={
+                  !focused
+                    ? require('./assets/icons/camera.png')
+                    : require('./assets/icons/camera-active.png')
+                }
                 style={{
                   height: 30,
                   width: 30,
-                  resizeMode: 'contain'
+                  resizeMode: 'contain',
                 }}
               />
             ),
@@ -160,11 +168,15 @@ export default function TabScreen() {
             headerShown: false,
             tabBarIcon: ({ focused, color }) => (
               <Image
-                source={!focused ? require('./assets/icons/user.png') : require('./assets/icons/user-active.png')}
+                source={
+                  !focused
+                    ? require('./assets/icons/user.png')
+                    : require('./assets/icons/user-active.png')
+                }
                 style={{
                   height: 30,
                   width: 30,
-                  resizeMode: 'contain'
+                  resizeMode: 'contain',
                 }}
               />
             ),

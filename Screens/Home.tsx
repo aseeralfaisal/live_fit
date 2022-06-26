@@ -1,21 +1,9 @@
-import React, { useState, useEffect } from 'react'
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  Button,
-} from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 import Header from '../Components/Header'
 import { useColorScheme } from 'react-native-appearance'
 import { AnimatedCircularProgress } from 'react-native-circular-progress'
-import { Accelerometer } from 'expo-sensors'
 import { useNavigation, NavigationProp } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
-import * as Progress from 'react-native-progress'
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import * as icons from '@fortawesome/free-solid-svg-icons'
 import {
   LineChart,
   BarChart,
@@ -25,7 +13,10 @@ import {
   StackedBarChart,
 } from 'react-native-chart-kit'
 import { Dimensions } from 'react-native'
+import { createStackNavigator } from '@react-navigation/stack'
 const screenWidth = Dimensions.get('window').width - 50
+import axios from 'axios'
+import { useEffect } from 'react'
 
 type navigationList = {
   FoodScan: undefined
@@ -34,17 +25,33 @@ type navigationList = {
   WalkSteps: undefined
 }
 export default function Home() {
-  const shadowStyle = {
-    width: 100,
-    height: 100,
-    color: '#000',
-    border: 2,
-    radius: 3,
-    opacity: 0.2,
-    x: 0,
-    y: 3,
-    style: { marginVertical: 5 },
+  const fetchData = async () => {
+    try {
+      const GRAPHQL_API = 'http://192.168.100.6:4000/graphql'
+      const GET_USER = `
+      query {
+        getUser {
+          user
+          id
+        }
+      }`
+      const fetchData = await axios.post(
+        GRAPHQL_API,
+        { query: GET_USER },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
+      )
+      console.log(fetchData.data.data.getUser)
+    } catch (err) {
+      console.log(err)
+    }
   }
+  useEffect(() => {
+    fetchData()
+  }, [])
 
   const navigation = useNavigation<NavigationProp<navigationList>>()
   let colorScheme = useColorScheme()
@@ -79,7 +86,10 @@ export default function Home() {
       }}
     >
       <Header />
-      <TouchableOpacity activeOpacity={0.5}>
+      <TouchableOpacity
+        activeOpacity={0.5}
+        onPress={() => navigation.navigate('BMI')}
+      >
         <LinearGradient
           colors={['#92A3FD', '#9DCEFF']}
           style={styles.gradientBar}
@@ -89,7 +99,7 @@ export default function Home() {
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginLeft: 12
+              marginLeft: 12,
             }}
           >
             <View style={{ alignItems: 'center' }}>
@@ -143,7 +153,7 @@ export default function Home() {
               style={{ resizeMode: 'contain', width: 90 }}
             />
             <View style={{ marginHorizontal: 10 }}>
-              <Text style={styles.textDark}>CALORIES</Text>
+              <Text style={styles.textDark}>Calories</Text>
               <Text style={styles.textDarkLighter}>
                 In maintanance calories
               </Text>
@@ -156,14 +166,18 @@ export default function Home() {
         </LinearGradient>
       </TouchableOpacity>
 
-      <TouchableOpacity activeOpacity={0.5} style={{ marginTop: 20 }}>
+      <TouchableOpacity
+        activeOpacity={0.5}
+        style={{ marginTop: 20 }}
+        onPress={() => navigation.navigate('Workouts')}
+      >
         <LinearGradient
           colors={['#C58BF255', '#EEA4CE33']}
           style={[styles.gradientBar, { height: 100 }]}
         >
           <Image
             source={require('../assets/icons/home_workout.png')}
-            style={{ resizeMode: 'contain', width: 60, marginHorizontal: 14 }}
+            style={{ resizeMode: 'contain', width: 70, marginHorizontal: 10 }}
           />
           <View style={{ marginLeft: -30 }}>
             <Text style={styles.textDark}>Home Workout</Text>
@@ -196,6 +210,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginHorizontal: 5,
     marginVertical: 5,
+    fontFamily: 'Poppins',
   },
   gradientBar: {
     padding: 15,
@@ -220,16 +235,19 @@ const styles = StyleSheet.create({
   textLight: {
     fontSize: 15,
     color: '#fff',
+    fontFamily: 'Poppins',
   },
   textDark: {
     fontSize: 16,
     color: '#000',
     fontWeight: '400',
+    fontFamily: 'Poppins',
   },
   textDarkLighter: {
     fontSize: 15,
     color: '#A4A9AD',
-    fontWeight: '400',
-    width: 160,
+    fontFamily: 'Poppins',
+    fontWeight: '500',
+    width: 180,
   },
 })
