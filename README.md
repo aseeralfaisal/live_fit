@@ -1,3 +1,3 @@
 # livefitv2
 ## A fitness app for everybody. <br>
-<img src="https://user-images.githubusercontent.com/67814164/175829378-afe38c99-c10c-4624-b83a-ab64e82e5ad1.png" width="300" >
+<img src="https://user-images.githubusercontent.com/67814164/177706141-784c77b7-644d-4dab-b8df-7b0c1cfb9f2f.png" width="300" >
