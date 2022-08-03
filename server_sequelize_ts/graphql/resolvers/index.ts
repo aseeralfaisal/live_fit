@@ -35,14 +35,14 @@ const resolvers = {
       try {
         const findUser = await User.findOne({ where: { user: user } })
         if (findUser) {
-          const passCompare = await bcrypt.compare(findUser.pass, pass)
+          const passCompare = await bcrypt.compare(pass, findUser.pass)
           if (passCompare) {
             return findUser.toJSON()
-          } else{
+          } else {
             return new ApolloError("Password's do not match")
           }
         } else {
-          return new ApolloError('User already exists')
+          return new ApolloError("User doesn't exists")
         }
       } catch (err) {
         // console.log(err)

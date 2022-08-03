@@ -31,3 +31,5 @@ async function startApolloServer() {
   console.log(`👌👌 Ready at ${PORT}${server.graphqlPath} `)
 }
 startApolloServer()
+
+export {}
