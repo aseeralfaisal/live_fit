@@ -18,7 +18,6 @@ const resolvers = {
       try {
         const salt = await bcrypt.genSalt(+saltRounds)
         const hashPass = await bcrypt.hash(pass, salt)
-        User.sync()
         const findOne = await User.findOne({ where: { user } })
         if (findOne) {
           return new ApolloError('User already exists')
