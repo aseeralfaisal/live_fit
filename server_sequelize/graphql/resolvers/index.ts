@@ -19,11 +19,11 @@ const resolvers = {
         const salt = await bcrypt.genSalt(+saltRounds)
         const hashPass = await bcrypt.hash(pass, salt)
         User.sync()
-        const findOne = await User.findOne({ where: { user: user } })
+        const findOne = await User.findOne({ where: { user } })
         if (findOne) {
           return new ApolloError('User already exists')
         } else {
-          const newUser = await User.create({ user: user, pass: hashPass })
+          const newUser = await User.create({ user, pass: hashPass })
           return newUser.toJSON()
         }
       } catch (err) {
