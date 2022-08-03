@@ -1,6 +1,6 @@
-const { ApolloError } = require('apollo-server-express')
-const User = require('../../models/user')
-const bcrypt = require('bcrypt')
+import { ApolloError } from 'apollo-server-express'
+import User from '../../models/user'
+import bcrypt from 'bcrypt'
 const saltRounds = process.env.SALT_ROUNDS as unknown as number
 
 interface argsType {
@@ -39,4 +39,4 @@ const resolvers = {
     },
   },
 }
-module.exports = resolvers
+export default resolvers
