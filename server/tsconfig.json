@@ -1,0 +1,27 @@
+  {
+    "compilerOptions": {
+      "module": "ES6",
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+      "target": "ES6",
+      "noImplicitAny": false,
+      "moduleResolution": "node",
+      "sourceMap": true,
+      "outDir": "dist",
+      "types": ["node"],
+      "baseUrl": ".",
+      "paths": {
+        "*": [
+          "node_modules/*",
+          "src/types/*"
+        ]
+      },
+      "lib": [
+        "ES6"
+      ],
+    },
+    "ts-node": {
+      "esm": true,
+      "experimentalSpecifierResolution": "node"
+    }
+  }
