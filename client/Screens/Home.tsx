@@ -27,12 +27,11 @@ type navigationList = {
 export default function Home() {
   const fetchData = async () => {
     try {
-      const GRAPHQL_API = 'http://192.168.100.6:4000/graphql'
+      const GRAPHQL_API = 'https://livefitv2.herokuapp.com/graphql'
       const GET_USER = `
       query {
         getUser {
           user
-          id
         }
       }`
       const fetchData = await axios.post(
@@ -44,7 +43,7 @@ export default function Home() {
           },
         },
       )
-      console.log(fetchData.data.data.getUser)
+      console.log(fetchData.data)
     } catch (err) {
       console.log(err)
     }

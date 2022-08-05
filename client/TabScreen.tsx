@@ -2,14 +2,13 @@ import * as React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import Home from './Screens/Home'
 import { useColorScheme } from 'react-native-appearance'
-import { StyleSheet, Image, View, TouchableOpacity } from 'react-native'
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
+import { Image, View, TouchableOpacity } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import {
   createStackNavigator,
   StackNavigationProp,
 } from '@react-navigation/stack'
-import { useNavigation, NavigationProp } from '@react-navigation/native'
+import * as NavigationBar from 'expo-navigation-bar'
 import FoodScan from './Screens/FoodScan'
 import Workouts from './Screens/Workouts'
 import BMI from './Screens/BMI'
@@ -38,6 +37,10 @@ export default function TabScreen() {
   const Stack = createStackNavigator<StackParamList>()
   // const navigation = useNavigation<NavigationProp<StackParamList>>()
 
+  React.useEffect(() => {
+    NavigationBar.setBackgroundColorAsync('white')
+  }, [])
+
   const HomeStack = () => {
     return (
       <View style={{ flex: 1, backgroundColor: 'rgba(80,80,80,0.3)' }}>
@@ -63,7 +66,13 @@ export default function TabScreen() {
           borderRadius: 10,
         }}
         screenOptions={{
-          tabBarStyle: { width: '96%', borderRadius: 10, borderWidth: 0.1, marginBottom: 12, shadowColor: 'rgba(0,0,0,0.5)', alignSelf: 'center' },
+          tabBarStyle: {
+            width: '100%',
+            borderRadius: 10,
+            borderWidth: 0.0,
+            shadowColor: 'rgba(0,0,0,0.5)',
+            alignSelf: 'center',
+          },
         }}
       >
         <Tab.Screen
