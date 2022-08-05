@@ -24,33 +24,9 @@ type navigationList = {
   BMI: undefined
   WalkSteps: undefined
 }
+
+const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
 export default function Home() {
-  const fetchData = async () => {
-    try {
-      const GRAPHQL_API = 'https://livefitv2.herokuapp.com/graphql'
-      const GET_USER = `
-      query {
-        getUser {
-          user
-        }
-      }`
-      const fetchData = await axios.post(
-        GRAPHQL_API,
-        { query: GET_USER },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-      )
-      console.log(fetchData.data)
-    } catch (err) {
-      console.log(err)
-    }
-  }
-  useEffect(() => {
-    fetchData()
-  }, [])
 
   const navigation = useNavigation<NavigationProp<navigationList>>()
   let colorScheme = useColorScheme()

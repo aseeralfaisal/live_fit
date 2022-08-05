@@ -12,8 +12,9 @@ import PassIcon from '../assets/icons/passIcon.svg'
 import { useState } from 'react'
 import { useAppSelector, useAppDispatch } from '../redux/hooks'
 import { changeEmailVal, changePassVal } from '../redux/userSlice'
+import axios from 'axios'
 
-export const Login = () => {
+export const Login = ({ setIsAuthenticated }: any) => {
   const dispatch = useAppDispatch()
   const emailVal = useAppSelector((state) => state.user.email)
   const passVal = useAppSelector((state) => state.user.pass)
@@ -23,6 +24,33 @@ export const Login = () => {
   }
   const onPassVal = (pass: string) => {
     dispatch(changePassVal(pass))
+  }
+  const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
+  const loginAction = async () => {
+    try {
+      const LOGIN_MUTATION = `mutation loginUser($user: String!, $pass: String!) {
+        loginUser(user: $user, pass: $pass) {
+          user
+        }
+      }`
+      const fetchData = await axios.post(BASE_URL, {
+        query: LOGIN_MUTATION,
+        variables: {
+          user: emailVal,
+          pass: passVal,
+        },
+      })
+      if (fetchData.data.data !== null) {
+        setIsAuthenticated(true)
+      } else {
+        setIsAuthenticated(false)
+        fetchData.data?.errors.map((item: { message: string }) => {
+          return alert(item.message)
+        })
+      }
+    } catch (err) {
+      console.log(err)
+    }
   }
   return (
     <View style={styles.container}>
@@ -46,10 +74,7 @@ export const Login = () => {
           style={styles.inputTextField}
         />
       </View>
-      <TouchableOpacity
-        activeOpacity={0.5}
-        onPress={() => console.log({ emailVal, passVal })}
-      >
+      <TouchableOpacity activeOpacity={0.5} onPress={loginAction}>
         <Btn title='Login' />
       </TouchableOpacity>
       <View style={styles.registerText}>
@@ -66,7 +91,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    marginTop: '5%',
+    marginTop: '15%',
   },
   title: {
     color: '#1D1617',
@@ -82,7 +107,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   input: {
-    width: 305,
     padding: 10,
     height: 48,
     borderRadius: 14,
@@ -94,6 +118,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   inputTextField: {
+    width: 250,
     marginHorizontal: 10,
   },
   registerText: {

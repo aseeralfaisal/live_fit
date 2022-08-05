@@ -1,16 +1,10 @@
 import * as React from 'react'
 import { useFonts } from 'expo-font'
 import AppLoading from 'expo-app-loading'
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
 import TabScreen from './TabScreen'
 import { Login } from './Screens/Login'
 import store from './redux/store'
 import { Provider } from 'react-redux'
-
-const client = new ApolloClient({
-  uri: 'localhost:4000/graphql',
-  cache: new InMemoryCache(),
-})
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -18,12 +12,14 @@ export default function App() {
     Poppins_Bold: require('./assets/fonts/Poppins-Bold.ttf'),
   })
 
+  const [isAuthenticated, setIsAuthenticated] = React.useState(false)
+
   if (!fontsLoaded) {
     return <AppLoading />
   } else {
     return (
       <Provider store={store}>
-        <TabScreen />
+        {isAuthenticated ? <TabScreen /> : <Login setIsAuthenticated={setIsAuthenticated} />}
       </Provider>
     )
   }
