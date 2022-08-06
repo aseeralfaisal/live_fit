@@ -45,7 +45,7 @@ export default function Home() {
     backgroundGradientFromOpacity: 0,
     backgroundGradientTo: '#08130D',
     backgroundGradientToOpacity: 0.0,
-    color: () => `rgba(45, 85, 255, 1)`,
+    color: () => "#555",
     strokeWidth: 2, // optional, default 3
     barPercentage: 0.5,
     useShadowColorFromDataset: false,
@@ -99,7 +99,7 @@ export default function Home() {
                 Mass Index
               </Text>
               <Text style={[styles.topbarText, { width: 170 }]}>
-                You have a normal weight
+                Normal weight
               </Text>
             </View>
             <Image
@@ -128,7 +128,7 @@ export default function Home() {
             <View style={{ marginHorizontal: 10 }}>
               <Text style={styles.textDark}>Calories</Text>
               <Text style={styles.textDarkLighter}>
-                In maintanance calories
+                Check your calorie intake
               </Text>
             </View>
           </View>
@@ -152,10 +152,10 @@ export default function Home() {
             source={require('../assets/icons/home_workout.png')}
             style={{ resizeMode: 'contain', width: 70, marginHorizontal: 10 }}
           />
-          <View style={{ marginLeft: -30 }}>
+          <View style={{ marginLeft: -10 }}>
             <Text style={styles.textDark}>Workout</Text>
             <Text style={styles.textDarkLighter}>
-              Burn calories simply by following the workouts
+              Create and log your workouts
             </Text>
           </View>
           <Image
