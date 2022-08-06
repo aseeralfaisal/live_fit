@@ -46,14 +46,18 @@ export default function Workouts() {
         equipment
       }
     }`
-    ;(async () => {
+    const getExerciseList = async () => {
       const fetchData = await axios.post(BASE_URL, {
         query: GET_EXERCISE_QUERY,
         variables: { target: 'back' },
       })
       const { getExercise } = fetchData.data.data
       setWorkouts(getExercise)
-    })()
+    }
+    getExerciseList()
+    return () => {
+      getExerciseList()
+    }
   }, [])
 
   const searchExercise = (val: string) => {
@@ -111,7 +115,7 @@ export default function Workouts() {
                           flexDirection: 'row',
                           justifyContent: 'space-between',
                           alignItems: 'center',
-                          marginVertical: 5
+                          marginVertical: 5,
                         }}
                       >
                         <View
@@ -121,7 +125,7 @@ export default function Workouts() {
                             borderRadius: 100,
                             overflow: 'hidden',
                             borderWidth: 1.2,
-                            borderColor: "#ccc",
+                            borderColor: '#ccc',
                           }}
                         >
                           <Image

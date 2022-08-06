@@ -1,10 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-} from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 import Header from '../Components/Header'
 import { useColorScheme } from 'react-native-appearance'
 import { AnimatedCircularProgress } from 'react-native-circular-progress'
@@ -39,19 +33,19 @@ export default function Home() {
     labels: ['SAT', 'SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI'],
     datasets: [
       {
-        data: [1800, 1850, 2000, 1705, 1780, 1980],
+        data: [1800, 1450, 1150, 1705, 1780, 1980],
         color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
         strokeWidth: 4, // optional
       },
     ],
-    legend: ['Over eaten'],
+    // legend: ['Over eaten'],
   }
   const chartConfig = {
     backgroundGradientFrom: '#1E2923',
     backgroundGradientFromOpacity: 0,
     backgroundGradientTo: '#08130D',
     backgroundGradientToOpacity: 0.0,
-    color: (opacity = 1) => `#7B6F72`,
+    color: () => `rgba(45, 85, 255, 1)`,
     strokeWidth: 2, // optional, default 3
     barPercentage: 0.5,
     useShadowColorFromDataset: false,
@@ -159,7 +153,7 @@ export default function Home() {
             style={{ resizeMode: 'contain', width: 70, marginHorizontal: 10 }}
           />
           <View style={{ marginLeft: -30 }}>
-            <Text style={styles.textDark}>Home Workout</Text>
+            <Text style={styles.textDark}>Workout</Text>
             <Text style={styles.textDarkLighter}>
               Burn calories simply by following the workouts
             </Text>
@@ -170,11 +164,11 @@ export default function Home() {
           />
         </LinearGradient>
       </TouchableOpacity>
-      <View style={{ marginLeft: 20, marginTop: 10 }}>
+      <View style={{ marginLeft: 20, marginTop: 40 }}>
         <LineChart
           data={data}
           width={screenWidth}
-          height={180}
+          height={250}
           chartConfig={chartConfig}
         />
       </View>
