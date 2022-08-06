@@ -38,18 +38,18 @@ export default function Workouts() {
 
   React.useEffect(() => {
     const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
-    const GET_EXERCISE_QUERY = `query Query {
-      getExercise {
-        id
-        name
+    const GET_EXERCISE_QUERY = `mutation Mutation($target: String!) {
+      getExercise(target: $target) {
         gifUrl
+        name
+        target
         equipment
-        bodyPart
       }
     }`
     ;(async () => {
       const fetchData = await axios.post(BASE_URL, {
         query: GET_EXERCISE_QUERY,
+        variables: { target: 'back' },
       })
       const { getExercise } = fetchData.data.data
       setWorkouts(getExercise)
@@ -111,19 +111,29 @@ export default function Workouts() {
                           flexDirection: 'row',
                           justifyContent: 'space-between',
                           alignItems: 'center',
+                          marginVertical: 5
                         }}
                       >
-                        <View style={{ width: 100 }}>
+                        <View
+                          style={{
+                            width: 75,
+                            height: 75,
+                            borderRadius: 100,
+                            overflow: 'hidden',
+                            borderWidth: 1.2,
+                            borderColor: "#ccc",
+                          }}
+                        >
                           <Image
                             source={{ uri: item.gifUrl }}
                             style={{
-                              height: 90,
-                              width: 90,
-                              resizeMode: 'contain',
+                              width: 75,
+                              height: 75,
+                              borderRadius: 100,
                             }}
                           />
                         </View>
-                        <Text style={styles.titleTxt}>
+                        <Text style={[styles.titleTxt, { marginLeft: 15 }]}>
                           {item.name.split(' ')[0]} {item.name.split(' ')[1]}{' '}
                           {item.name.split(' ')[2]}
                         </Text>
