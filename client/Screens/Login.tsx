@@ -5,6 +5,7 @@ import {
   Image,
   View,
   TouchableOpacity,
+  ActivityIndicator,
 } from 'react-native'
 import { Btn } from '../Components/Button'
 import EmailIcon from '../assets/icons/emailIcon.svg'
@@ -18,6 +19,7 @@ export const Login = ({ setIsAuthenticated }: any) => {
   const dispatch = useAppDispatch()
   const emailVal = useAppSelector((state) => state.user.email)
   const passVal = useAppSelector((state) => state.user.pass)
+  const [loader, setLoader] = useState(false)
 
   const onEmailVal = (email: string) => {
     dispatch(changeEmailVal(email))
@@ -28,6 +30,7 @@ export const Login = ({ setIsAuthenticated }: any) => {
   const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
   const loginAction = async () => {
     try {
+      setLoader(true)
       const LOGIN_MUTATION = `mutation loginUser($user: String!, $pass: String!) {
         loginUser(user: $user, pass: $pass) {
           user
@@ -42,8 +45,10 @@ export const Login = ({ setIsAuthenticated }: any) => {
       })
       if (fetchData.data.data !== null) {
         setIsAuthenticated(true)
+        setLoader(false)
       } else {
         setIsAuthenticated(false)
+        setLoader(false)
         fetchData.data?.errors.map((item: { message: string }) => {
           return alert(item.message)
         })
@@ -56,26 +61,28 @@ export const Login = ({ setIsAuthenticated }: any) => {
     <View style={styles.container}>
       <Text style={styles.title}>Hey there</Text>
       <Text style={styles.title2}>Welcome</Text>
-      <View style={styles.input}>
-        <EmailIcon />
-        <TextInput
-          value={emailVal}
-          onChangeText={(val) => onEmailVal(val)}
-          placeholder='Email'
-          style={styles.inputTextField}
-        />
-      </View>
-      <View style={styles.input}>
-        <PassIcon />
-        <TextInput
-          value={passVal}
-          onChangeText={(val) => onPassVal(val)}
-          placeholder='Password'
-          style={styles.inputTextField}
-        />
-      </View>
+      <>
+        <View style={styles.input}>
+          <EmailIcon />
+          <TextInput
+            value={emailVal}
+            onChangeText={(val) => onEmailVal(val)}
+            placeholder='Email'
+            style={styles.inputTextField}
+          />
+        </View>
+        <View style={styles.input}>
+          <PassIcon />
+          <TextInput
+            value={passVal}
+            onChangeText={(val) => onPassVal(val)}
+            placeholder='Password'
+            style={styles.inputTextField}
+          />
+        </View>
+      </>
       <TouchableOpacity activeOpacity={0.5} onPress={loginAction}>
-        <Btn title='Login' />
+        <Btn title='Login' loading={loader} />
       </TouchableOpacity>
       <View style={styles.registerText}>
         <Text style={styles.title}>Don’t have an account yet?</Text>

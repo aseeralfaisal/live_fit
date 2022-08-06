@@ -1,4 +1,10 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+} from 'react-native'
 import Header from '../Components/Header'
 import { useColorScheme } from 'react-native-appearance'
 import { AnimatedCircularProgress } from 'react-native-circular-progress'
@@ -25,9 +31,7 @@ type navigationList = {
   WalkSteps: undefined
 }
 
-const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
 export default function Home() {
-
   const navigation = useNavigation<NavigationProp<navigationList>>()
   let colorScheme = useColorScheme()
 
