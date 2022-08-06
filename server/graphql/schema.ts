@@ -5,8 +5,17 @@ const typeDefs = gql`
     user: String!
     pass: String!
   }
+  type Exercise {
+    bodyPart: String!
+    equipment: String!
+    gifUrl: String!
+    id: String!
+    name: String!
+    target: String!
+  }
   type Query {
     getUser: [User!]
+    getExercise: [Exercise!]
   }
   type Mutation {
     addUser(user: String!, pass: String!): User!
