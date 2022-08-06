@@ -9,8 +9,13 @@ import {
 } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { useColorScheme } from 'react-native-appearance'
-import { useNavigation, NavigationProp, useRoute } from '@react-navigation/native'
+import {
+  useNavigation,
+  NavigationProp,
+  useRoute,
+} from '@react-navigation/native'
 import { AnimatedCircularProgress } from 'react-native-circular-progress'
+import { useAppSelector } from '../redux/hooks'
 
 type NavigationList = {
   about: undefined
@@ -19,19 +24,24 @@ export default function Header() {
   const navigation = useNavigation<NavigationProp<NavigationList>>()
   const route = useRoute()
   let colorScheme = useColorScheme()
+  const emailVal = useAppSelector((state) => state.user.email)
 
   console.log(route.name)
 
   return (
     <>
       <View style={styles.container}>
-        <Image
-          source={require('../assets/icons/avatar.png')}
-          style={{ width: 50, resizeMode: 'contain' }}
-        />
-        <View style={{ marginLeft: -90 }}>
-          <Text style={{ color: '#aaa', fontFamily: 'Poppins' }}>Welcome</Text>
-          <Text style={styles.userName}>Freaky Aseer</Text>
+        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+          <Image
+            source={require('../assets/icons/avatar.png')}
+            style={{ width: 50, resizeMode: 'contain' }}
+          />
+          <View style={{ marginLeft: 10 }}>
+            <Text style={{ color: '#aaa', fontFamily: 'Poppins' }}>
+              Welcome
+            </Text>
+            <Text style={styles.userName}>{emailVal}</Text>
+          </View>
         </View>
         <TouchableOpacity activeOpacity={0.5}>
           <Image
@@ -59,5 +69,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'Poppins_Bold',
     color: '#555',
+    textTransform: 'capitalize',
   },
 })

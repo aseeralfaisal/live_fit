@@ -11,12 +11,14 @@ import {
   Animated,
   TextInput,
   Button,
+  ImageBackground,
 } from 'react-native'
 import Header from '../Components/Header'
 import { useColorScheme } from 'react-native-appearance'
 import { AnimatedCircularProgress } from 'react-native-circular-progress'
 import { exerciseDATA } from '../assets/ExerciseData'
 import { useNavigation } from '@react-navigation/native'
+import axios from 'axios'
 
 export default function Workouts() {
   let colorScheme = useColorScheme()
@@ -25,66 +27,43 @@ export default function Workouts() {
   const [listView, setListView] = React.useState(false)
   const [specificWorkout, setSpecificWorkout] = React.useState(false)
   const [exer, setExer] = React.useState(0)
-  const [item, setItem] = React.useState('')
+  const [exerciseItem, setExerciseItem] = React.useState<any>(undefined)
   const fadeAnim = React.useRef(new Animated.Value(0)).current
   const [playBtn, setPlayBtn] = React.useState('Start')
   const [countStartBtnClick, setCountStartBtnClick] = React.useState(0)
-  const [reps, setReps] = React.useState('5')
+  const [searchVal, setSearchVal] = React.useState('')
+  const [workouts, setWorkouts] = React.useState([])
 
   const window = Dimensions.get('window')
 
-  const navigation = useNavigation()
+  React.useEffect(() => {
+    const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
+    const GET_EXERCISE_QUERY = `query Query {
+      getExercise {
+        id
+        name
+        gifUrl
+        equipment
+        bodyPart
+      }
+    }`
+    ;(async () => {
+      const fetchData = await axios.post(BASE_URL, {
+        query: GET_EXERCISE_QUERY,
+      })
+      const { getExercise } = fetchData.data.data
+      setWorkouts(getExercise)
+    })()
+  }, [])
 
-  const fadeIn = () => {
-    // Will change fadeAnim value to 1 in 5 seconds
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 1800,
-      useNativeDriver: true,
-    }).start()
+  const searchExercise = (val: string) => {
+    setSearchVal(val)
   }
 
-  React.useEffect(() => {
-    if (start) {
-      const timer = setTimeout(() => {
-        setWatch(watch + 1)
-      }, 1000)
-      if (watch == Number(reps)) {
-        clearTimeout(timer)
-        setWatch(0)
-        setExer(exer + 1)
-        setStart(true)
-      }
-      if (exer >= 8) {
-        setWatch(0)
-        setExer(0)
-        setListView(false)
-        setStart(false)
-      }
-    }
-  })
-
-  const onStart = () => {
-    if (start) {
-      setCountStartBtnClick(countStartBtnClick + 1)
-      setListView(false)
-      setStart(false)
-    } else {
-      setListView(true)
-      setStart(true)
-    }
-    fadeIn()
+  const specificView = (item: any) => {
+    setExerciseItem(item)
+    setSpecificWorkout(true)
   }
-
-  React.useEffect(() => {
-    if (countStartBtnClick == 0 && !start) {
-      setPlayBtn('Start')
-    } else if (start) {
-      setPlayBtn('Pause')
-    } else {
-      setPlayBtn('Resume')
-    }
-  }, [start])
 
   return (
     <>
@@ -95,139 +74,113 @@ export default function Workouts() {
         }}
       >
         <Header />
-        <>
-          {listView ? (
-            <Animated.View style={{ opacity: fadeAnim, alignItems: 'center' }}>
-              <Text style={styles.titleTxt}>{exerciseDATA[exer]?.name}</Text>
-              <Image
-                source={exerciseDATA[exer]?.img}
-                style={{ width: 200, resizeMode: 'contain' }}
-              />
-            </Animated.View>
-          ) : (
-            <FlatList
-              data={exerciseDATA}
-              renderItem={({ item, index }: any) => {
-                return (
-                  <>
-                    <View
+        <View style={styles.input}>
+          <TextInput
+            value={searchVal}
+            onChangeText={(val) => searchExercise(val)}
+            placeholder='Search Exercises'
+            style={styles.inputTextField}
+          />
+        </View>
+        <FlatList
+          data={workouts}
+          renderItem={({ item, index }: any) => {
+            return (
+              <>
+                {item.name.toLowerCase().includes(searchVal.toLowerCase()) ? (
+                  <View
+                    style={{
+                      marginHorizontal: window.width - window.width / 1.05,
+                      borderColor: 'rgba(100,100,100,0.25)',
+                      padding: 8,
+                      borderBottomWidth: 1,
+                    }}
+                  >
+                    <TouchableOpacity
+                      onPress={() => specificView(item)}
                       style={{
-                        marginHorizontal: window.width - window.width / 1.1,
-                        borderColor: 'rgba(100,100,100,0.25)',
-                        padding: 8,
-                        borderBottomWidth: 1,
+                        flexDirection: 'row',
+                        alignItems: 'center',
                       }}
                     >
-                      <TouchableOpacity
-                        onPress={() => {
-                          setItem(item)
-                          setSpecificWorkout(true)
-                        }}
+                      {/* <Text style={[styles.txt, { fontSize: 20 }]}>
+                      {index + 1}
+                    </Text> */}
+                      <View
                         style={{
                           flexDirection: 'row',
+                          justifyContent: 'space-between',
                           alignItems: 'center',
                         }}
                       >
-                        <Text style={[styles.txt, { fontSize: 20 }]}>
-                          {index + 1}
+                        <View style={{ width: 100 }}>
+                          <Image
+                            source={{ uri: item.gifUrl }}
+                            style={{
+                              height: 90,
+                              width: 90,
+                              resizeMode: 'contain',
+                            }}
+                          />
+                        </View>
+                        <Text style={styles.titleTxt}>
+                          {item.name.split(' ')[0]} {item.name.split(' ')[1]}{' '}
+                          {item.name.split(' ')[2]}
                         </Text>
-                        <Image
-                          source={item.img}
-                          style={{ height: 80, width: 80 }}
-                        />
-                        <Text style={styles.titleTxt}>{item.name}</Text>
-                      </TouchableOpacity>
-                    </View>
-                  </>
-                )
-              }}
-              numColumns={1}
-              keyExtractor={(item, idx) => idx.toString()}
-            />
-          )}
-        </>
-        <Modal
-          animationType='fade'
-          visible={specificWorkout}
-          transparent={true}
-          onRequestClose={() => setSpecificWorkout(!specificWorkout)}
-        >
-          <View style={{ backgroundColor: '#ffffff' }}>
-            <View
-              style={{
-                alignItems: 'center',
-                height: '100%',
-                justifyContent: 'center',
-              }}
-            >
-              <Text style={[styles.titleTxt, { fontSize: 34 }]}>
-                {item.name}
-              </Text>
-              <Image
-                source={item.img}
-                style={{ width: 170, resizeMode: 'contain' }}
-              />
-              <Text style={[styles.txt, { textAlign: 'center' }]}>
-                {item.desc}
-              </Text>
-            </View>
-          </View>
-        </Modal>
-        {listView && (
-          <Text
-            style={{
-              fontSize: 40,
-              alignSelf: 'center',
-              fontFamily: 'Comfortaa-Bold',
-              color: 'rgb(80,80,80)',
-            }}
-          >
-            {watch}
-          </Text>
-        )}
-        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                ) : (
+                  <></>
+                )}
+              </>
+            )
+          }}
+          numColumns={1}
+          keyExtractor={(item, idx) => idx.toString()}
+        />
+      </View>
+      <Modal
+        animationType='fade'
+        visible={specificWorkout}
+        transparent={true}
+        onRequestClose={() => setSpecificWorkout(!specificWorkout)}
+      >
+        <View style={{ backgroundColor: '#ffffff' }}>
           <View
             style={{
-              flexDirection: 'row',
               alignItems: 'center',
+              height: '100%',
               justifyContent: 'center',
             }}
           >
-            <Text style={styles.txt}>Reps</Text>
-            <TextInput
-              placeholder='Reps'
-              keyboardType='numeric'
-              value={reps}
-              onChangeText={(text) => setReps(text)}
-              style={{
-                textAlign: 'center',
-                padding: 5,
-                width: 50,
-                backgroundColor: '#ecf4f7',
-                fontSize: 24,
-                borderRadius: 10,
-                color: '#555',
-              }}
+            <Image
+              source={{ uri: exerciseItem?.gifUrl }}
+              style={{ width: 250, height: 250, resizeMode: 'contain' }}
             />
-          </View>
-          <TouchableOpacity
-            activeOpacity={0.7}
-            style={styles.tile}
-            onPress={onStart}
-          >
             <Text
-              style={{
-                fontSize: 24,
-                alignSelf: 'center',
-                color: 'white',
-                color: '#555',
-              }}
+              style={[styles.titleTxt, { fontSize: 28, textAlign: 'center' }]}
             >
-              {playBtn}
+              {exerciseItem?.name}
             </Text>
-          </TouchableOpacity>
+            {/* <Text style={[styles.txt, { textAlign: 'center' }]}>
+              {exerciseItem.name}
+            </Text> */}
+          </View>
         </View>
-      </View>
+      </Modal>
+      {listView && (
+        <Text
+          style={{
+            fontSize: 40,
+            alignSelf: 'center',
+            fontFamily: 'Comfortaa-Bold',
+            color: 'rgb(80,80,80)',
+          }}
+        >
+          {watch}
+        </Text>
+      )}
     </>
   )
 }
@@ -240,11 +193,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   titleTxt: {
-    marginHorizontal: 8,
-    fontFamily: 'Poppins_Bold',
+    fontFamily: 'Poppins',
+    fontWeight: '700',
+    textTransform: 'capitalize',
     color: 'rgb(80,80,80)',
-    fontSize: 20,
-    alignSelf: 'center',
+    fontSize: 18,
   },
   list: {
     flex: 1,
@@ -258,5 +211,20 @@ const styles = StyleSheet.create({
     width: 180,
     padding: 5,
     marginHorizontal: 15,
+  },
+  input: {
+    padding: 10,
+    height: 48,
+    borderRadius: 14,
+    backgroundColor: '#F7F8F8',
+    flexDirection: 'row',
+    alignItems: 'center',
+    fontFamily: 'Poppins',
+    fontSize: 16,
+    marginHorizontal: 20,
+  },
+  inputTextField: {
+    width: 250,
+    marginHorizontal: 10,
   },
 })

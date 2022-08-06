@@ -15,11 +15,11 @@ const typeDefs = gql`
   }
   type Query {
     getUser: [User!]
-    getExercise: [Exercise!]
   }
   type Mutation {
     addUser(user: String!, pass: String!): User!
     loginUser(user: String!, pass: String!): User!
+    getExercise(target: String!): [Exercise!]
   }
 `
 export default typeDefs
