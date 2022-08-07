@@ -35,9 +35,12 @@ const resolvers = {
       const { user, pass } = args
       try {
         const findUser = await User.findOne({ where: { user: user } })
+        console.log('USER__FOUND: ___', findUser)
         if (findUser) {
           const passCompare = await bcrypt.compare(pass, findUser.pass)
+          console.log('PASSWORD: ___', passCompare)
           if (passCompare) {
+            console.log('FIND__USER__JSON: ___', findUser.toJSON())
             return findUser.toJSON()
           } else {
             return new ApolloError("Password's do not match")
