@@ -22,11 +22,7 @@ type NavigationList = {
 }
 export default function Header() {
   const navigation = useNavigation<NavigationProp<NavigationList>>()
-  const route = useRoute()
-  let colorScheme = useColorScheme()
   const emailVal = useAppSelector((state) => state.user.email)
-
-  console.log(route.name)
 
   return (
     <>

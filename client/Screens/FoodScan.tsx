@@ -50,7 +50,7 @@ export default function FoodScan() {
           await Permissions.askAsync(Permissions.CAMERA)
         }
       } catch (err) {
-        console.log(err)
+        // console.log(err)
       }
     })()
   })
