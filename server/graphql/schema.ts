@@ -6,7 +6,6 @@ const typeDefs = gql`
     pass: String!
   }
   type Exercise {
-    bodyPart: String!
     equipment: String!
     gifUrl: String!
     id: String!
