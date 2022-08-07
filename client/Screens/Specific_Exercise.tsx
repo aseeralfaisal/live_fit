@@ -61,6 +61,8 @@ export default function Specific_Exercise() {
     setSpecificWorkout(true)
   }
 
+  const [inputBorderColor, setInputBorderColor] = React.useState('#ccc')
+
   return (
     <>
       <View
@@ -70,8 +72,15 @@ export default function Specific_Exercise() {
         }}
       >
         <Header />
-        <View style={styles.input}>
+        <View
+          style={[
+            styles.input,
+            { borderColor: inputBorderColor, borderWidth: 1 },
+          ]}
+        >
           <TextInput
+            onFocus={() => setInputBorderColor('#92A3FD')}
+            onBlur={() => setInputBorderColor('#ccc')}
             value={searchVal}
             onChangeText={(val) => searchExercise(val)}
             placeholder='Search Exercises'
@@ -109,11 +118,11 @@ export default function Specific_Exercise() {
                       >
                         <View
                           style={{
-                            width: 60,
-                            height: 60,
+                            width: 65,
+                            height: 65,
                             borderRadius: 100,
                             overflow: 'hidden',
-                            borderWidth: 1.2,
+                            borderWidth: 1,
                             borderColor: '#ccc',
                           }}
                         >
@@ -202,16 +211,17 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 48,
-    borderRadius: 14,
-    backgroundColor: '#F7F8F8',
+    borderRadius: 16,
+    backgroundColor: '#F8F9F9',
     flexDirection: 'row',
     alignItems: 'center',
     fontFamily: 'Poppins',
-    fontSize: 20,
     marginHorizontal: 20,
+    // borderWidth: 1,
   },
   inputTextField: {
     width: 250,
+    fontSize: 16,
     marginHorizontal: 10,
   },
 })

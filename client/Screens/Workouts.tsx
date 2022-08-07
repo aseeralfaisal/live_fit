@@ -11,6 +11,8 @@ import {
 import Header from '../Components/Header'
 import { useColorScheme } from 'react-native-appearance'
 import { useNavigation, NavigationProp } from '@react-navigation/native'
+import { Btn } from '../Components/Button'
+import { LinearGradient } from 'expo-linear-gradient'
 
 type navigationList = {
   FoodScan: undefined
@@ -61,11 +63,11 @@ export default function Workouts() {
                       })
                     }}
                     style={{
-                      borderColor: '#ccc',
+                      borderColor: '#ccc', //92A3FD
                       borderRadius: 15,
                       borderWidth: 1,
-                      height: 150,
-                      width: 150,
+                      height: 165,
+                      width: 165,
                       justifyContent: 'center',
                       alignItems: 'center',
                     }}
@@ -74,7 +76,18 @@ export default function Workouts() {
                       source={item.img}
                       style={{ width: 120, height: 120, resizeMode: 'contain' }}
                     />
-                    <Text style={styles.tileTitle}>{item.name}</Text>
+                    <LinearGradient
+                      colors={['#92A3FD', '#92A3FD']}
+                      style={{
+                        borderBottomLeftRadius: 10,
+                        borderBottomRightRadius: 10,
+                        borderTopLeftRadius: 3,
+                        borderTopRightRadius: 3,
+                        marginTop: 5
+                      }}
+                    >
+                      <Text style={styles.tileTitle}>{item.name}</Text>
+                    </LinearGradient>
                   </TouchableOpacity>
                 </View>
               )
@@ -97,9 +110,12 @@ const styles = StyleSheet.create({
   },
   tileTitle: {
     fontFamily: 'Poppins',
-    color: 'rgb(80,80,80)',
+    // color: '#92A3FD',
+    color: '#fff',
     textTransform: 'capitalize',
     fontSize: 16,
+    width: 155,
+    borderRadius: 10,
     textAlign: 'center',
   },
   list: {
