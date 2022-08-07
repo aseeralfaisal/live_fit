@@ -54,7 +54,7 @@ export const Login = ({ setIsAuthenticated }: any) => {
         })
       }
     } catch (err) {
-      console.log(err)
+      // console.log(err)
     }
   }
   return (

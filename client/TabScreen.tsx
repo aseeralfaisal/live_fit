@@ -14,6 +14,7 @@ import Workouts from './Screens/Workouts'
 import BMI from './Screens/BMI'
 import Map from './Screens/Map'
 import About from './Screens/About'
+import Specific_Exercise from './Screens/Specific_Exercise'
 
 type TabParamList = {
   Home: undefined
@@ -24,6 +25,7 @@ type TabParamList = {
 }
 type StackParamList = {
   HomeMain: undefined
+  Specific_Exercise: undefined
   FoodScan: undefined
   Workouts: undefined
   BMI: undefined
@@ -46,6 +48,7 @@ export default function TabScreen() {
       <View style={{ flex: 1, backgroundColor: 'rgba(80,80,80,0.3)' }}>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name='HomeMain' children={() => <Home />} />
+          <Stack.Screen name='Specific_Exercise' children={() => <Specific_Exercise />}/>
           <Stack.Screen name='Map' children={() => <Map />} />
           <Stack.Screen name='Workouts' children={() => <Workouts />} />
           <Stack.Screen name='BMI' children={() => <BMI />} />
@@ -55,7 +58,6 @@ export default function TabScreen() {
     )
   }
 
-  let colorScheme = useColorScheme()
   return (
     <NavigationContainer>
       <Tab.Navigator
