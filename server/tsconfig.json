@@ -1,15 +1,16 @@
   {
     "compilerOptions": {
-      "module": "ES6",
+      "module": "ESNext",
       "esModuleInterop": true,
       "allowSyntheticDefaultImports": true,
-      "target": "ES6",
+      "target": "ESNext",
       "noImplicitAny": false,
       "moduleResolution": "node",
       "sourceMap": true,
       "outDir": "dist",
       "types": ["node"],
       "baseUrl": ".",
+      "resolveJsonModule": true,
       "paths": {
         "*": [
           "node_modules/*",
@@ -17,7 +18,7 @@
         ]
       },
       "lib": [
-        "ES6"
+        "ESNext"
       ],
     },
     "ts-node": {

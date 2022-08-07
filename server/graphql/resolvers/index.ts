@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import { ApolloError } from 'apollo-server-express'
 const saltRounds = process.env.SALT_ROUNDS as unknown as number
 import axios from 'axios'
+import exercises from '../../Data/exercises.json' assert { type: 'json' }
 
 interface userArgsType {
   user: string
@@ -50,16 +51,21 @@ const resolvers = {
     },
     async getExercise(_: undefined, { target }: { target: string }) {
       try {
-        const BASE_URL = `https://exercisedb.p.rapidapi.com/exercises/bodyPart/${target}`
-        const config = {
-          headers: {
-            'X-RapidAPI-Key':
-              'adc17d2ademsh0e623b3458ffb2dp19ade4jsn0d7711bcfd5f',
-            'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com',
-          },
+        const { chest, back, legs, shoulders, arms } = exercises
+        switch (target) {
+          case 'chest':
+            return chest
+          case 'back':
+            return back
+          case 'legs':
+            return legs
+          case 'shoulders':
+            return shoulders
+          case 'arms':
+            return arms
+          default:
+            return null
         }
-        const exercises = await axios.get(BASE_URL, config)
-        return exercises.data
       } catch (err) {
         console.log(err)
       }
