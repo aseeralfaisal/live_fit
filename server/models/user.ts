@@ -8,8 +8,8 @@ import db from '../config/db.config'
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   [x: string]: any
-  user: string
-  pass: string
+  declare user: string
+  declare pass: string
 }
 User.init(
   {
