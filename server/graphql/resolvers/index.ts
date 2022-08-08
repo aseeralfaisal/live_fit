@@ -2,7 +2,6 @@ import User from '../../models/user'
 import bcrypt from 'bcrypt'
 import { ApolloError } from 'apollo-server-express'
 const saltRounds = process.env.SALT_ROUNDS as unknown as number
-import axios from 'axios'
 import exercises from '../../Data/exercises.json' assert { type: 'json' }
 
 interface userArgsType {
@@ -28,19 +27,16 @@ const resolvers = {
           return newUser.toJSON()
         }
       } catch (err) {
-        // console.log(err)
+        console.log(err)
       }
     },
     async loginUser(_: undefined, args: userArgsType) {
       const { user, pass } = args
       try {
         const findUser = await User.findOne({ where: { user: user } })
-        console.log('USER__FOUND: ___', findUser)
         if (findUser) {
           const passCompare = await bcrypt.compare(pass, findUser.pass)
-          console.log('PASSWORD: ___', passCompare)
           if (passCompare) {
-            console.log('FIND__USER__JSON: ___', findUser.toJSON())
             return findUser.toJSON()
           } else {
             return new ApolloError("Password's do not match")
@@ -49,7 +45,7 @@ const resolvers = {
           return new ApolloError("User doesn't exists")
         }
       } catch (err) {
-        // console.log(err)
+        console.log(err)
       }
     },
     async getExercise(_: undefined, { target }: { target: string }) {

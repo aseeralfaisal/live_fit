@@ -18,7 +18,7 @@
         ]
       },
       "lib": [
-        "ESNext"
+        "ES6"
       ],
     },
     "ts-node": {
