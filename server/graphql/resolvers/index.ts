@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt'
 import { ApolloError } from 'apollo-server-express'
 const saltRounds = process.env.SALT_ROUNDS as unknown as number
 import exercises from '../../Data/exercises.json' assert { type: 'json' }
+import chosenExercise from '../../models/chosenExercises'
 
 interface userArgsType {
   user: string
@@ -68,6 +69,29 @@ const resolvers = {
       } catch (err) {
         console.log(err)
       }
+    },
+    async setSelectedExercises(_: undefined, { exercises }: any) {
+      const bulkCreate = await chosenExercise.bulkCreate(exercises, {
+        returning: true,
+      })
+      console.log(bulkCreate)
+      return bulkCreate
+    },
+    async getSelectedExercises(_: undefined, { user }) {
+      const getExercises = await chosenExercise.findAll({
+        where: { user: user },
+      })
+      console.log(getExercises)
+      return getExercises
+    },
+    async deleteSelectedExercises(_: undefined, { equipment, user }) {
+      const deleteExercises = await chosenExercise.destroy({
+        where: { equipment, user },
+      })
+      const getExercises = await chosenExercise.findAll({
+        where: { user: user, equipment: equipment },
+      })
+      return getExercises
     },
   },
 }

@@ -62,6 +62,11 @@ export default function Specific_Exercise() {
   }
 
   const [inputBorderColor, setInputBorderColor] = React.useState('#ccc')
+  const [exerciseArray, setExerciseArray] = React.useState<Array<object>>([{}])
+
+  const selectExercises = (item: any) => {
+    setExerciseArray([...exerciseArray, item])
+  }
 
   return (
     <>
@@ -87,70 +92,81 @@ export default function Specific_Exercise() {
             style={styles.inputTextField}
           />
         </View>
-        <FlatList
-          data={workouts}
-          renderItem={({ item }: any) => {
-            return (
-              <>
-                {item.name.toLowerCase().includes(searchVal.toLowerCase()) ? (
-                  <View
-                    style={{
-                      marginHorizontal: window.width - window.width / 1.05,
-                      borderColor: 'rgba(100,100,100,0.25)',
-                      padding: 8,
-                      borderBottomWidth: 1,
-                    }}
-                  >
-                    <TouchableOpacity
-                      onPress={() => specificView(item)}
+        <View
+          style={{
+            marginTop: 14,
+            backgroundColor: 'rgba(100,100,100,0.05)',
+            marginHorizontal: 20,
+            borderRadius: 12,
+          }}
+        >
+          <FlatList
+            data={workouts}
+            renderItem={({ item }: any) => {
+              return (
+                <>
+                  {item.name.toLowerCase().includes(searchVal.toLowerCase()) ? (
+                    <View
                       style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
+                        marginHorizontal: window.width - window.width / 1.05,
+                        borderColor: 'rgba(100,100,100,0.2)',
+                        // borderBottomWidth: 1,
+                        padding: 8,
+                        // backgroundColor: 'rgba(100,100,100,0.1)',
+                        borderRadius: 8,
                       }}
                     >
-                      <View
+                      <TouchableOpacity
+                        onPress={() => selectExercises(item)}
                         style={{
                           flexDirection: 'row',
-                          justifyContent: 'space-between',
                           alignItems: 'center',
-                          marginVertical: 5,
                         }}
                       >
                         <View
                           style={{
-                            width: 65,
-                            height: 65,
-                            borderRadius: 100,
-                            overflow: 'hidden',
-                            borderWidth: 1,
-                            borderColor: '#ccc',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            marginVertical: 5,
                           }}
                         >
-                          <Image
-                            source={{ uri: item.gifUrl }}
+                          <View
                             style={{
-                              width: 60,
-                              height: 60,
+                              width: 65,
+                              height: 65,
                               borderRadius: 100,
+                              overflow: 'hidden',
+                              borderWidth: 1,
+                              borderColor: '#ccc',
                             }}
-                          />
+                          >
+                            <Image
+                              source={{ uri: item.gifUrl }}
+                              style={{
+                                width: 60,
+                                height: 60,
+                                borderRadius: 100,
+                              }}
+                            />
+                          </View>
+                          <Text style={[styles.titleTxt, { marginLeft: 15 }]}>
+                            {item.name.split(' ')[0]} {item.name.split(' ')[1]}{' '}
+                            {item.name.split(' ')[2]}
+                          </Text>
                         </View>
-                        <Text style={[styles.titleTxt, { marginLeft: 15 }]}>
-                          {item.name.split(' ')[0]} {item.name.split(' ')[1]}{' '}
-                          {item.name.split(' ')[2]}
-                        </Text>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
-                ) : (
-                  <></>
-                )}
-              </>
-            )
-          }}
-          numColumns={1}
-          keyExtractor={(_, idx) => idx.toString()}
-        />
+                      </TouchableOpacity>
+                    </View>
+                  ) : (
+                    <></>
+                  )}
+                </>
+              )
+            }}
+            numColumns={1}
+            keyExtractor={(_, idx) => idx.toString()}
+          />
+        </View>
       </View>
       <Modal
         animationType='fade'
@@ -194,7 +210,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     textTransform: 'capitalize',
     color: 'rgb(80,80,80)',
-    fontSize: 16,
+    fontSize: 14,
   },
   list: {
     flex: 1,
@@ -221,7 +237,7 @@ const styles = StyleSheet.create({
   },
   inputTextField: {
     width: 250,
-    fontSize: 16,
+    fontSize: 14,
     marginHorizontal: 10,
   },
 })

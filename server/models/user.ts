@@ -16,9 +16,10 @@ User.init(
     user: { type: DataTypes.STRING, primaryKey: true },
     pass: { type: DataTypes.STRING },
   },
+  
   { sequelize: db, freezeTableName: true, tableName: 'users' }
 )
 
-db.sync()
+User.sync()
 
 export default User
