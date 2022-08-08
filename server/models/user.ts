@@ -19,6 +19,6 @@ User.init(
   { sequelize: db, freezeTableName: true, tableName: 'users' }
 )
 
-db.sync({ force: true })
+db.sync()
 
 export default User

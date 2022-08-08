@@ -43,6 +43,7 @@ export const Login = ({ setIsAuthenticated }: any) => {
           pass: passVal,
         },
       })
+      console.log(fetchData.data)
       if (fetchData.data.data !== null) {
         setIsAuthenticated(true)
         setLoader(false)
@@ -54,7 +55,7 @@ export const Login = ({ setIsAuthenticated }: any) => {
         })
       }
     } catch (err) {
-      // console.log(err)
+      console.log(err)
     }
   }
   return (
