@@ -3,6 +3,7 @@ import { ApolloError } from 'apollo-server-express'
 const saltRounds = process.env.SALT_ROUNDS as unknown as number
 import exercises from '../../Data/exercises.json' assert { type: 'json' }
 import User from '../../models/user'
+import Workouts from '../../models/workouts'
 
 interface argsType {
   name: string
@@ -14,7 +15,7 @@ const resolvers = {
     getUser: () => User.find(),
   },
   Mutation: {
-    async addUser(parent: undefined, args: argsType) {
+    async addUser(_: any, args: argsType) {
       const { name, pass } = args
       try {
         const salt = await bcrypt.genSalt(saltRounds)
@@ -40,13 +41,13 @@ const resolvers = {
         if (passCompare) {
           return userExists
         } else {
-          return new ApolloError("Password do not match")
+          return new ApolloError('Password do not match')
         }
       } else {
         return new ApolloError("User doesn't exist")
       }
     },
-    async getExercise(_: undefined, { target }: { target: string }) {
+    async getExercise(_: any, { target }: { target: string }) {
       try {
         const { chest, back, legs, shoulders, arms } = exercises
         switch (target) {
@@ -63,6 +64,53 @@ const resolvers = {
           default:
             return null
         }
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async createWorkout(_: any, { userName, workoutName, equipment, gifUrl, id, name, target }) {
+      try {
+        const user = await User.findOne({ user: userName })
+        if (user) {
+          const workoutFound = await Workouts.findOne({ workoutName })
+          if (workoutFound) {
+            return new ApolloError('Workout already exist')
+          } else {
+            const workouts = new Workouts({
+              userName,
+              workoutName,
+              equipment,
+              gifUrl,
+              id,
+              name,
+              target,
+            })
+            await workouts.save()
+            const result = await Workouts.find({ userName })
+            return result
+          }
+        } else {
+          return new ApolloError('User not found')
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async getUserWorkouts(_: any, { userName }) {
+      try {
+        const user = await User.findOne({ user: userName })
+        if (user) {
+          const workoutsFound = await Workouts.find({ userName })
+          return workoutsFound
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async getUserWorkout(_: any, { workoutName }) {
+      try {
+        const workoutsFound = await Workouts.find({ workoutName })
+        return workoutsFound
       } catch (err) {
         console.log(err)
       }
