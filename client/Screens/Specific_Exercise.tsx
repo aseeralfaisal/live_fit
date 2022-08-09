@@ -9,10 +9,12 @@ import {
   Modal,
   FlatList,
   TextInput,
+  ColorPropType,
 } from 'react-native'
 import Header from '../Components/Header'
 import axios from 'axios'
 import { useRoute } from '@react-navigation/native'
+import { useAppSelector } from '../redux/hooks'
 
 export default function Specific_Exercise() {
   const route = useRoute()
@@ -22,6 +24,7 @@ export default function Specific_Exercise() {
   const [searchVal, setSearchVal] = React.useState('')
   const [workouts, setWorkouts] = React.useState([])
   const window = Dimensions.get('window')
+  const emailVal = useAppSelector((state) => state.user.email)
 
   const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
   const GET_EXERCISE_QUERY = `mutation Mutation($target: String!) {
@@ -34,6 +37,7 @@ export default function Specific_Exercise() {
   }`
 
   React.useEffect(() => {
+    let isMounted = true
     const getExerciseList = async () => {
       const fetchData = await axios.post(BASE_URL, {
         query: GET_EXERCISE_QUERY,
@@ -44,11 +48,14 @@ export default function Specific_Exercise() {
       const { getExercise } = fetchData.data.data
       return getExercise
     }
-    getExerciseList()
-      .then((response) => setWorkouts(response))
-      .catch((err) => console.log(err))
+    if (isMounted) {
+      getExerciseList()
+        .then((response) => setWorkouts(response))
+        .catch((err) => console.log(err))
+    }
     return () => {
       getExerciseList()
+      isMounted = false
     }
   }, [])
 
@@ -67,6 +74,8 @@ export default function Specific_Exercise() {
   const selectExercises = (item: any) => {
     setExerciseArray([...exerciseArray, item])
   }
+  // console.log(exerciseArray)
+  const selected = (item: object) => exerciseArray.includes(item)
 
   return (
     <>
@@ -74,15 +83,9 @@ export default function Specific_Exercise() {
         style={{
           flex: 1,
           backgroundColor: '#fff',
-        }}
-      >
+        }}>
         <Header />
-        <View
-          style={[
-            styles.input,
-            { borderColor: inputBorderColor, borderWidth: 1 },
-          ]}
-        >
+        <View style={[styles.input, { borderColor: inputBorderColor, borderWidth: 1 }]}>
           <TextInput
             onFocus={() => setInputBorderColor('#92A3FD')}
             onBlur={() => setInputBorderColor('#ccc')}
@@ -98,8 +101,7 @@ export default function Specific_Exercise() {
             backgroundColor: 'rgba(100,100,100,0.05)',
             marginHorizontal: 20,
             borderRadius: 12,
-          }}
-        >
+          }}>
           <FlatList
             data={workouts}
             renderItem={({ item }: any) => {
@@ -110,49 +112,56 @@ export default function Specific_Exercise() {
                       style={{
                         marginHorizontal: window.width - window.width / 1.05,
                         borderColor: 'rgba(100,100,100,0.2)',
-                        // borderBottomWidth: 1,
+                        borderBottomWidth: 1,
                         padding: 8,
                         // backgroundColor: 'rgba(100,100,100,0.1)',
                         borderRadius: 8,
-                      }}
-                    >
+                      }}>
                       <TouchableOpacity
+                        activeOpacity={0.9}
                         onPress={() => selectExercises(item)}
                         style={{
                           flexDirection: 'row',
                           alignItems: 'center',
-                        }}
-                      >
+                        }}>
+                        {selected(item) && (
+                          <View
+                            style={{
+                              backgroundColor: '#92A3FD',
+                              marginLeft: -20,
+                              marginRight: 16,
+                              width: 4,
+                              height: '100%',
+                              borderRadius: 20,
+                            }}></View>
+                        )}
                         <View
                           style={{
                             flexDirection: 'row',
                             justifyContent: 'space-between',
                             alignItems: 'center',
                             marginVertical: 5,
-                          }}
-                        >
+                          }}>
                           <View
                             style={{
                               width: 65,
                               height: 65,
                               borderRadius: 100,
                               overflow: 'hidden',
-                              borderWidth: 1,
-                              borderColor: '#ccc',
-                            }}
-                          >
+                              // borderWidth: 0,
+                              // borderColor: '#ccc',
+                            }}>
                             <Image
                               source={{ uri: item.gifUrl }}
                               style={{
-                                width: 60,
-                                height: 60,
+                                width: 65,
+                                height: 65,
                                 borderRadius: 100,
                               }}
                             />
                           </View>
                           <Text style={[styles.titleTxt, { marginLeft: 15 }]}>
-                            {item.name.split(' ')[0]} {item.name.split(' ')[1]}{' '}
-                            {item.name.split(' ')[2]}
+                            {item.name.split(' ')[0]} {item.name.split(' ')[1]} {item.name.split(' ')[2]}
                           </Text>
                         </View>
                       </TouchableOpacity>
@@ -172,25 +181,16 @@ export default function Specific_Exercise() {
         animationType='fade'
         visible={specificWorkout}
         transparent={true}
-        onRequestClose={() => setSpecificWorkout(!specificWorkout)}
-      >
+        onRequestClose={() => setSpecificWorkout(!specificWorkout)}>
         <View style={{ backgroundColor: '#ffffff' }}>
           <View
             style={{
               alignItems: 'center',
               height: '100%',
               justifyContent: 'center',
-            }}
-          >
-            <Image
-              source={{ uri: exerciseItem?.gifUrl }}
-              style={{ width: 250, height: 250, resizeMode: 'contain' }}
-            />
-            <Text
-              style={[styles.titleTxt, { fontSize: 28, textAlign: 'center' }]}
-            >
-              {exerciseItem?.name}
-            </Text>
+            }}>
+            <Image source={{ uri: exerciseItem?.gifUrl }} style={{ width: 250, height: 250, resizeMode: 'contain' }} />
+            <Text style={[styles.titleTxt, { fontSize: 28, textAlign: 'center' }]}>{exerciseItem?.name}</Text>
           </View>
         </View>
       </Modal>

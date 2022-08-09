@@ -1,13 +1,5 @@
 import * as React from 'react'
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Dimensions,
-  Image,
-  FlatList,
-} from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions, Image, FlatList } from 'react-native'
 import Header from '../Components/Header'
 import { useColorScheme } from 'react-native-appearance'
 import { useNavigation, NavigationProp } from '@react-navigation/native'
@@ -40,10 +32,10 @@ export default function Workouts() {
         style={{
           flex: 1,
           backgroundColor: '#fff',
-        }}
-      >
+        }}>
         <Header />
         <View style={{ paddingHorizontal: 15, paddingBottom: 150 }}>
+          <Text style={styles.txt}>Explore Workouts</Text>
           <FlatList
             data={targetBodyPart}
             renderItem={({ item }) => {
@@ -52,41 +44,55 @@ export default function Workouts() {
                   style={{
                     flex: 1 / 2,
                     flexDirection: 'column',
-                    marginVertical: 15,
+                    marginVertical: 9,
                     alignItems: 'center',
-                  }}
-                >
+                  }}>
                   <TouchableOpacity
                     onPress={() => {
                       navigation.navigate('Specific_Exercise', {
                         exerciseTarget: item.name,
                       })
                     }}
-                    style={{
-                      borderColor: '#ccc', //92A3FD
-                      borderRadius: 15,
-                      borderWidth: 1,
-                      height: 165,
-                      width: 165,
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}
+                    // style={{
+                    //   borderColor: '#ccc', //92A3FD
+                    //   borderRadius: 15,
+                    //   borderWidth: 1,
+                    //   height: 148,
+                    //   width: 150,
+                    //   justifyContent: 'center',
+                    //   alignItems: 'center',
+                    // }}
                   >
-                    <Image
-                      source={item.img}
-                      style={{ width: 120, height: 120, resizeMode: 'contain' }}
-                    />
                     <LinearGradient
-                      colors={['#92A3FD', '#92A3FD']}
-                      style={{
-                        borderBottomLeftRadius: 10,
-                        borderBottomRightRadius: 10,
-                        borderTopLeftRadius: 3,
-                        borderTopRightRadius: 3,
-                        marginTop: 5
-                      }}
-                    >
-                      <Text style={styles.tileTitle}>{item.name}</Text>
+                      colors={['#C58BF233', '#EEA4CE22']}
+                      // colors={['#92A3FD55', '#9DCEFF44']}
+                      style={{ alignItems: 'center', borderRadius: 15 }}>
+                      <View
+                        style={{
+                          width: 120,
+                          height: 120,
+                          borderRadius: 100,
+                          alignItems: 'center',
+                          overflow: 'hidden',
+                          paddingTop: '15%',
+                        }}>
+                        <Image
+                          source={item.img}
+                          style={{ width: 80, height: 80, resizeMode: 'contain', borderRadius: 100 }}
+                        />
+                      </View>
+                      <View
+                        style={{
+                          borderBottomLeftRadius: 13,
+                          borderBottomRightRadius: 13,
+                          borderTopLeftRadius: 3,
+                          borderTopRightRadius: 3,
+                          opacity: 0.85,
+                          width: 145,
+                          paddingBottom: 10,
+                        }}>
+                        <Text style={styles.tileTitle}>{item.name}</Text>
+                      </View>
                     </LinearGradient>
                   </TouchableOpacity>
                 </View>
@@ -109,11 +115,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   tileTitle: {
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins_Bold',
     // color: '#92A3FD',
-    color: '#fff',
+    color: '#555',
     textTransform: 'capitalize',
-    fontSize: 16,
+    fontSize: 14,
     width: 155,
     borderRadius: 10,
     textAlign: 'center',

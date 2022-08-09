@@ -31,19 +31,18 @@ export const Login = ({ setIsAuthenticated }: any) => {
   const loginAction = async () => {
     try {
       setLoader(true)
-      const LOGIN_MUTATION = `mutation loginUser($user: String!, $pass: String!) {
-        loginUser(user: $user, pass: $pass) {
+      const LOGIN_MUTATION = `mutation LoginUser($name: String!, $pass: String!) {
+        loginUser(name: $name, pass: $pass) {
           user
         }
       }`
       const fetchData = await axios.post(BASE_URL, {
         query: LOGIN_MUTATION,
         variables: {
-          user: emailVal,
+          name: emailVal,
           pass: passVal,
         },
       })
-      console.log(fetchData.data)
       if (fetchData.data.data !== null) {
         setIsAuthenticated(true)
         setLoader(false)
