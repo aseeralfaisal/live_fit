@@ -13,8 +13,8 @@ export const Login = ({ setIsAuthenticated }: any) => {
   const passVal = useAppSelector((state) => state.user.pass)
   const [loader, setLoader] = useState(false)
 
-  const onUserVal = (userVal: string) => {
-    dispatch(changeUserVal(userVal))
+  const onUserVal = (user: string) => {
+    dispatch(changeUserVal(user))
   }
   const onPassVal = (pass: string) => {
     dispatch(changePassVal(pass))
