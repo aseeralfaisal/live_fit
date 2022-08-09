@@ -5,23 +5,12 @@ import {
   View,
   TouchableOpacity,
   Image,
-  Modal,
 } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
-import { useColorScheme } from 'react-native-appearance'
-import {
-  useNavigation,
-  NavigationProp,
-  useRoute,
-} from '@react-navigation/native'
-import { AnimatedCircularProgress } from 'react-native-circular-progress'
 import { useAppSelector } from '../redux/hooks'
+import { useRoute } from '@react-navigation/native'
 
-type NavigationList = {
-  about: undefined
-}
 export default function Header() {
-  const navigation = useNavigation<NavigationProp<NavigationList>>()
   const userVal = useAppSelector((state) => state.user.userVal)
 
   return (

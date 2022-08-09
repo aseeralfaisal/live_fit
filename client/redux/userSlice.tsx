@@ -28,6 +28,13 @@ export const userSlice = createSlice({
   },
 })
 
-export const { changeUserVal, changePassVal, setWorkouts, setSpecificExercises, setExerciseTarget } = userSlice.actions
+export const {
+  changeUserVal,
+  changePassVal,
+  setWorkouts,
+  setSpecificExercises,
+  setExerciseTarget,
+  setIsWorkoutpage,
+} = userSlice.actions
 
 export default userSlice.reducer

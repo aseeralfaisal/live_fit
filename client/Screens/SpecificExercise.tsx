@@ -16,6 +16,7 @@ import axios from 'axios'
 import { useAppSelector } from '../redux/hooks'
 import { setSpecificExercises } from '../redux/userSlice'
 import { useDispatch } from 'react-redux'
+import { Btn } from '../Components/Button'
 
 export default function SpecificExercise() {
   const dispatch = useDispatch()
@@ -75,7 +76,32 @@ export default function SpecificExercise() {
   const selectExercises = (item: any) => {
     setExerciseArray([...exerciseArray, item])
   }
+  console.log(exerciseArray)
   const selected = (item: object) => exerciseArray.includes(item)
+
+  const createWorkout = async () => {
+    try {
+      const CREATE_WORKOUT_QUERY = `mutation CreateWorkout($exercises: WorkoutInput, $userName: String!, $workoutName: String!) {
+        createWorkout(exercises: $exercises, userName: $userName, workoutName: $workoutName) {
+          workoutName
+          exercises {
+            equipment
+          }
+        }
+      }`
+      const res = await axios.post(BASE_URL, {
+        query: CREATE_WORKOUT_QUERY,
+        variables: {
+          exercises: exerciseArray,
+          userName: userVal,
+          workoutName: 'Workout_NEW',
+        },
+      })
+      console.log(res.data)
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
   return (
     <>
@@ -95,6 +121,12 @@ export default function SpecificExercise() {
             style={styles.inputTextField}
           />
         </View>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={{ alignItems: 'center', marginBottom: -20 }}
+          onPress={createWorkout}>
+          <Btn title='Create a workout >' loading={false} />
+        </TouchableOpacity>
         <View
           style={{
             marginTop: 14,
@@ -113,8 +145,7 @@ export default function SpecificExercise() {
                         marginHorizontal: window.width - window.width / 1.05,
                         borderColor: 'rgba(100,100,100,0.2)',
                         padding: 8,
-                        // borderBottomWidth: 0,
-                        // backgroundColor: 'rgba(100,100,100,0.1)',
+                        borderBottomWidth: 1,
                         borderRadius: 8,
                       }}>
                       <TouchableOpacity
@@ -161,7 +192,10 @@ export default function SpecificExercise() {
                             />
                           </View>
                           <Text
-                            style={[styles.titleTxt, { marginLeft: 15, color: selected(item) ? '#92A3FD' : '#555' }]}>
+                            style={[
+                              styles.titleTxt,
+                              { marginLeft: 15, color: selected(item) ? '#92A3FD' : '#555' },
+                            ]}>
                             {item.name.split(' ')[0]} {item.name.split(' ')[1]} {item.name.split(' ')[2]}
                           </Text>
                         </View>
@@ -190,7 +224,10 @@ export default function SpecificExercise() {
               height: '100%',
               justifyContent: 'center',
             }}>
-            <Image source={{ uri: exerciseItem?.gifUrl }} style={{ width: 250, height: 250, resizeMode: 'contain' }} />
+            <Image
+              source={{ uri: exerciseItem?.gifUrl }}
+              style={{ width: 250, height: 250, resizeMode: 'contain' }}
+            />
             <Text style={[styles.titleTxt, { fontSize: 28, textAlign: 'center' }]}>{exerciseItem?.name}</Text>
           </View>
         </View>

@@ -1,13 +1,9 @@
 import * as React from 'react'
-import { NavigationContainer } from '@react-navigation/native'
+import { NavigationContainer, useRoute } from '@react-navigation/native'
 import Home from './Screens/Home'
-import { useColorScheme } from 'react-native-appearance'
 import { Image, View, TouchableOpacity } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import {
-  createStackNavigator,
-  StackNavigationProp,
-} from '@react-navigation/stack'
+import { createStackNavigator } from '@react-navigation/stack'
 import * as NavigationBar from 'expo-navigation-bar'
 import FoodScan from './Screens/FoodScan'
 import Workouts from './Screens/Workouts'
@@ -33,22 +29,20 @@ type StackParamList = {
 }
 
 export default function TabScreen() {
-  const [steps, setSteps] = React.useState(0)
-
   const Tab = createBottomTabNavigator<TabParamList>()
   const Stack = createStackNavigator<StackParamList>()
-  // const navigation = useNavigation<NavigationProp<StackParamList>>()
 
   React.useEffect(() => {
     NavigationBar.setBackgroundColorAsync('white')
   }, [])
 
   const HomeStack = () => {
+    
     return (
       <View style={{ flex: 1, backgroundColor: 'rgba(80,80,80,0.3)' }}>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name='HomeMain' children={() => <Home />} />
-          <Stack.Screen name='SpecificExercise' children={() => <SpecificExercise />}/>
+          <Stack.Screen name='SpecificExercise' children={() => <SpecificExercise />} />
           <Stack.Screen name='Map' children={() => <Map />} />
           <Stack.Screen name='Workouts' children={() => <Workouts />} />
           <Stack.Screen name='BMI' children={() => <BMI />} />
@@ -75,8 +69,7 @@ export default function TabScreen() {
             shadowColor: 'rgba(0,0,0,0.5)',
             alignSelf: 'center',
           },
-        }}
-      >
+        }}>
         <Tab.Screen
           name='Home'
           component={HomeStack}
@@ -179,9 +172,7 @@ export default function TabScreen() {
             tabBarIcon: ({ focused, color }) => (
               <Image
                 source={
-                  !focused
-                    ? require('./assets/icons/user.png')
-                    : require('./assets/icons/user-active.png')
+                  !focused ? require('./assets/icons/user.png') : require('./assets/icons/user-active.png')
                 }
                 style={{
                   height: 30,

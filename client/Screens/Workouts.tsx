@@ -1,7 +1,6 @@
 import * as React from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions, Image, FlatList } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, FlatList } from 'react-native'
 import Header from '../Components/Header'
-import { useColorScheme } from 'react-native-appearance'
 import { useNavigation, NavigationProp } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
 import axios from 'axios'
@@ -17,12 +16,11 @@ type navigationList = {
   WalkSteps: undefined
 }
 export default function Workouts() {
-  let colorScheme = useColorScheme()
-  const window = Dimensions.get('window')
   const navigation = useNavigation<NavigationProp<navigationList>>()
   const dispatch = useDispatch()
   const userVal = useAppSelector((state) => state.user.userVal)
   const workouts = useAppSelector((state) => state.user.workouts)
+
   const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
 
   const targetBodyPart = [
@@ -68,19 +66,20 @@ export default function Workouts() {
           backgroundColor: '#fff',
         }}>
         <Header />
-        <View style={{ paddingHorizontal: 15, paddingBottom: 150 }}>
+        <View style={{ paddingHorizontal: 15 }}>
           <Text style={styles.txt}>Your Workouts</Text>
           <FlatList
             data={workouts}
             renderItem={({ item }) => {
               const { workoutName } = item
               return (
-                <View>
-                  <Text
-                    style={[styles.tileTitle, { textAlign: 'left', backgroundColor: '#ccc', margin: 10, padding: 10 }]}>
+                <LinearGradient
+                  colors={['#92A3FD33', '#9DCEFF22']}
+                  style={{ marginHorizontal: 16, marginVertical: 8, borderRadius: 12 }}>
+                  <Text style={[styles.tileTitle, { textAlign: 'left', margin: 10, padding: 10 }]}>
                     {workoutName}
                   </Text>
-                </View>
+                </LinearGradient>
               )
             }}
             keyExtractor={(item, idx) => idx.toString()}
