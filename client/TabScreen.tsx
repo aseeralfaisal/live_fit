@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { NavigationContainer, useRoute } from '@react-navigation/native'
+import { NavigationContainer } from '@react-navigation/native'
 import Home from './Screens/Home'
 import { Image, View, TouchableOpacity } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -11,26 +11,11 @@ import BMI from './Screens/BMI'
 import Map from './Screens/Map'
 import About from './Screens/About'
 import SpecificExercise from './Screens/SpecificExercise'
-
-type TabParamList = {
-  Home: undefined
-  Calories: undefined
-  Workout: undefined
-  About: undefined
-  FoodScan: undefined
-}
-type StackParamList = {
-  HomeMain: undefined
-  SpecificExercise: undefined
-  FoodScan: undefined
-  Workouts: undefined
-  BMI: undefined
-  Map: undefined
-}
+import UserExercises from './Screens/UserExercises'
 
 export default function TabScreen() {
-  const Tab = createBottomTabNavigator<TabParamList>()
-  const Stack = createStackNavigator<StackParamList>()
+  const Tab = createBottomTabNavigator<any>()
+  const Stack = createStackNavigator<any>()
 
   React.useEffect(() => {
     NavigationBar.setBackgroundColorAsync('white')
@@ -43,6 +28,7 @@ export default function TabScreen() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name='HomeMain' children={() => <Home />} />
           <Stack.Screen name='SpecificExercise' children={() => <SpecificExercise />} />
+          <Stack.Screen name='UserExercises' children={() => <UserExercises />} />
           <Stack.Screen name='Map' children={() => <Map />} />
           <Stack.Screen name='Workouts' children={() => <Workouts />} />
           <Stack.Screen name='BMI' children={() => <BMI />} />

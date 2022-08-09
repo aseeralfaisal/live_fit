@@ -32,6 +32,7 @@ export default function SpecificExercise() {
   const GET_EXERCISE_QUERY = `mutation Mutation($target: String!) {
     getExercise(target: $target) {
       gifUrl
+      id
       name
       target
       equipment
@@ -71,7 +72,7 @@ export default function SpecificExercise() {
   }
 
   const [inputBorderColor, setInputBorderColor] = React.useState('#ccc')
-  const [exerciseArray, setExerciseArray] = React.useState<Array<object>>([{ userName: userVal }])
+  const [exerciseArray, setExerciseArray] = React.useState<any>([])
 
   const selectExercises = (item: any) => {
     setExerciseArray([...exerciseArray, item])
@@ -81,11 +82,16 @@ export default function SpecificExercise() {
 
   const createWorkout = async () => {
     try {
-      const CREATE_WORKOUT_QUERY = `mutation CreateWorkout($exercises: WorkoutInput, $userName: String!, $workoutName: String!) {
-        createWorkout(exercises: $exercises, userName: $userName, workoutName: $workoutName) {
+      const CREATE_WORKOUT_QUERY = `mutation CreateWorkout($userName: String!, $workoutName: String!, $exercises: [WorkoutInput]) {
+        createWorkout(userName: $userName, workoutName: $workoutName, exercises: $exercises) {
           workoutName
+          userName
           exercises {
             equipment
+            gifUrl
+            id
+            name
+            target
           }
         }
       }`
@@ -98,8 +104,8 @@ export default function SpecificExercise() {
         },
       })
       console.log(res.data)
-    } catch (err) {
-      console.log(err)
+    } catch ({ response }: any) {
+      console.log(response)
     }
   }
 
@@ -212,7 +218,7 @@ export default function SpecificExercise() {
           />
         </View>
       </View>
-      <Modal
+      {/* <Modal
         animationType='fade'
         visible={specificWorkout}
         transparent={true}
@@ -231,7 +237,7 @@ export default function SpecificExercise() {
             <Text style={[styles.titleTxt, { fontSize: 28, textAlign: 'center' }]}>{exerciseItem?.name}</Text>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
     </>
   )
 }

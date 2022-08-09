@@ -8,15 +8,8 @@ import { useAppSelector } from '../redux/hooks'
 import { useDispatch } from 'react-redux'
 import { setExerciseTarget, setWorkouts } from '../redux/userSlice'
 
-type navigationList = {
-  FoodScan: undefined
-  SpecificExercise: any
-  Workouts: undefined
-  BMI: undefined
-  WalkSteps: undefined
-}
 export default function Workouts() {
-  const navigation = useNavigation<NavigationProp<navigationList>>()
+  const navigation = useNavigation<any>()
   const dispatch = useDispatch()
   const userVal = useAppSelector((state) => state.user.userVal)
   const workouts = useAppSelector((state) => state.user.workouts)
@@ -73,18 +66,25 @@ export default function Workouts() {
             renderItem={({ item }) => {
               const { workoutName } = item
               return (
-                <LinearGradient
-                  colors={['#92A3FD33', '#9DCEFF22']}
-                  style={{ marginHorizontal: 16, marginVertical: 8, borderRadius: 12 }}>
-                  <Text style={[styles.tileTitle, { textAlign: 'left', margin: 10, padding: 10 }]}>
-                    {workoutName}
-                  </Text>
-                </LinearGradient>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('UserExercises', {
+                      workoutName,
+                    })
+                  }>
+                  <LinearGradient
+                    colors={['#92A3FD33', '#9DCEFF22']}
+                    style={{ marginHorizontal: 16, marginVertical: 8, borderRadius: 12 }}>
+                    <Text style={[styles.tileTitle, { textAlign: 'left', margin: 10, padding: 10 }]}>
+                      {workoutName}
+                    </Text>
+                  </LinearGradient>
+                </TouchableOpacity>
               )
             }}
             keyExtractor={(item, idx) => idx.toString()}
           />
-          <Text style={styles.txt}>Explore Workouts</Text>
+          <Text style={styles.txt}>Explore</Text>
           <FlatList
             data={targetBodyPart}
             renderItem={({ item }) => {
