@@ -5,10 +5,14 @@ import { useColorScheme } from 'react-native-appearance'
 import { useNavigation, NavigationProp } from '@react-navigation/native'
 import { Btn } from '../Components/Button'
 import { LinearGradient } from 'expo-linear-gradient'
+import axios from 'axios'
+import { useAppSelector } from '../redux/hooks'
+import { useDispatch } from 'react-redux'
+import { setExerciseTarget, setWorkouts } from '../redux/userSlice'
 
 type navigationList = {
   FoodScan: undefined
-  Specific_Exercise: undefined | any
+  SpecificExercise: any
   Workouts: undefined
   BMI: undefined
   WalkSteps: undefined
@@ -17,6 +21,10 @@ export default function Workouts() {
   let colorScheme = useColorScheme()
   const window = Dimensions.get('window')
   const navigation = useNavigation<NavigationProp<navigationList>>()
+  const dispatch = useDispatch()
+  const emailVal = useAppSelector((state) => state.user.email)
+  const workouts = useAppSelector((state) => state.user.workouts)
+  const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
 
   const targetBodyPart = [
     { name: 'chest', img: require(`../assets/imgs/chest.png`) },
@@ -25,6 +33,34 @@ export default function Workouts() {
     { name: 'arms', img: require(`../assets/imgs/arms.png`) },
     { name: 'legs', img: require(`../assets/imgs/legs.png`) },
   ]
+  const GET_USER_WORKOUTS = `mutation GetUserWorkouts($userName: String!) {
+    getUserWorkouts(userName: $userName) {
+      workoutName
+    }
+  }`
+  React.useEffect(() => {
+    let isMounted = true
+    const getWorkoutList = async () => {
+      const fetchData = await axios.post(BASE_URL, {
+        query: GET_USER_WORKOUTS,
+        variables: {
+          userName: emailVal,
+        },
+      })
+      const { getUserWorkouts } = fetchData.data.data
+      console.log(getUserWorkouts)
+      return getUserWorkouts
+    }
+    if (isMounted) {
+      getWorkoutList()
+        .then((response) => dispatch(setWorkouts(response)))
+        .catch((err) => console.log(err))
+    }
+    return () => {
+      getWorkoutList()
+      isMounted = false
+    }
+  }, [])
 
   return (
     <>
@@ -35,6 +71,22 @@ export default function Workouts() {
         }}>
         <Header />
         <View style={{ paddingHorizontal: 15, paddingBottom: 150 }}>
+          <Text style={styles.txt}>Your Workouts</Text>
+          <FlatList
+            data={workouts}
+            renderItem={({ item }) => {
+              const { workoutName } = item
+              return (
+                <View>
+                  <Text
+                    style={[styles.tileTitle, { textAlign: 'left', backgroundColor: '#ccc', margin: 10, padding: 10 }]}>
+                    {workoutName}
+                  </Text>
+                </View>
+              )
+            }}
+            keyExtractor={(item, idx) => idx.toString()}
+          />
           <Text style={styles.txt}>Explore Workouts</Text>
           <FlatList
             data={targetBodyPart}
@@ -49,23 +101,11 @@ export default function Workouts() {
                   }}>
                   <TouchableOpacity
                     onPress={() => {
-                      navigation.navigate('Specific_Exercise', {
-                        exerciseTarget: item.name,
-                      })
-                    }}
-                    // style={{
-                    //   borderColor: '#ccc', //92A3FD
-                    //   borderRadius: 15,
-                    //   borderWidth: 1,
-                    //   height: 148,
-                    //   width: 150,
-                    //   justifyContent: 'center',
-                    //   alignItems: 'center',
-                    // }}
-                  >
+                      dispatch(setExerciseTarget(item.name))
+                      navigation.navigate('SpecificExercise')
+                    }}>
                     <LinearGradient
                       colors={['#C58BF233', '#EEA4CE22']}
-                      // colors={['#92A3FD55', '#9DCEFF44']}
                       style={{ alignItems: 'center', borderRadius: 15 }}>
                       <View
                         style={{

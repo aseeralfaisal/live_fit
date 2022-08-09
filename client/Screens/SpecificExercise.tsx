@@ -13,18 +13,19 @@ import {
 } from 'react-native'
 import Header from '../Components/Header'
 import axios from 'axios'
-import { useRoute } from '@react-navigation/native'
 import { useAppSelector } from '../redux/hooks'
+import { setSpecificExercises } from '../redux/userSlice'
+import { useDispatch } from 'react-redux'
 
-export default function Specific_Exercise() {
-  const route = useRoute()
-  let { exerciseTarget }: any = route.params
+export default function SpecificExercise() {
+  const dispatch = useDispatch()
+  const exerciseTarget = useAppSelector((state) => state.user.exerciseTarget)
   const [specificWorkout, setSpecificWorkout] = React.useState(false)
   const [exerciseItem, setExerciseItem] = React.useState<any>(undefined)
   const [searchVal, setSearchVal] = React.useState('')
-  const [workouts, setWorkouts] = React.useState([])
   const window = Dimensions.get('window')
   const emailVal = useAppSelector((state) => state.user.email)
+  const specificExercises = useAppSelector((state) => state.user.specificExercises)
 
   const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
   const GET_EXERCISE_QUERY = `mutation Mutation($target: String!) {
@@ -50,7 +51,7 @@ export default function Specific_Exercise() {
     }
     if (isMounted) {
       getExerciseList()
-        .then((response) => setWorkouts(response))
+        .then((response) => dispatch(setSpecificExercises(response)))
         .catch((err) => console.log(err))
     }
     return () => {
@@ -69,12 +70,11 @@ export default function Specific_Exercise() {
   }
 
   const [inputBorderColor, setInputBorderColor] = React.useState('#ccc')
-  const [exerciseArray, setExerciseArray] = React.useState<Array<object>>([{}])
+  const [exerciseArray, setExerciseArray] = React.useState<Array<object>>([{ userName: emailVal }])
 
   const selectExercises = (item: any) => {
     setExerciseArray([...exerciseArray, item])
   }
-  // console.log(exerciseArray)
   const selected = (item: object) => exerciseArray.includes(item)
 
   return (
@@ -103,7 +103,7 @@ export default function Specific_Exercise() {
             borderRadius: 12,
           }}>
           <FlatList
-            data={workouts}
+            data={specificExercises}
             renderItem={({ item }: any) => {
               return (
                 <>
@@ -112,8 +112,8 @@ export default function Specific_Exercise() {
                       style={{
                         marginHorizontal: window.width - window.width / 1.05,
                         borderColor: 'rgba(100,100,100,0.2)',
-                        borderBottomWidth: 1,
                         padding: 8,
+                        // borderBottomWidth: 0,
                         // backgroundColor: 'rgba(100,100,100,0.1)',
                         borderRadius: 8,
                       }}>
@@ -148,8 +148,8 @@ export default function Specific_Exercise() {
                               height: 65,
                               borderRadius: 100,
                               overflow: 'hidden',
-                              // borderWidth: 0,
-                              // borderColor: '#ccc',
+                              borderWidth: 1,
+                              borderColor: selected(item) ? '#92A3FD' : '#fff',
                             }}>
                             <Image
                               source={{ uri: item.gifUrl }}
@@ -160,7 +160,8 @@ export default function Specific_Exercise() {
                               }}
                             />
                           </View>
-                          <Text style={[styles.titleTxt, { marginLeft: 15 }]}>
+                          <Text
+                            style={[styles.titleTxt, { marginLeft: 15, color: selected(item) ? '#92A3FD' : '#555' }]}>
                             {item.name.split(' ')[0]} {item.name.split(' ')[1]} {item.name.split(' ')[2]}
                           </Text>
                         </View>
