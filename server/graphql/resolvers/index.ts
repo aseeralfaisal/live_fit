@@ -68,22 +68,21 @@ const resolvers = {
         console.log(err)
       }
     },
-    async createWorkout(_: any, { userName, workoutName, equipment, gifUrl, id, name, target }) {
+    async createWorkout(_: any, { userName, workoutName, exercises }) {
       try {
         const user = await User.findOne({ user: userName })
         if (user) {
           const workoutFound = await Workouts.findOne({ workoutName })
           if (workoutFound) {
-            return new ApolloError('Workout already exist')
+            workoutFound.exercises.push(exercises)
+            workoutFound.save()
+            const result = await Workouts.find({ userName })
+            return result
           } else {
             const workouts = new Workouts({
               userName,
               workoutName,
-              equipment,
-              gifUrl,
-              id,
-              name,
-              target,
+              exercises,
             })
             await workouts.save()
             const result = await Workouts.find({ userName })
@@ -107,10 +106,17 @@ const resolvers = {
         console.log(err)
       }
     },
-    async getUserWorkout(_: any, { workoutName }) {
+    async getUserWorkout(_: any, { workoutName, userName }) {
       try {
-        const workoutsFound = await Workouts.find({ workoutName })
-        return workoutsFound
+        const user = await User.findOne({ user: userName })
+        if (user) {
+          const workoutsFound = await Workouts.find({ workoutName })
+          if (workoutsFound) {
+            return workoutsFound
+          }
+        } else {
+          return new Error('User not found')
+        }
       } catch (err) {
         console.log(err)
       }

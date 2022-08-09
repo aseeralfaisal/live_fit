@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, TouchableOpacity, Dimensions, Image, FlatList }
 import Header from '../Components/Header'
 import { useColorScheme } from 'react-native-appearance'
 import { useNavigation, NavigationProp } from '@react-navigation/native'
-import { Btn } from '../Components/Button'
 import { LinearGradient } from 'expo-linear-gradient'
 import axios from 'axios'
 import { useAppSelector } from '../redux/hooks'
