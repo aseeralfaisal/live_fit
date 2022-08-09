@@ -1,52 +1,49 @@
-import User from '../../models/user'
 import bcrypt from 'bcrypt'
 import { ApolloError } from 'apollo-server-express'
 const saltRounds = process.env.SALT_ROUNDS as unknown as number
 import exercises from '../../Data/exercises.json' assert { type: 'json' }
-import chosenExercise from '../../models/chosenExercises'
+import User from '../../models/user'
 
-interface userArgsType {
-  user: string
+interface argsType {
+  name: string
   pass: string
 }
 
 const resolvers = {
   Query: {
-    getUser: () => User.findAll().then((item: any) => item),
+    getUser: () => User.find(),
   },
   Mutation: {
-    async addUser(_: undefined, args: userArgsType) {
-      const { user, pass } = args
+    async addUser(parent: undefined, args: argsType) {
+      const { name, pass } = args
       try {
-        const salt = await bcrypt.genSalt(+saltRounds)
-        const hashPass = await bcrypt.hash(pass, salt)
-        const findOne = await User.findOne({ where: { user } })
-        if (findOne) {
-          return new ApolloError('User already exists')
-        } else {
-          const newUser = await User.create({ user, pass: hashPass })
-          return newUser.toJSON()
+        const salt = await bcrypt.genSalt(saltRounds)
+        const hash = await bcrypt.hash(pass, salt)
+        const user = new User({
+          user: name,
+          pass: hash,
+        })
+        const userExists = await User.findOne({ user: user.user })
+        if (!userExists) {
+          await user.save()
         }
+        return user
       } catch (err) {
         console.log(err)
       }
     },
-    async loginUser(_: undefined, args: userArgsType) {
-      const { user, pass } = args
-      try {
-        const findUser = await User.findOne({ where: { user: user } })
-        if (findUser) {
-          const passCompare = await bcrypt.compare(pass, findUser.pass)
-          if (passCompare) {
-            return findUser.toJSON()
-          } else {
-            return new ApolloError("Password's do not match")
-          }
+    async loginUser(parent: undefined, args: argsType) {
+      const { name, pass } = args
+      const userExists = await User.findOne({ user: name })
+      if (userExists) {
+        const passCompare = await bcrypt.compare(pass, userExists.pass)
+        if (passCompare) {
+          return userExists
         } else {
-          return new ApolloError("User doesn't exists")
+          return new ApolloError("Password do not match")
         }
-      } catch (err) {
-        console.log(err)
+      } else {
+        return new ApolloError("User doesn't exist")
       }
     },
     async getExercise(_: undefined, { target }: { target: string }) {
@@ -69,29 +66,6 @@ const resolvers = {
       } catch (err) {
         console.log(err)
       }
-    },
-    async setSelectedExercises(_: undefined, { exercises }: any) {
-      const bulkCreate = await chosenExercise.bulkCreate(exercises, {
-        returning: true,
-      })
-      console.log(bulkCreate)
-      return bulkCreate
-    },
-    async getSelectedExercises(_: undefined, { user }) {
-      const getExercises = await chosenExercise.findAll({
-        where: { user: user },
-      })
-      console.log(getExercises)
-      return getExercises
-    },
-    async deleteSelectedExercises(_: undefined, { equipment, user }) {
-      const deleteExercises = await chosenExercise.destroy({
-        where: { equipment, user },
-      })
-      const getExercises = await chosenExercise.findAll({
-        where: { user: user, equipment: equipment },
-      })
-      return getExercises
     },
   },
 }

@@ -1,25 +1,17 @@
-import {
-  Model,
-  InferAttributes,
-  InferCreationAttributes,
-  DataTypes,
-} from 'sequelize'
-import db from '../config/db.config'
 
-class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
-  [x: string]: any
-  declare user: string
-  declare pass: string
-}
-User.init(
-  {
-    user: { type: DataTypes.STRING, primaryKey: true },
-    pass: { type: DataTypes.STRING },
+import mongoose, { mongo } from "mongoose"
+const Schema = mongoose.Schema
+
+const User = new Schema({
+    user: {
+      type: String,
+      required: true,
+    },
+    pass: {
+      type: String,
+    },
   },
-  
-  { sequelize: db, freezeTableName: true, tableName: 'users' }
+  { timestamps: true }
 )
 
-User.sync()
-
-export default User
+export default mongoose.model("User", User)

@@ -7,7 +7,9 @@ import http from 'http'
 import cors from 'cors'
 import resolvers from './graphql/resolvers/index'
 import typeDefs from './graphql/schema'
+import mongoose from 'mongoose'
 
+const mongoUri = process.env.MONGO_URI
 const PORT = process.env.PORT || 4000
 
 async function startApolloServer() {
@@ -20,6 +22,15 @@ async function startApolloServer() {
     cache: 'bounded',
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   })
+
+  
+  const connect = await mongoose.connect(mongoUri)
+
+  if (connect) {
+    console.log('Connected to DB')
+  } else {
+    console.log("Couldn\'t connect to DB")
+  }
 
   await server.start()
   server.applyMiddleware({ app })
