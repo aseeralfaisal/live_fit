@@ -24,7 +24,7 @@ export default function SpecificExercise() {
   const [exerciseItem, setExerciseItem] = React.useState<any>(undefined)
   const [searchVal, setSearchVal] = React.useState('')
   const window = Dimensions.get('window')
-  const emailVal = useAppSelector((state) => state.user.email)
+  const userVal = useAppSelector((state) => state.user.userVal)
   const specificExercises = useAppSelector((state) => state.user.specificExercises)
 
   const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
@@ -70,7 +70,7 @@ export default function SpecificExercise() {
   }
 
   const [inputBorderColor, setInputBorderColor] = React.useState('#ccc')
-  const [exerciseArray, setExerciseArray] = React.useState<Array<object>>([{ userName: emailVal }])
+  const [exerciseArray, setExerciseArray] = React.useState<Array<object>>([{ userName: userVal }])
 
   const selectExercises = (item: any) => {
     setExerciseArray([...exerciseArray, item])

@@ -1,28 +1,20 @@
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  Image,
-  View,
-  TouchableOpacity,
-  ActivityIndicator,
-} from 'react-native'
+import { StyleSheet, Text, TextInput, Image, View, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { Btn } from '../Components/Button'
-import EmailIcon from '../assets/icons/emailIcon.svg'
+import UserIcon from '../assets/icons/userIcon.svg'
 import PassIcon from '../assets/icons/passIcon.svg'
 import { useState } from 'react'
 import { useAppSelector, useAppDispatch } from '../redux/hooks'
-import { changeEmailVal, changePassVal } from '../redux/userSlice'
+import { changeUserVal, changePassVal } from '../redux/userSlice'
 import axios from 'axios'
 
 export const Login = ({ setIsAuthenticated }: any) => {
   const dispatch = useAppDispatch()
-  const emailVal = useAppSelector((state) => state.user.email)
+  const userVal = useAppSelector((state) => state.user.userVal)
   const passVal = useAppSelector((state) => state.user.pass)
   const [loader, setLoader] = useState(false)
 
-  const onEmailVal = (email: string) => {
-    dispatch(changeEmailVal(email))
+  const onUserVal = (userVal: string) => {
+    dispatch(changeUserVal(userVal))
   }
   const onPassVal = (pass: string) => {
     dispatch(changePassVal(pass))
@@ -39,7 +31,7 @@ export const Login = ({ setIsAuthenticated }: any) => {
       const fetchData = await axios.post(BASE_URL, {
         query: LOGIN_MUTATION,
         variables: {
-          name: emailVal,
+          name: userVal,
           pass: passVal,
         },
       })
@@ -63,11 +55,11 @@ export const Login = ({ setIsAuthenticated }: any) => {
       <Text style={styles.title2}>Welcome</Text>
       <>
         <View style={styles.input}>
-          <EmailIcon />
+          <UserIcon />
           <TextInput
-            value={emailVal}
-            onChangeText={(val) => onEmailVal(val)}
-            placeholder='Email'
+            value={userVal}
+            onChangeText={(val) => onUserVal(val)}
+            placeholder='User Name'
             style={styles.inputTextField}
           />
         </View>

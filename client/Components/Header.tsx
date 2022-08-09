@@ -22,7 +22,7 @@ type NavigationList = {
 }
 export default function Header() {
   const navigation = useNavigation<NavigationProp<NavigationList>>()
-  const emailVal = useAppSelector((state) => state.user.email)
+  const userVal = useAppSelector((state) => state.user.userVal)
 
   return (
     <>
@@ -36,7 +36,7 @@ export default function Header() {
             <Text style={{ color: '#aaa', fontFamily: 'Poppins' }}>
               Welcome
             </Text>
-            <Text style={styles.userName}>{emailVal}</Text>
+            <Text style={styles.userName}>{userVal}</Text>
           </View>
         </View>
         <TouchableOpacity activeOpacity={0.5}>

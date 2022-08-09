@@ -22,7 +22,7 @@ export default function Workouts() {
   const window = Dimensions.get('window')
   const navigation = useNavigation<NavigationProp<navigationList>>()
   const dispatch = useDispatch()
-  const emailVal = useAppSelector((state) => state.user.email)
+  const userVal = useAppSelector((state) => state.user.userVal)
   const workouts = useAppSelector((state) => state.user.workouts)
   const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
 
@@ -44,11 +44,10 @@ export default function Workouts() {
       const fetchData = await axios.post(BASE_URL, {
         query: GET_USER_WORKOUTS,
         variables: {
-          userName: emailVal,
+          userName: userVal,
         },
       })
       const { getUserWorkouts } = fetchData.data.data
-      console.log(getUserWorkouts)
       return getUserWorkouts
     }
     if (isMounted) {

@@ -3,15 +3,15 @@ import { createSlice } from '@reduxjs/toolkit'
 export const userSlice = createSlice({
   name: 'user',
   initialState: {
-    email: '',
+    userVal: '',
     pass: '',
     workouts: [],
     specificExercises: [],
     exerciseTarget: '',
   },
   reducers: {
-    changeEmailVal: (state, action) => {
-      state.email = action.payload
+    changeUserVal: (state, action) => {
+      state.userVal = action.payload
     },
     changePassVal: (state, action) => {
       state.pass = action.payload
@@ -28,6 +28,6 @@ export const userSlice = createSlice({
   },
 })
 
-export const { changeEmailVal, changePassVal, setWorkouts, setSpecificExercises, setExerciseTarget } = userSlice.actions
+export const { changeUserVal, changePassVal, setWorkouts, setSpecificExercises, setExerciseTarget } = userSlice.actions
 
 export default userSlice.reducer
