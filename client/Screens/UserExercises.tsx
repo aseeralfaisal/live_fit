@@ -5,7 +5,8 @@ import { useAppSelector } from '../redux/hooks'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
 import { useRoute } from '@react-navigation/native'
-import { FlatList } from 'react-native-gesture-handler'
+import { FlatList, TextInput } from 'react-native-gesture-handler'
+import { Btn } from '../Components/Button'
 
 export default function UserExercises() {
   const dispatch = useDispatch()
@@ -18,13 +19,18 @@ export default function UserExercises() {
   const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
   React.useEffect(() => {
     const getUserExercises = async () => {
-      const GET_EXERCISE_QUERY = `mutation Mutation($userName: String!, $workoutName: String!) {
+      const GET_EXERCISE_QUERY = `mutation GetUserWorkout($userName: String!, $workoutName: String!) {
         getUserWorkout(userName: $userName, workoutName: $workoutName) {
           workoutName
           userName
           exercises {
-           name 
-           gifUrl
+            name
+            gifUrl
+            SetsAndReps {
+              Weight
+              Set
+              Reps
+            }
           }
         }
       }`
@@ -37,6 +43,7 @@ export default function UserExercises() {
         },
       })
       const { getUserWorkout } = res.data.data
+      console.log(getUserWorkout)
       getUserWorkout.map(({ exercises }: any) => setUserExercises(exercises))
     }
     getUserExercises()
@@ -44,6 +51,11 @@ export default function UserExercises() {
       getUserExercises()
     }
   }, [])
+
+  console.log(UserExercises)
+
+  let number = 0
+  const [setRepNumber, setSetRepNumber] = React.useState([number])
 
   return (
     <>
@@ -63,15 +75,24 @@ export default function UserExercises() {
           }}>
           <FlatList
             data={UserExercises}
+            ItemSeparatorComponent={() => {
+              return (
+                <View
+                  style={{
+                    borderColor: 'rgba(100,100,100,0.2)',
+                    borderBottomWidth: 1,
+                    alignItems: 'center',
+                    marginHorizontal: 20,
+                  }}></View>
+              )
+            }}
             renderItem={({ item }: any) => {
               return (
                 <>
                   <View
                     style={{
                       marginHorizontal: window.width - window.width / 1.05,
-                      borderColor: 'rgba(100,100,100,0.2)',
                       padding: 8,
-                      borderBottomWidth: 0,
                       borderRadius: 8,
                     }}>
                     <TouchableOpacity
@@ -108,6 +129,50 @@ export default function UserExercises() {
                           {item.name.split(' ')[0]} {item.name.split(' ')[1]} {item.name.split(' ')[2]}
                         </Text>
                       </View>
+                    </TouchableOpacity>
+                    <FlatList
+                      data={setRepNumber}
+                      renderItem={() => {
+                        return (
+                          <View>
+                            <View
+                              style={{ marginVertical: 20, flexDirection: 'row', justifyContent: 'center' }}>
+                              <TextInput
+                                placeholder='Set'
+                                keyboardType='numeric'
+                                style={styles.SetRepInput}
+                              />
+                              <Text style={{ marginVertical: 17, marginHorizontal: 5, color: '#555' }}>
+                                X
+                              </Text>
+                              <TextInput
+                                placeholder='Reps'
+                                keyboardType='numeric'
+                                style={styles.SetRepInput}
+                              />
+                              <TextInput
+                                placeholder='Weight'
+                                keyboardType='numeric'
+                                style={styles.SetRepInput}
+                              />
+                            </View>
+                          </View>
+                        )
+                      }}
+                      keyExtractor={(_, idx) => idx.toString()}
+                    />
+                    <TouchableOpacity
+                      onPress={() => {
+                          setSetRepNumber([...setRepNumber, number + 1])
+                      }}
+                      style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: '#ccc',
+                        borderRadius: 8,
+                        height: 40,
+                      }}>
+                      <Text style={styles.titleTxt}>Add Set</Text>
                     </TouchableOpacity>
                   </View>
                 </>
@@ -149,19 +214,14 @@ const styles = StyleSheet.create({
     padding: 5,
     marginHorizontal: 15,
   },
-  input: {
-    height: 48,
-    borderRadius: 16,
-    backgroundColor: '#F8F9F9',
-    flexDirection: 'row',
-    alignItems: 'center',
-    fontFamily: 'Poppins',
-    marginHorizontal: 20,
-    // borderWidth: 1,
-  },
-  inputTextField: {
-    width: 250,
-    fontSize: 14,
+  SetRepInput: {
+    width: 55,
+    height: 55,
+    backgroundColor: '#fff',
+    textAlign: 'center',
+    borderRadius: 5,
     marginHorizontal: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
   },
 })
