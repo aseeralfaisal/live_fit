@@ -1,12 +1,17 @@
-import mongoose from "mongoose"
-const exercisesSchema = new mongoose.Schema(
-    {
-      equipment: String,
-      gifUrl: String,
-      id: String,
-      name: String,
-      target: String
-    },
-  )
+import mongoose from 'mongoose'
 
-  export default exercisesSchema
+const sets = new mongoose.Schema({
+  set: Number,
+  reps: Number,
+  weight: Number,
+})
+const exercisesSchema = new mongoose.Schema({
+  equipment: String,
+  gifUrl: String,
+  id: String,
+  name: String,
+  target: String,
+  sets: [sets],
+})
+
+export default exercisesSchema

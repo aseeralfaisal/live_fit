@@ -4,7 +4,6 @@ const saltRounds = process.env.SALT_ROUNDS as unknown as number
 import exercises from '../../Data/exercises.json' assert { type: 'json' }
 import User from '../../models/user'
 import Workouts from '../../models/workouts'
-import setSchema from '../../models/sets'
 
 interface argsType {
   name: string
@@ -129,36 +128,19 @@ const resolvers = {
       try {
         const user = await User.findOne({ user: userName })
         if (user) {
-          const workoutFound = await setSchema.findOne({ workoutName })
+          const workoutFound = await Workouts.findOne({ workoutName })
           if (workoutFound) {
-            setsReps.forEach(async (element: object) => {
-              workoutFound.sets.push(element)
-              await workoutFound.save()
+            workoutFound.exercises.forEach(async (item) => {
+              if (item.name === exerciseName) {
+                setsReps.forEach((elem: object) => {
+                  item.sets.push(elem)
+                })
+                await workoutFound.save()
+              }
             })
-            return setsReps
           } else {
-            const newSet = new setSchema({
-              userName,
-              workoutName,
-              exerciseName,
-              sets: setsReps,
-            })
-            await newSet.save()
-            return setsReps
+            return null
           }
-        }
-      } catch (err) {
-        console.log(err)
-      }
-    },
-    async getNumberOfSet(_: any, { userName, workoutName, exerciseName }) {
-      try {
-        const userExist = await User.findOne({ user: userName })
-        const workoutExist = await Workouts.findOne({ workoutName })
-        if (userExist && workoutExist) {
-          const exercise = await setSchema.findOne({ exerciseName })
-          console.log(exercise.sets)
-          return exercise.sets          
         }
       } catch (err) {
         console.log(err)
