@@ -50,7 +50,7 @@ export default function UserExercises() {
     }
   }, [])
 
-  // console.log(UserExercises)
+  console.log('UserExercises ', UserExercises)
 
   let number = 0
   const [setRepNumber, setSetRepNumber] = React.useState([number])

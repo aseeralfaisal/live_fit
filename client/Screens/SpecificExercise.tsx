@@ -83,7 +83,7 @@ export default function SpecificExercise() {
   const CreateUpdateWorkout = async () => {
     try {
       const CREATE_WORKOUT_QUERY = `mutation CreateUpdateWorkout($userName: String!, $workoutName: String!, $exercises: [WorkoutInput]) {
-        CreateUpdateWorkout(userName: $userName, workoutName: $workoutName, exercises: $exercises) {
+        createUpdateWorkout(userName: $userName, workoutName: $workoutName, exercises: $exercises) {
           workoutName
           userName
           exercises {
