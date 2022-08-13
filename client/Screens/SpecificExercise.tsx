@@ -80,10 +80,10 @@ export default function SpecificExercise() {
   console.log(exerciseArray)
   const selected = (item: object) => exerciseArray.includes(item)
 
-  const createWorkout = async () => {
+  const CreateUpdateWorkout = async () => {
     try {
-      const CREATE_WORKOUT_QUERY = `mutation CreateWorkout($userName: String!, $workoutName: String!, $exercises: [WorkoutInput]) {
-        createWorkout(userName: $userName, workoutName: $workoutName, exercises: $exercises) {
+      const CREATE_WORKOUT_QUERY = `mutation CreateUpdateWorkout($userName: String!, $workoutName: String!, $exercises: [WorkoutInput]) {
+        CreateUpdateWorkout(userName: $userName, workoutName: $workoutName, exercises: $exercises) {
           workoutName
           userName
           exercises {
@@ -130,7 +130,7 @@ export default function SpecificExercise() {
         <TouchableOpacity
           activeOpacity={0.7}
           style={{ alignItems: 'center', marginBottom: -20 }}
-          onPress={createWorkout}>
+          onPress={CreateUpdateWorkout}>
           <Btn title='Create a workout >' loading={false} />
         </TouchableOpacity>
         <View
