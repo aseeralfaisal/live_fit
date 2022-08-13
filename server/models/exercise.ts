@@ -7,7 +7,6 @@ const exercisesSchema = new mongoose.Schema(
       name: { type: String },
       target: { type: String }
     },
-    { _id: false }
   )
 
   export default exercisesSchema

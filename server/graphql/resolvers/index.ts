@@ -4,6 +4,7 @@ const saltRounds = process.env.SALT_ROUNDS as unknown as number
 import exercises from '../../Data/exercises.json' assert { type: 'json' }
 import User from '../../models/user'
 import Workouts from '../../models/workouts'
+import setSchema from '../../models/sets'
 
 interface argsType {
   name: string
@@ -119,6 +120,31 @@ const resolvers = {
           }
         } else {
           return new Error('User not found')
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async addSetsReps(_: any, { workoutName, userName, setsReps }) {
+      try {
+        const user = await User.findOne({ user: userName })
+        if (user) {
+          const workoutFound = await setSchema.findOne({ workoutName })
+          if (!workoutFound) {
+            const newSet = new setSchema({
+              userName,
+              workoutName,
+              sets: setsReps,
+            })
+            await newSet.save()
+            return setsReps
+          } else {
+            setsReps.forEach(async (element: object) => {
+              workoutFound.sets.push(element)
+              await workoutFound.save()
+            })
+            return setsReps
+          }
         }
       } catch (err) {
         console.log(err)

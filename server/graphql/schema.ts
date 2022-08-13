@@ -27,6 +27,21 @@ const typeDefs = gql`
     userName: String!
     exercises: [Exercise!]
   }
+  input setRepsWeightinput {
+    set: Int
+    reps: Int
+    weight: Int
+  }
+  type setRepsWeightMain {
+    set: Int
+    reps: Int
+    weight: Int
+  }
+  type setRepsWeight {
+    userName: String
+    workoutName: String
+    setsReps: [setRepsWeightMain]
+  }
   type Mutation {
     addUser(name: String!, pass: String!): User!
     loginUser(name: String!, pass: String!): User!
@@ -34,6 +49,7 @@ const typeDefs = gql`
     createWorkout(userName: String!, workoutName: String!, exercises: [WorkoutInput]): [Workout]
     getUserWorkouts(userName: String!): [Workout]
     getUserWorkout(userName: String!, workoutName: String!): [Workout]
+    addSetsReps(userName: String, workoutName: String, setsReps: [setRepsWeightinput]): [setRepsWeightMain]
   }
 `
 export default typeDefs

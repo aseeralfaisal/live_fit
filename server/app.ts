@@ -27,7 +27,7 @@ async function startApolloServer() {
   if (connect) {
     console.log('Connected to DB')
   } else {
-    console.log("Couldn\'t connect to DB")
+    console.log("Couldn't connect to DB")
   }
 
   await server.start()
@@ -36,7 +36,7 @@ async function startApolloServer() {
   app.use(express.json())
   app.use(cors())
   await new Promise<void>((resolve) => httpServer.listen(PORT, resolve))
-  
-  console.log(`👌👌 Ready at ${PORT}${server.graphqlPath} `)
+
+  console.log(`👌👌 Ready at http://localhost:${PORT}${server.graphqlPath} `)
 }
 startApolloServer()
