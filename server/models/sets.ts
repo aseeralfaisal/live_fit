@@ -10,7 +10,8 @@ const setsSchema = new mongoose.Schema(
   {
     workoutName: String,
     userName: String,
-    sets: [sets]
+    exerciseName: String,
+    sets: [sets],
   },
   { timestamps: true }
 )

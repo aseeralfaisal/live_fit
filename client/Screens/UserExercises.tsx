@@ -24,13 +24,11 @@ export default function UserExercises() {
           workoutName
           userName
           exercises {
-            name
+            equipment
             gifUrl
-            SetsAndReps {
-              Weight
-              Set
-              Reps
-            }
+            id
+            name
+            target
           }
         }
       }`
@@ -52,7 +50,7 @@ export default function UserExercises() {
     }
   }, [])
 
-  console.log(UserExercises)
+  // console.log(UserExercises)
 
   let number = 0
   const [setRepNumber, setSetRepNumber] = React.useState([number])
@@ -163,7 +161,7 @@ export default function UserExercises() {
                     />
                     <TouchableOpacity
                       onPress={() => {
-                          setSetRepNumber([...setRepNumber, number + 1])
+                        setSetRepNumber([...setRepNumber, number + 1])
                       }}
                       style={{
                         alignItems: 'center',

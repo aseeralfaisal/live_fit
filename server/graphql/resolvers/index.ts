@@ -125,24 +125,25 @@ const resolvers = {
         console.log(err)
       }
     },
-    async addSetsReps(_: any, { workoutName, userName, setsReps }) {
+    async addSetsReps(_: any, { workoutName, userName, exerciseName, setsReps }) {
       try {
         const user = await User.findOne({ user: userName })
         if (user) {
           const workoutFound = await setSchema.findOne({ workoutName })
-          if (!workoutFound) {
-            const newSet = new setSchema({
-              userName,
-              workoutName,
-              sets: setsReps,
-            })
-            await newSet.save()
-            return setsReps
-          } else {
+          if (workoutFound) {
             setsReps.forEach(async (element: object) => {
               workoutFound.sets.push(element)
               await workoutFound.save()
             })
+            return setsReps
+          } else {
+            const newSet = new setSchema({
+              userName,
+              workoutName,
+              exerciseName,
+              sets: setsReps,
+            })
+            await newSet.save()
             return setsReps
           }
         }
