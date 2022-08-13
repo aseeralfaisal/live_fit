@@ -151,6 +151,19 @@ const resolvers = {
         console.log(err)
       }
     },
+    async getNumberOfSet(_: any, { userName, workoutName, exerciseName }) {
+      try {
+        const userExist = await User.findOne({ user: userName })
+        const workoutExist = await Workouts.findOne({ workoutName })
+        if (userExist && workoutExist) {
+          const exercise = await setSchema.findOne({ exerciseName })
+          console.log(exercise.sets)
+          return exercise.sets          
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    },
   },
 }
 export default resolvers

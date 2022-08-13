@@ -56,6 +56,7 @@ const typeDefs = gql`
       exerciseName: String
       setsReps: [setRepsWeightinput]
     ): [setRepsWeightMain]
+    getNumberOfSet(userName: String!, workoutName: String!, exerciseName: String!): [setRepsWeightMain]
   }
 `
 export default typeDefs
