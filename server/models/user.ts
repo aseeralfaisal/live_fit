@@ -2,12 +2,8 @@ import mongoose from 'mongoose'
 
 const User = new mongoose.Schema(
   {
-    user: {
-      type: String,
-    },
-    pass: {
-      type: String,
-    },
+    user: String,
+    pass: String,
   },
   { timestamps: true }
 )

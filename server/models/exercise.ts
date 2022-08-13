@@ -1,11 +1,11 @@
 import mongoose from "mongoose"
 const exercisesSchema = new mongoose.Schema(
     {
-      equipment: { type: String },
-      gifUrl: { type: String },
-      id: { type: String },
-      name: { type: String },
-      target: { type: String }
+      equipment: String,
+      gifUrl: String,
+      id: String,
+      name: String,
+      target: String
     },
   )
 
