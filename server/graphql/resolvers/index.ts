@@ -138,8 +138,7 @@ const resolvers = {
                 await workoutFound.save()
               }
             })
-          } else {
-            return null
+            return workoutFound
           }
         }
       } catch (err) {
