@@ -74,8 +74,11 @@ const resolvers = {
         if (user) {
           const workoutFound = await Workouts.findOne({ workoutName })
           if (workoutFound) {
-            workoutFound.exercises.push(exercises)
-            workoutFound.save()
+            exercises.forEach((exercise: object) => {
+              workoutFound.exercises.push(exercise)
+            })
+            const found = await workoutFound.save()
+            console.log(found)
             const result = await Workouts.find({ userName })
             return result
           } else {

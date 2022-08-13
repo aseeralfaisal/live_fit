@@ -22,8 +22,6 @@ async function startApolloServer() {
     cache: 'bounded',
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   })
-
-  
   const connect = await mongoose.connect(mongoUri)
 
   if (connect) {
