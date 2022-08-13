@@ -41,7 +41,7 @@ const typeDefs = gql`
     addUser(name: String!, pass: String!): User!
     loginUser(name: String!, pass: String!): User!
     getExercise(target: String!): [Exercise!]
-    createWorkout(userName: String!, workoutName: String!, exercises: [WorkoutInput]): [Workout]
+    createUpdateWorkout(userName: String!, workoutName: String!, exercises: [WorkoutInput]): [Workout]
     getUserWorkouts(userName: String!): [Workout]
     getUserWorkout(userName: String!, workoutName: String!): [Workout]
     addSetsReps(

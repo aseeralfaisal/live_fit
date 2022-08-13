@@ -68,7 +68,7 @@ const resolvers = {
         console.log(err)
       }
     },
-    async createWorkout(_: any, { userName, workoutName, exercises }) {
+    async createUpdateWorkout(_: any, { userName, workoutName, exercises }) {
       try {
         const user = await User.findOne({ user: userName })
         if (user) {
@@ -101,10 +101,9 @@ const resolvers = {
     async getUserWorkouts(_: any, { userName }) {
       try {
         const user = await User.findOne({ user: userName })
-        if (user) {
-          const workoutsFound = await Workouts.find({ userName })
-          return workoutsFound
-        }
+        if (!user) return new ApolloError('Invalid User')
+        const workoutsFound = await Workouts.find({ userName })
+        return workoutsFound
       } catch (err) {
         console.log(err)
       }
@@ -112,14 +111,9 @@ const resolvers = {
     async getUserWorkout(_: any, { workoutName, userName }) {
       try {
         const user = await User.findOne({ user: userName })
-        if (user) {
-          const workoutsFound = await Workouts.find({ workoutName })
-          if (workoutsFound) {
-            return workoutsFound
-          }
-        } else {
-          return new Error('User not found')
-        }
+        if (!user) return new ApolloError('Invalid User')
+        const workoutsFound = await Workouts.find({ workoutName })
+        if (workoutsFound) return workoutsFound
       } catch (err) {
         console.log(err)
       }
