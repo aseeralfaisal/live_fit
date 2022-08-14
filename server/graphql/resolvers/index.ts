@@ -129,7 +129,6 @@ const resolvers = {
                 setsReps.forEach((elem: object) => {
                   item.sets.push(elem)
                 })
-                item.sets.push({})
                 await workoutFound.save()
               }
             })

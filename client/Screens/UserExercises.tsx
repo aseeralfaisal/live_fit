@@ -6,7 +6,8 @@ import { useDispatch } from 'react-redux'
 import axios from 'axios'
 import { useRoute } from '@react-navigation/native'
 import { FlatList, TextInput } from 'react-native-gesture-handler'
-import { Btn } from '../Components/Button'
+import { LinearGradient } from 'expo-linear-gradient'
+import Checkbox from 'expo-checkbox'
 
 export default function UserExercises() {
   const dispatch = useDispatch()
@@ -84,7 +85,7 @@ export default function UserExercises() {
       variables: {
         setsReps: [
           {
-            set: +set,
+            set: 5,
             reps: +reps,
             weight: +weight,
           },
@@ -98,6 +99,8 @@ export default function UserExercises() {
       setIsSetAdded(!isSetAdded)
     }
   }
+
+  const [isChecked, setIsChecked] = React.useState(false)
 
   return (
     <>
@@ -114,8 +117,10 @@ export default function UserExercises() {
             backgroundColor: 'rgba(100,100,100,0.05)',
             marginHorizontal: 20,
             borderRadius: 12,
+            overflow: 'scroll',
           }}>
           <FlatList
+            scrollEnabled
             data={UserExercises}
             ItemSeparatorComponent={() => {
               return (
@@ -128,7 +133,7 @@ export default function UserExercises() {
                   }}></View>
               )
             }}
-            renderItem={({ item: set }: any) => {
+            renderItem={({ item: set, dex }: any) => {
               return (
                 <>
                   <View
@@ -178,56 +183,87 @@ export default function UserExercises() {
                         // console.log(set.sets.length - 1, index)
                         return (
                           <View>
-                            {/* <Text style={styles.titleTxt}>{set.sets.length.toString()}</Text>
-                            <Text style={styles.titleTxt}>{index}</Text> */}
-                            <View
-                              style={{ marginVertical: 20, flexDirection: 'row', justifyContent: 'center' }}>
+                            {index === 0 && (
+                              <View
+                                style={{ flexDirection: 'row', justifyContent: 'space-around', margin: 10 }}>
+                                <Text style={styles.setRepsWeightTitle}>Set</Text>
+                                <Text style={styles.setRepsWeightTitle}>Reps</Text>
+                                <Text style={styles.setRepsWeightTitle}>Weight</Text>
+                                {/* <Text style={styles.setRepsWeightTitle}>Done</Text> */}
+                              </View>
+                            )}
+                            <TouchableOpacity
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-around',
+                                margin: 10,
+                                padding: 7,
+                                borderRadius: 8,
+                                backgroundColor: '#fff',
+                              }}>
                               <TextInput
-                                value={set}
-                                onChangeText={(text) => setSet(text)}
-                                placeholder={item.set.toString()}
-                                keyboardType='numeric'
-                                style={styles.SetRepInput}
-                                placeholderTextColor="#555"
-                                editable={set.sets.length - 1 === index ? true : false}
-                              />
-                              <Text style={{ marginVertical: 17, marginHorizontal: 5, color: '#555' }}>
-                                X
-                              </Text>
-                              <TextInput
-                                value={reps}
-                                onChangeText={(text) => setReps(text)}
-                                placeholder={item.reps.toString()}
-                                keyboardType='numeric'
-                                style={styles.SetRepInput}
-                                placeholderTextColor="#555"
-                                editable={set.sets.length - 1 === index ? true : false}
+                                value={item?.set?.toString()}
+                                editable={false}
+                                style={{ textAlign: 'left', fontWeight: 'bold', fontSize: 16 }}
                               />
                               <TextInput
-                                value={weight}
-                                onChangeText={(text) => setWeight(text)}
-                                placeholder={item.weight.toString()}
-                                keyboardType='numeric'
-                                style={styles.SetRepInput}
-                                placeholderTextColor="#555"
-                                editable={set.sets.length - 1 === index ? true : false}
+                                value={item?.reps?.toString()}
+                                editable={false}
+                                style={{ textAlign: 'left', fontWeight: 'bold', fontSize: 16 }}
                               />
-                            </View>
+                              <TextInput
+                                value={item?.weight?.toString()}
+                                editable={false}
+                                style={{ textAlign: 'left', fontWeight: 'bold', fontSize: 16 }}
+                              />
+                            </TouchableOpacity>
                           </View>
                         )
                       }}
                       keyExtractor={(_, idx) => idx.toString()}
                     />
                     <TouchableOpacity
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-around',
+                        margin: 10,
+                        padding: 7,
+                        borderRadius: 8,
+                        backgroundColor: '#fff',
+                      }}>
+                      <TextInput
+                        placeholder="Set"
+                        value={set}
+                        onChangeText={txt => console.log(txt)}
+                        placeholderTextColor='#ccc'    
+                        style={{ textAlign: 'left', fontWeight: 'bold', fontSize: 16 }}
+                        />
+                      <TextInput
+                        placeholder='Reps'
+                        value={reps}
+                        onChangeText={txt => setReps(txt)}
+                        placeholderTextColor='#ccc'
+                        style={{ textAlign: 'left', fontWeight: 'bold', fontSize: 16 }}
+                        />
+                      <TextInput
+                        placeholder='Weights'
+                        value={weight}
+                        onChangeText={txt => setWeight(txt)}
+                        placeholderTextColor='#ccc'
+                        style={{ textAlign: 'left', fontWeight: 'bold', fontSize: 16 }}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
                       onPress={() => addSet(set.name)}
                       style={{
                         alignItems: 'center',
                         justifyContent: 'center',
-                        backgroundColor: '#ccc',
+                        backgroundColor: '#92A3FD33',
                         borderRadius: 8,
                         height: 40,
+                        margin: 10,
                       }}>
-                      <Text style={styles.titleTxt}>Add Set</Text>
+                      <Text style={[styles.titleTxt, { color: '#555' }]}>Add Set</Text>
                     </TouchableOpacity>
                   </View>
                 </>
@@ -246,8 +282,13 @@ const styles = StyleSheet.create({
   txt: {
     marginHorizontal: 8,
     fontFamily: 'Poppins_Bold',
-    color: 'rgb(80,80,80)',
+    color: '#555',
     fontSize: 20,
+  },
+  setRepsWeightTitle: {
+    fontFamily: 'Poppins_Bold',
+    color: '#777',
+    fontSize: 14,
   },
   titleTxt: {
     fontFamily: 'Poppins',
@@ -268,15 +309,5 @@ const styles = StyleSheet.create({
     width: 180,
     padding: 5,
     marginHorizontal: 15,
-  },
-  SetRepInput: {
-    width: 55,
-    height: 55,
-    backgroundColor: '#fff',
-    textAlign: 'center',
-    borderRadius: 5,
-    marginHorizontal: 10,
-    borderWidth: 1,
-    borderColor: '#ccc',
   },
 })
