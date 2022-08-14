@@ -16,13 +16,15 @@ import axios from 'axios'
 import { useAppSelector } from '../redux/hooks'
 import { setSpecificExercises } from '../redux/userSlice'
 import { useDispatch } from 'react-redux'
+import { AddButton } from '../Components/AddButton'
+import { SpecificExerciseView } from '../Components/popups/SpecificExerciseView'
 import { Btn } from '../Components/Button'
 
 export default function SpecificExercise() {
   const dispatch = useDispatch()
   const exerciseTarget = useAppSelector((state) => state.user.exerciseTarget)
-  const [specificWorkout, setSpecificWorkout] = React.useState(false)
-  const [exerciseItem, setExerciseItem] = React.useState<any>(undefined)
+  const [specificWorkout, setSpecificWorkout] = React.useState<boolean>(false)
+  const [exerciseItem, setExerciseItem] = React.useState<object>({})
   const [searchVal, setSearchVal] = React.useState('')
   const window = Dimensions.get('window')
   const userVal = useAppSelector((state) => state.user.userVal)
@@ -75,7 +77,11 @@ export default function SpecificExercise() {
   const [exerciseArray, setExerciseArray] = React.useState<any>([])
 
   const selectExercises = (item: any) => {
-    setExerciseArray([...exerciseArray, item])
+    if (exerciseArray.includes(item)) {
+      setExerciseArray(exerciseArray.filter(({ name }: any) => name !== item.name))
+    } else {
+      setExerciseArray([...exerciseArray, item])
+    }
   }
   console.log(exerciseArray)
   const selected = (item: object) => exerciseArray.includes(item)
@@ -127,12 +133,6 @@ export default function SpecificExercise() {
             style={styles.inputTextField}
           />
         </View>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          style={{ alignItems: 'center', marginBottom: -20 }}
-          onPress={CreateUpdateWorkout}>
-          <Btn title='Create a workout >' loading={false} />
-        </TouchableOpacity>
         <View
           style={{
             marginTop: 14,
@@ -142,69 +142,93 @@ export default function SpecificExercise() {
           }}>
           <FlatList
             data={specificExercises}
+            ItemSeparatorComponent={() => {
+              return (
+                <View
+                  style={{
+                    borderColor: 'rgba(100,100,100,0.1)',
+                    borderBottomWidth: 1,
+                  }}></View>
+              )
+            }}
             renderItem={({ item }: any) => {
               return (
                 <>
                   {item.name.toLowerCase().includes(searchVal.toLowerCase()) ? (
-                    <View
-                      style={{
-                        marginHorizontal: window.width - window.width / 1.05,
-                        borderColor: 'rgba(100,100,100,0.2)',
-                        padding: 8,
-                        borderBottomWidth: 1,
-                        borderRadius: 8,
-                      }}>
-                      <TouchableOpacity
-                        activeOpacity={0.9}
-                        onPress={() => selectExercises(item)}
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                      <View
                         style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
+                          marginHorizontal: window.width - window.width / 1.05,
+                          padding: 8,
+                          borderRadius: 8,
                         }}>
-                        {selected(item) && (
-                          <View
-                            style={{
-                              backgroundColor: '#92A3FD',
-                              marginLeft: -20,
-                              marginRight: 16,
-                              width: 4,
-                              height: '100%',
-                              borderRadius: 20,
-                            }}></View>
-                        )}
-                        <View
+                        <TouchableOpacity
+                          activeOpacity={0.9}
+                          onLongPress={() => {
+                            setExerciseItem(item)
+                            setSpecificWorkout(!specificWorkout)
+                          }}
+                          onPress={() => selectExercises(item)}
                           style={{
                             flexDirection: 'row',
-                            justifyContent: 'space-between',
                             alignItems: 'center',
-                            marginVertical: 5,
                           }}>
+                          {selected(item) && (
+                            <View
+                              style={{
+                                backgroundColor: '#92A3FD',
+                                marginLeft: -20,
+                                marginRight: 16,
+                                width: 4,
+                                height: '100%',
+                                borderRadius: 20,
+                              }}></View>
+                          )}
                           <View
                             style={{
-                              width: 65,
-                              height: 65,
-                              borderRadius: 100,
-                              overflow: 'hidden',
-                              borderWidth: 1,
-                              borderColor: selected(item) ? '#92A3FD' : '#fff',
+                              flexDirection: 'row',
+                              justifyContent: 'space-between',
+                              alignItems: 'center',
+                              marginVertical: 5,
                             }}>
-                            <Image
-                              source={{ uri: item.gifUrl }}
+                            <View
                               style={{
                                 width: 65,
                                 height: 65,
                                 borderRadius: 100,
-                              }}
-                            />
+                                overflow: 'hidden',
+                                borderWidth: 1,
+                                borderColor: selected(item) ? '#92A3FD' : '#fff',
+                              }}>
+                              <Image
+                                source={{ uri: item.gifUrl }}
+                                style={{
+                                  width: 65,
+                                  height: 65,
+                                  borderRadius: 100,
+                                }}
+                              />
+                            </View>
+                            <Text
+                              style={[
+                                styles.titleTxt,
+                                { marginLeft: 15, color: selected(item) ? '#92A3FD' : '#555' },
+                              ]}>
+                              {item.name.split(' ')[0]} {item.name.split(' ')[1]} {item.name.split(' ')[2]}
+                            </Text>
                           </View>
-                          <Text
-                            style={[
-                              styles.titleTxt,
-                              { marginLeft: 15, color: selected(item) ? '#92A3FD' : '#555' },
-                            ]}>
-                            {item.name.split(' ')[0]} {item.name.split(' ')[1]} {item.name.split(' ')[2]}
-                          </Text>
-                        </View>
+                        </TouchableOpacity>
+                      </View>
+                      <TouchableOpacity
+                        activeOpacity={0.6}
+                        onPress={() => {
+                          setExerciseItem(item)
+                          setSpecificWorkout(!specificWorkout)
+                        }}>
+                        <Image
+                          source={require('../assets/icons/workout_btn.png')}
+                          style={{ resizeMode: 'contain', width: 30, marginRight: 18 }}
+                        />
                       </TouchableOpacity>
                     </View>
                   ) : (
@@ -218,26 +242,14 @@ export default function SpecificExercise() {
           />
         </View>
       </View>
-      {/* <Modal
-        animationType='fade'
-        visible={specificWorkout}
-        transparent={true}
-        onRequestClose={() => setSpecificWorkout(!specificWorkout)}>
-        <View style={{ backgroundColor: '#ffffff' }}>
-          <View
-            style={{
-              alignItems: 'center',
-              height: '100%',
-              justifyContent: 'center',
-            }}>
-            <Image
-              source={{ uri: exerciseItem?.gifUrl }}
-              style={{ width: 250, height: 250, resizeMode: 'contain' }}
-            />
-            <Text style={[styles.titleTxt, { fontSize: 28, textAlign: 'center' }]}>{exerciseItem?.name}</Text>
-          </View>
-        </View>
-      </Modal> */}
+      <TouchableOpacity activeOpacity={0.9} style={{ position: 'absolute', top: '92%', left: '5%' }}>
+        <Btn title='Add exercise' loading={false} />
+      </TouchableOpacity>
+      <SpecificExerciseView
+        specificWorkout={specificWorkout}
+        setSpecificWorkout={setSpecificWorkout}
+        exerciseItem={exerciseItem}
+      />
     </>
   )
 }
