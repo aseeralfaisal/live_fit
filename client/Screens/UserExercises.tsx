@@ -85,7 +85,7 @@ export default function UserExercises() {
       variables: {
         setsReps: [
           {
-            set: 5,
+            set: +set,
             reps: +reps,
             weight: +weight,
           },
@@ -110,7 +110,7 @@ export default function UserExercises() {
           backgroundColor: '#fff',
         }}>
         <Header />
-        <Text style={[styles.txt, { marginHorizontal: 20 }]}>Exercises</Text>
+        {/* <Text style={[styles.txt, { marginHorizontal: 20 }]}>Exercises</Text> */}
         <View
           style={{
             marginTop: 14,
@@ -189,7 +189,6 @@ export default function UserExercises() {
                                 <Text style={styles.setRepsWeightTitle}>Set</Text>
                                 <Text style={styles.setRepsWeightTitle}>Reps</Text>
                                 <Text style={styles.setRepsWeightTitle}>Weight</Text>
-                                {/* <Text style={styles.setRepsWeightTitle}>Done</Text> */}
                               </View>
                             )}
                             <TouchableOpacity
@@ -200,59 +199,63 @@ export default function UserExercises() {
                                 padding: 7,
                                 borderRadius: 8,
                                 backgroundColor: '#fff',
+                                // borderWidth: .5,
+                                borderColor: '#ccc',
                               }}>
                               <TextInput
-                                value={item?.set?.toString()}
+                                value={(index + 1)?.toString()}
                                 editable={false}
-                                style={{ textAlign: 'left', fontWeight: 'bold', fontSize: 16 }}
+                                style={styles.setRepsInput}
                               />
                               <TextInput
                                 value={item?.reps?.toString()}
+                                placeholder='Reps'
                                 editable={false}
-                                style={{ textAlign: 'left', fontWeight: 'bold', fontSize: 16 }}
+                                style={styles.setRepsInput}
                               />
                               <TextInput
                                 value={item?.weight?.toString()}
+                                placeholder='Weight'
                                 editable={false}
-                                style={{ textAlign: 'left', fontWeight: 'bold', fontSize: 16 }}
+                                style={styles.setRepsInput}
                               />
                             </TouchableOpacity>
+                            {index === set.sets.length - 1 && (
+                              <View
+                                style={{
+                                  flexDirection: 'row',
+                                  justifyContent: 'space-around',
+                                  margin: 10,
+                                  padding: 7,
+                                  borderRadius: 8,
+                                  backgroundColor: '#fff',
+                                }}>
+                                <TextInput
+                                  value={(index + 2)?.toString()}
+                                  editable={false}
+                                  style={styles.setRepsInput}
+                                />
+                                <TextInput
+                                  value={reps}
+                                  placeholder='Reps'
+                                  onChangeText={(txt) => setReps(txt)}
+                                  editable={true}
+                                  style={styles.setRepsInput}
+                                />
+                                <TextInput
+                                  value={weight}
+                                  placeholder='Weight'
+                                  onChangeText={(txt) => setWeight(txt)}
+                                  editable={true}
+                                  style={styles.setRepsInput}
+                                />
+                              </View>
+                            )}
                           </View>
                         )
                       }}
                       keyExtractor={(_, idx) => idx.toString()}
                     />
-                    <TouchableOpacity
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-around',
-                        margin: 10,
-                        padding: 7,
-                        borderRadius: 8,
-                        backgroundColor: '#fff',
-                      }}>
-                      <TextInput
-                        placeholder="Set"
-                        value={set}
-                        onChangeText={txt => console.log(txt)}
-                        placeholderTextColor='#ccc'    
-                        style={{ textAlign: 'left', fontWeight: 'bold', fontSize: 16 }}
-                        />
-                      <TextInput
-                        placeholder='Reps'
-                        value={reps}
-                        onChangeText={txt => setReps(txt)}
-                        placeholderTextColor='#ccc'
-                        style={{ textAlign: 'left', fontWeight: 'bold', fontSize: 16 }}
-                        />
-                      <TextInput
-                        placeholder='Weights'
-                        value={weight}
-                        onChangeText={txt => setWeight(txt)}
-                        placeholderTextColor='#ccc'
-                        style={{ textAlign: 'left', fontWeight: 'bold', fontSize: 16 }}
-                      />
-                    </TouchableOpacity>
                     <TouchableOpacity
                       onPress={() => addSet(set.name)}
                       style={{
@@ -296,6 +299,11 @@ const styles = StyleSheet.create({
     textTransform: 'capitalize',
     color: 'rgb(80,80,80)',
     fontSize: 14,
+  },
+  setRepsInput: {
+    textAlign: 'left',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   list: {
     flex: 1,
