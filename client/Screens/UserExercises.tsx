@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Pressable,
   TouchableNativeFeedback,
+  TouchableWithoutFeedback,
 } from 'react-native'
 import Header from '../Components/Header'
 import { useAppSelector } from '../redux/hooks'
@@ -156,7 +157,6 @@ export default function UserExercises() {
                       onPress={() => {
                         setSetID(indx)
                       }}
-                      activeOpacity={0.9}
                       style={{
                         flexDirection: 'row',
                         alignItems: 'center',
