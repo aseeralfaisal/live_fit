@@ -5,6 +5,7 @@ import TabScreen from './TabScreen'
 import { Login } from './Screens/Login'
 import store from './redux/store'
 import { Provider } from 'react-redux'
+import StackScreen from './StackScreen'
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -19,7 +20,7 @@ export default function App() {
   } else {
     return (
       <Provider store={store}>
-        {isAuthenticated ? <TabScreen /> : <Login setIsAuthenticated={setIsAuthenticated} />}
+        {isAuthenticated ? <StackScreen /> : <Login setIsAuthenticated={setIsAuthenticated} />}
       </Provider>
     )
   }

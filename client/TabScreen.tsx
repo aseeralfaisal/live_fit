@@ -3,43 +3,18 @@ import { NavigationContainer } from '@react-navigation/native'
 import Home from './Screens/Home'
 import { Image, View, TouchableOpacity } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { createStackNavigator } from '@react-navigation/stack'
 import * as NavigationBar from 'expo-navigation-bar'
-import FoodScan from './Screens/FoodScan'
 import Workouts from './Screens/Workouts'
-import BMI from './Screens/BMI'
-import Map from './Screens/Map'
 import About from './Screens/About'
-import SpecificExercise from './Screens/SpecificExercise'
-import UserExercises from './Screens/UserExercises'
 
 export default function TabScreen() {
   const Tab = createBottomTabNavigator<any>()
-  const Stack = createStackNavigator<any>()
 
   React.useEffect(() => {
     NavigationBar.setBackgroundColorAsync('white')
   }, [])
 
-  const HomeStack = () => {
-    
-    return (
-      <View style={{ flex: 1, backgroundColor: 'rgba(80,80,80,0.3)' }}>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name='HomeMain' children={() => <Home />} />
-          <Stack.Screen name='SpecificExercise' children={() => <SpecificExercise />} />
-          <Stack.Screen name='UserExercises' children={() => <UserExercises />} />
-          <Stack.Screen name='Map' children={() => <Map />} />
-          <Stack.Screen name='Workouts' children={() => <Workouts />} />
-          <Stack.Screen name='BMI' children={() => <BMI />} />
-          <Stack.Screen name='FoodScan' children={() => <FoodScan />} />
-        </Stack.Navigator>
-      </View>
-    )
-  }
-
   return (
-    <NavigationContainer>
       <Tab.Navigator
         initialRouteName='Home'
         sceneContainerStyle={{
@@ -58,7 +33,7 @@ export default function TabScreen() {
         }}>
         <Tab.Screen
           name='Home'
-          component={HomeStack}
+          component={Home}
           options={{
             tabBarLabel: 'HomeStack',
             headerShown: false,
@@ -105,7 +80,7 @@ export default function TabScreen() {
 
         <Tab.Screen
           name='Calories'
-          component={HomeStack}
+          component={Home}
           options={{
             tabBarLabel: 'Calories',
             tabBarShowLabel: false,
@@ -127,7 +102,7 @@ export default function TabScreen() {
         />
         <Tab.Screen
           name='FoodScan'
-          component={HomeStack}
+          component={Home}
           options={{
             tabBarLabel: 'Camera',
             tabBarShowLabel: false,
@@ -170,6 +145,5 @@ export default function TabScreen() {
           }}
         />
       </Tab.Navigator>
-    </NavigationContainer>
   )
 }
