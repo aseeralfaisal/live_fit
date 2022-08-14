@@ -10,6 +10,8 @@ import {
   FlatList,
   TextInput,
   ColorPropType,
+  TouchableNativeFeedback,
+  Pressable,
 } from 'react-native'
 import Header from '../Components/Header'
 import axios from 'axios'
@@ -19,6 +21,7 @@ import { useDispatch } from 'react-redux'
 import { AddButton } from '../Components/AddButton'
 import { SpecificExerciseView } from '../Components/popups/SpecificExerciseView'
 import { Btn } from '../Components/Button'
+import { TouchableHighlight } from 'react-native-gesture-handler'
 
 export default function SpecificExercise() {
   const dispatch = useDispatch()
@@ -83,7 +86,6 @@ export default function SpecificExercise() {
       setExerciseArray([...exerciseArray, item])
     }
   }
-  console.log(exerciseArray)
   const selected = (item: object) => exerciseArray.includes(item)
 
   const CreateUpdateWorkout = async () => {
@@ -142,6 +144,8 @@ export default function SpecificExercise() {
           }}>
           <FlatList
             data={specificExercises}
+            removeClippedSubviews={true}
+            maxToRenderPerBatch={10}
             ItemSeparatorComponent={() => {
               return (
                 <View
@@ -162,62 +166,64 @@ export default function SpecificExercise() {
                           padding: 8,
                           borderRadius: 8,
                         }}>
-                        <TouchableOpacity
-                          activeOpacity={0.9}
+                        <Pressable
                           onLongPress={() => {
                             setExerciseItem(item)
                             setSpecificWorkout(!specificWorkout)
                           }}
-                          onPress={() => selectExercises(item)}
+                          onPressIn={() => selectExercises(item)}
                           style={{
                             flexDirection: 'row',
                             alignItems: 'center',
                           }}>
-                          {selected(item) && (
+                          <View>
+                            {selected(item) && (
+                              <View
+                                style={{
+                                  backgroundColor: '#92A3FD',
+                                  marginLeft: -20,
+                                  marginRight: 16,
+                                  width: 4,
+                                  height: '100%',
+                                  position: 'absolute',
+                                  borderRadius: 20,
+                                }}></View>
+                            )}
                             <View
                               style={{
-                                backgroundColor: '#92A3FD',
-                                marginLeft: -20,
-                                marginRight: 16,
-                                width: 4,
-                                height: '100%',
-                                borderRadius: 20,
-                              }}></View>
-                          )}
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              justifyContent: 'space-between',
-                              alignItems: 'center',
-                              marginVertical: 5,
-                            }}>
-                            <View
-                              style={{
-                                width: 65,
-                                height: 65,
-                                borderRadius: 100,
-                                overflow: 'hidden',
-                                borderWidth: 1,
-                                borderColor: selected(item) ? '#92A3FD' : '#fff',
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                marginVertical: 5,
                               }}>
-                              <Image
-                                source={{ uri: item.gifUrl }}
+                              <View
                                 style={{
                                   width: 65,
                                   height: 65,
                                   borderRadius: 100,
-                                }}
-                              />
+                                  overflow: 'hidden',
+                                  borderWidth: 1,
+                                  borderColor: selected(item) ? '#92A3FD' : '#fff',
+                                }}>
+                                <Image
+                                  source={{ uri: item.gifUrl }}
+                                  style={{
+                                    width: 65,
+                                    height: 65,
+                                    borderRadius: 100,
+                                  }}
+                                />
+                              </View>
+                              <Text
+                                style={[
+                                  styles.titleTxt,
+                                  { marginLeft: 15, color: selected(item) ? '#92A3FD' : '#555' },
+                                ]}>
+                                {item.name.split(' ')[0]} {item.name.split(' ')[1]} {item.name.split(' ')[2]}
+                              </Text>
                             </View>
-                            <Text
-                              style={[
-                                styles.titleTxt,
-                                { marginLeft: 15, color: selected(item) ? '#92A3FD' : '#555' },
-                              ]}>
-                              {item.name.split(' ')[0]} {item.name.split(' ')[1]} {item.name.split(' ')[2]}
-                            </Text>
                           </View>
-                        </TouchableOpacity>
+                        </Pressable>
                       </View>
                       <TouchableOpacity
                         activeOpacity={0.6}
