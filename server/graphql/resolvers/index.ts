@@ -139,6 +139,26 @@ const resolvers = {
         console.log(err)
       }
     },
+    async deleteSet(_: any, { workoutName, userName, id }) {
+      try {
+        const user = await User.findOne({ user: userName })
+        if (user) {
+          const workoutFound = await Workouts.findOne({ workoutName })
+          if (!workoutFound) return new ApolloError('Invalid workout name')
+          workoutFound.exercises.forEach(async (item) => {
+            item.sets.forEach(async (set) => {
+              if (set.id === id) {
+                await set.remove()
+              }
+            })
+          })
+          await workoutFound.save()
+          return workoutFound
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    },
   },
 }
 export default resolvers
