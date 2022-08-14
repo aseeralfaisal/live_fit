@@ -1,14 +1,5 @@
 import * as React from 'react'
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  Dimensions,
-  TouchableOpacity,
-  Pressable,
-  TouchableNativeFeedback,
-} from 'react-native'
+import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, Pressable } from 'react-native'
 import Header from '../Components/Header'
 import { useAppSelector } from '../redux/hooks'
 import { useDispatch } from 'react-redux'
@@ -110,7 +101,6 @@ export default function UserExercises() {
   }
 
   const [selectedSet, setSelectedSet] = React.useState(1)
-  const [setID, setSetID] = React.useState(1)
 
   return (
     <>
@@ -143,7 +133,7 @@ export default function UserExercises() {
                   }}></View>
               )
             }}
-            renderItem={({ item: set, index: indx }: any) => {
+            renderItem={({ item: set, dex }: any) => {
               return (
                 <>
                   <View
@@ -153,9 +143,6 @@ export default function UserExercises() {
                       borderRadius: 8,
                     }}>
                     <TouchableOpacity
-                      onPress={() => {
-                        setSetID(indx)
-                      }}
                       activeOpacity={0.9}
                       style={{
                         flexDirection: 'row',
@@ -190,74 +177,116 @@ export default function UserExercises() {
                         </Text>
                       </View>
                     </TouchableOpacity>
-                    {setID === indx && (
-                      <View>
-                        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                          <FlatList
-                            data={set.sets}
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                            renderItem={({ item, index }) => {
-                              return (
-                                <>
-                                  <Pressable
-                                    style={{ marginVertical: 20 }}
-                                    onPressIn={() => {
-                                      setReps(item.reps)
-                                      setWeight(item.weight)
-                                      setSelectedSet(index + 1)
-                                    }}>
-                                    <Text
-                                      style={[
-                                        styles.setTitle,
-                                        {
-                                          backgroundColor: selectedSet === index + 1 ? '#92A3FD' : '#fff',
-                                          color: selectedSet === index + 1 ? '#fff' : '#555',
-                                          borderTopLeftRadius: index === 0 ? 8 : 0,
-                                          borderBottomLeftRadius: index === 0 ? 8 : 0,
-                                          borderTopRightRadius: index === set.sets.length - 1 ? 8 : 0,
-                                          borderBottomRightRadius: index === set.sets.length - 1 ? 8 : 0,
-                                        },
-                                      ]}>
-                                      Set {index + 1}
-                                    </Text>
-                                  </Pressable>
-                                </>
-                              )
-                            }}
-                            keyExtractor={(_, idx) => idx.toString()}
-                          />
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              justifyContent: 'center',
-                            }}>
-                            <TextInput
-                              placeholder='Reps'
-                              value={reps.toString()}
-                              style={styles.setRepsInput}
-                            />
-                            <TextInput
-                              placeholder='Weight'
-                              value={weight.toString()}
-                              style={styles.setRepsInput}
-                            />
-                          </View>
-                        </View>
-                        <Pressable
-                          onPress={() => addSet(set.name)}
-                          style={{
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            backgroundColor: '#DDDADA99',
-                            borderRadius: 8,
-                            height: 40,
-                            marginVertical: 20,
-                          }}>
-                          <Text style={[styles.titleTxt, { color: '#555' }]}>Add Set</Text>
-                        </Pressable>
-                      </View>
-                    )}
+                    <FlatList
+                      data={set.sets}
+                      horizontal
+                      renderItem={({ item, index }) => {
+                        return (
+                          <Pressable onPressIn={() => setSelectedSet(index + 1)}>
+                            <View style={{ marginVertical: 20 }}>
+                              <Text
+                                style={[
+                                  styles.setTitle,
+                                  { backgroundColor: selectedSet === index + 1 ? '#ccc' : '#fff' },
+                                ]}>
+                                Set {index + 1}
+                              </Text>
+                            </View>
+
+                            {/* {index === 0 && (
+                              <View
+                                style={{ flexDirection: 'row', justifyContent: 'space-around', margin: 10 }}>
+                                <Text style={styles.setRepsWeightTitle}>Set</Text>
+                                <Text style={styles.setRepsWeightTitle}>Reps</Text>
+                                <Text style={styles.setRepsWeightTitle}>Weight</Text>
+                              </View>
+                            )} */}
+                            {/* <TouchableOpacity
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-around',
+                                margin: 10,
+                                padding: 7,
+                                borderRadius: 8,
+                                backgroundColor: '#fff',
+                                // borderWidth: .5,
+                                borderColor: '#ccc',
+                              }}>
+                              <TextInput
+                                value={(index + 1)?.toString()}
+                                editable={false}
+                                style={styles.setRepsInput}
+                              />
+                              <TextInput
+                                value={item?.reps?.toString()}
+                                placeholder='Reps'
+                                editable={false}
+                                style={styles.setRepsInput}
+                              />
+                              <TextInput
+                                value={item?.weight?.toString()}
+                                placeholder='Weight'
+                                editable={false}
+                                style={styles.setRepsInput}
+                              />
+                            </TouchableOpacity> */}
+                            {/* {index === set.sets.length - 1 && (
+                              <View
+                                style={{
+                                  flexDirection: 'row',
+                                  justifyContent: 'space-around',
+                                  margin: 10,
+                                  padding: 7,
+                                  borderRadius: 8,
+                                  backgroundColor: '#fff',
+                                }}>
+                                <TextInput
+                                  value={(index + 2)?.toString()}
+                                  editable={false}
+                                  style={styles.setRepsInput}
+                                />
+                                <TextInput
+                                  value={reps}
+                                  placeholder='Reps'
+                                  onChangeText={(txt) => setReps(txt)}
+                                  editable={true}
+                                  style={styles.setRepsInput}
+                                />
+                                <TextInput
+                                  value={weight}
+                                  placeholder='Weight'
+                                  onChangeText={(txt) => setWeight(txt)}
+                                  editable={true}
+                                  style={styles.setRepsInput}
+                                />
+                              </View>
+                            )} */}
+                          </Pressable>
+                        )
+                      }}
+                      keyExtractor={(_, idx) => idx.toString()}
+                    />
+                    <View
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        justifyContent: 'center'
+                      }}>
+                      <TextInput placeholder='Set' style={styles.setRepsInput} />
+                      <TextInput placeholder='Reps' style={styles.setRepsInput} />
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => addSet(set.name)}
+                      style={{
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: '#92A3FD33',
+                        borderRadius: 8,
+                        height: 40,
+                        margin: 10,
+                      }}>
+                      <Text style={[styles.titleTxt, { color: '#555' }]}>Add Set</Text>
+                    </TouchableOpacity>
                   </View>
                 </>
               )
@@ -285,8 +314,7 @@ const styles = StyleSheet.create({
   },
   setTitle: {
     backgroundColor: '#fff',
-    color: '#555',
-    padding: 16,
+    padding: 10,
     textAlign: 'center',
     textAlignVertical: 'center',
   },
@@ -300,12 +328,11 @@ const styles = StyleSheet.create({
   setRepsInput: {
     textAlign: 'center',
     fontWeight: 'bold',
-    fontSize: 14,
+    fontSize: 16,
     backgroundColor: '#fff',
-    width: 60,
-    height: 60,
-    borderRadius: 6,
-    margin: 12,
+    width: 50,
+    height: 50,
+    marginHorizontal: 5
   },
   list: {
     flex: 1,

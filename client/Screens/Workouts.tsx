@@ -64,7 +64,7 @@ export default function Workouts() {
           <FlatList
             data={workouts}
             renderItem={({ item }) => {
-              const { workoutName } = item
+              const { workoutName }: any = item
               return (
                 <TouchableOpacity
                   onPress={() =>
@@ -73,10 +73,10 @@ export default function Workouts() {
                     })
                   }>
                   <LinearGradient
-                    colors={['#92A3FD33', '#9DCEFF22']}
+                    colors={['#DDDADA', '#DDDADA']}
                     style={{ marginHorizontal: 16, marginVertical: 8, borderRadius: 12 }}>
                     <Text style={[styles.tileTitle, { textAlign: 'left', margin: 10, padding: 10 }]}>
-                      {workoutName}
+                      {workoutName.replace('_', ' ').toString()}
                     </Text>
                   </LinearGradient>
                 </TouchableOpacity>
@@ -84,7 +84,7 @@ export default function Workouts() {
             }}
             keyExtractor={(item, idx) => idx.toString()}
           />
-          <Text style={styles.txt}>Explore</Text>
+          {/* <Text style={styles.txt}>Explore</Text>
           <FlatList
             data={targetBodyPart}
             renderItem={({ item }) => {
@@ -137,7 +137,7 @@ export default function Workouts() {
             }}
             numColumns={2}
             keyExtractor={(_, idx) => idx.toString()}
-          />
+          /> */}
         </View>
       </View>
     </>
