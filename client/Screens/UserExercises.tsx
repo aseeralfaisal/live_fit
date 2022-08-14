@@ -15,6 +15,10 @@ export default function UserExercises() {
   const workoutName = route.params.workoutName
   const [UserExercises, setUserExercises] = React.useState(null)
   const window = Dimensions.get('window')
+  const [set, setSet] = React.useState<string>('')
+  const [reps, setReps] = React.useState<string>('')
+  const [weight, setWeight] = React.useState<string>('')
+  const [isSetAdded, setIsSetAdded] = React.useState(false)
 
   const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
   React.useEffect(() => {
@@ -29,6 +33,11 @@ export default function UserExercises() {
             id
             name
             target
+            sets {
+              reps
+              set
+              weight
+            }
           }
         }
       }`
@@ -48,12 +57,47 @@ export default function UserExercises() {
     return () => {
       getUserExercises()
     }
-  }, [])
+  }, [isSetAdded])
 
-  console.log('UserExercises ', UserExercises)
+  const addSet = async (exerciseName: string) => {
+    const ADD_SET_QUERY = `mutation AddSetsReps($setsReps: [setRepsWeightinput], $userName: String, $workoutName: String, $exerciseName: String) {
+      addSetsReps(setsReps: $setsReps, userName: $userName, workoutName: $workoutName, exerciseName: $exerciseName) {
+        workoutName
+        userName
+        exercises {
+          equipment
+          gifUrl
+          id
+          name
+          target
+          sets {
+            set
+            reps
+            weight
+          }
+        }
+      }
+    }`
 
-  let number = 0
-  const [setRepNumber, setSetRepNumber] = React.useState([number])
+    const res = await axios.post(BASE_URL, {
+      query: ADD_SET_QUERY,
+      variables: {
+        setsReps: [
+          {
+            set: +set,
+            reps: +reps,
+            weight: +weight,
+          },
+        ],
+        userName: userVal,
+        workoutName: 'Workout_NEW',
+        exerciseName: exerciseName,
+      },
+    })
+    if (res.status) {
+      setIsSetAdded(!isSetAdded)
+    }
+  }
 
   return (
     <>
@@ -84,7 +128,7 @@ export default function UserExercises() {
                   }}></View>
               )
             }}
-            renderItem={({ item }: any) => {
+            renderItem={({ item: set }: any) => {
               return (
                 <>
                   <View
@@ -114,7 +158,7 @@ export default function UserExercises() {
                             overflow: 'hidden',
                           }}>
                           <Image
-                            source={{ uri: item.gifUrl }}
+                            source={{ uri: set.gifUrl }}
                             style={{
                               width: 65,
                               height: 65,
@@ -124,34 +168,49 @@ export default function UserExercises() {
                           />
                         </View>
                         <Text style={[styles.titleTxt, { marginLeft: 15, color: '#555' }]}>
-                          {item.name.split(' ')[0]} {item.name.split(' ')[1]} {item.name.split(' ')[2]}
+                          {set.name.split(' ')[0]} {set.name.split(' ')[1]} {set.name.split(' ')[2]}
                         </Text>
                       </View>
                     </TouchableOpacity>
                     <FlatList
-                      data={setRepNumber}
-                      renderItem={() => {
+                      data={set.sets}
+                      renderItem={({ item, index }) => {
+                        // console.log(set.sets.length - 1, index)
                         return (
                           <View>
+                            {/* <Text style={styles.titleTxt}>{set.sets.length.toString()}</Text>
+                            <Text style={styles.titleTxt}>{index}</Text> */}
                             <View
                               style={{ marginVertical: 20, flexDirection: 'row', justifyContent: 'center' }}>
                               <TextInput
-                                placeholder='Set'
+                                value={set}
+                                onChangeText={(text) => setSet(text)}
+                                placeholder={item.set.toString()}
                                 keyboardType='numeric'
                                 style={styles.SetRepInput}
+                                placeholderTextColor="#555"
+                                editable={set.sets.length - 1 === index ? true : false}
                               />
                               <Text style={{ marginVertical: 17, marginHorizontal: 5, color: '#555' }}>
                                 X
                               </Text>
                               <TextInput
-                                placeholder='Reps'
+                                value={reps}
+                                onChangeText={(text) => setReps(text)}
+                                placeholder={item.reps.toString()}
                                 keyboardType='numeric'
                                 style={styles.SetRepInput}
+                                placeholderTextColor="#555"
+                                editable={set.sets.length - 1 === index ? true : false}
                               />
                               <TextInput
-                                placeholder='Weight'
+                                value={weight}
+                                onChangeText={(text) => setWeight(text)}
+                                placeholder={item.weight.toString()}
                                 keyboardType='numeric'
                                 style={styles.SetRepInput}
+                                placeholderTextColor="#555"
+                                editable={set.sets.length - 1 === index ? true : false}
                               />
                             </View>
                           </View>
@@ -160,9 +219,7 @@ export default function UserExercises() {
                       keyExtractor={(_, idx) => idx.toString()}
                     />
                     <TouchableOpacity
-                      onPress={() => {
-                        setSetRepNumber([...setRepNumber, number + 1])
-                      }}
+                      onPress={() => addSet(set.name)}
                       style={{
                         alignItems: 'center',
                         justifyContent: 'center',

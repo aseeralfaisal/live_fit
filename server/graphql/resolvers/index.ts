@@ -128,6 +128,7 @@ const resolvers = {
               if (item.name === exerciseName) {
                 setsReps.forEach((elem: object) => {
                   item.sets.push(elem)
+                  item.sets.push({})
                 })
                 await workoutFound.save()
               }
