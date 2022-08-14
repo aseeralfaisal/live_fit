@@ -24,7 +24,7 @@ export default function UserExercises() {
   const userVal = useAppSelector((state) => state.user.userVal)
   const route: any = useRoute()
   const workoutName = route.params.workoutName
-  const [UserExercises, setUserExercises] = React.useState(null)
+  const [UserExercises, setUserExercises] = React.useState<any>([])
   const window = Dimensions.get('window')
   const [set, setSet] = React.useState<string>('')
   const [reps, setReps] = React.useState<string>('')
@@ -111,7 +111,7 @@ export default function UserExercises() {
   }
 
   const [selectedSet, setSelectedSet] = React.useState(1)
-  const [setID, setSetID] = React.useState(1)
+  const [setNumber, setSetNumber] = React.useState(0)
 
   return (
     <>
@@ -155,7 +155,8 @@ export default function UserExercises() {
                     }}>
                     <TouchableOpacity
                       onPress={() => {
-                        setSetID(indx)
+                        setSelectedSet(1)
+                        setSetNumber(indx)
                       }}
                       style={{
                         flexDirection: 'row',
@@ -190,7 +191,7 @@ export default function UserExercises() {
                         </Text>
                       </View>
                     </TouchableOpacity>
-                    {setID === indx && (
+                    {setNumber === indx && (
                       <View>
                         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                           <FlatList
@@ -232,20 +233,31 @@ export default function UserExercises() {
                               flexDirection: 'row',
                               justifyContent: 'center',
                             }}>
-                            <TextInput
-                              placeholder='Reps'
-                              value={reps.toString()}
-                              style={styles.setRepsInput}
-                            />
-                            <TextInput
-                              placeholder='Weight'
-                              value={weight.toString()}
-                              style={styles.setRepsInput}
-                            />
+                            <View style={{ alignItems: 'center' }}>
+                              <Text style={styles.setRepsWeightTitle}>Reps</Text>
+                              <TextInput
+                                placeholder='Reps'
+                                value={reps.toString()}
+                                style={styles.setRepsInput}
+                              />
+                            </View>
+                            <View style={{ alignItems: 'center' }}>
+                              <Text style={styles.setRepsWeightTitle}>Weight</Text>
+                              <TextInput
+                                placeholder='Weight'
+                                value={weight.toString()}
+                                style={styles.setRepsInput}
+                              />
+                            </View>
                           </View>
                         </View>
                         <Pressable
-                          onPress={() => addSet(set.name)}
+                          onPress={() => {
+                            setUserExercises([...UserExercises], {})
+                            setSelectedSet(set.sets.length + 1)
+                            // addSet(set.name)
+                            console.log(UserExercises)
+                          }}
                           style={{
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -255,6 +267,17 @@ export default function UserExercises() {
                             marginVertical: 20,
                           }}>
                           <Text style={[styles.titleTxt, { color: '#555' }]}>Add Set</Text>
+                        </Pressable>
+                        <Pressable
+                          style={{
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: '#DDDADA99',
+                            borderRadius: 8,
+                            height: 40,
+                            marginBottom: 20,
+                          }}>
+                          <Text style={[styles.titleTxt, { color: '#555' }]}>Finish set</Text>
                         </Pressable>
                       </View>
                     )}
@@ -279,14 +302,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   setRepsWeightTitle: {
-    fontFamily: 'Poppins_Bold',
-    color: '#777',
+    fontFamily: 'Poppins',
+    color: '#888',
     fontSize: 14,
   },
   setTitle: {
     backgroundColor: '#fff',
     color: '#555',
-    padding: 16,
+    width: 72,
+    height: 58,
     textAlign: 'center',
     textAlignVertical: 'center',
   },
@@ -306,6 +330,7 @@ const styles = StyleSheet.create({
     height: 60,
     borderRadius: 6,
     margin: 12,
+    color: '#555',
   },
   list: {
     flex: 1,

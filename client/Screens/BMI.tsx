@@ -130,7 +130,7 @@ export default function BMI() {
           />
         </View>
         <TouchableOpacity activeOpacity={0.5} onPress={calculateBmi}>
-          <Btn title='Calculate' />
+          <Btn title='Calculate' loading={false} />
         </TouchableOpacity>
         {/* <TouchableOpacity onPress={calculateBmi}>
           <LinearGradient
@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
   },
   editIconStyle: {
     position: 'absolute',
-    width: 32,
+    width: 24,
     resizeMode: 'contain',
     marginLeft: 10,
   },
@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
   },
   btnText: {
     alignSelf: 'center',
-    fontSize: 20,
+    fontSize: 14,
     color: '#fff',
     fontFamily: 'Poppins',
     fontWeight: '500',
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins',
     fontWeight: '400',
     borderRadius: 100,
-    fontSize: 18,
+    fontSize: 14,
     height: 50,
     width: 315,
     // alignSelf: 'center',

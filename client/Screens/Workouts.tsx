@@ -73,9 +73,13 @@ export default function Workouts() {
                     })
                   }>
                   <LinearGradient
-                    colors={['#DDDADA', '#DDDADA']}
+                    colors={['#92A3FD', '#92A3FD']}
                     style={{ marginHorizontal: 16, marginVertical: 8, borderRadius: 12 }}>
-                    <Text style={[styles.tileTitle, { textAlign: 'left', margin: 10, padding: 10 }]}>
+                    <Text
+                      style={[
+                        styles.tileTitle,
+                        { textAlign: 'left', color: '#fff', margin: 10, padding: 10 },
+                      ]}>
                       {workoutName.replace('_', ' ').toString()}
                     </Text>
                   </LinearGradient>
