@@ -7,10 +7,8 @@ import {
   Dimensions,
   TouchableOpacity,
   Pressable,
-  TouchableNativeFeedback,
-  TouchableWithoutFeedback,
-  Modal,
   Alert,
+  Appearance,
 } from 'react-native'
 import Header from '../Components/Header'
 import { useAppSelector } from '../redux/hooks'
@@ -18,8 +16,6 @@ import { useDispatch } from 'react-redux'
 import axios from 'axios'
 import { useRoute } from '@react-navigation/native'
 import { FlatList, TextInput } from 'react-native-gesture-handler'
-import { LinearGradient } from 'expo-linear-gradient'
-import Checkbox from 'expo-checkbox'
 
 export default function UserExercises() {
   const dispatch = useDispatch()
@@ -29,9 +25,7 @@ export default function UserExercises() {
   const [UserExercises, setUserExercises] = React.useState<any>([])
   const window = Dimensions.get('window')
   const [reps, setReps] = React.useState<string>('')
-  const [repsLocal, setRepsLocal] = React.useState<string>('')
   const [weight, setWeight] = React.useState<string>('')
-  const [weightLocal, setWeightLocal] = React.useState<string>('')
   const [isSetAdded, setIsSetAdded] = React.useState(false)
 
   const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
@@ -105,7 +99,7 @@ export default function UserExercises() {
         exerciseName: setName,
       },
     })
-    // if (res.status === 200) throw new Error('Something went wrong')
+    if (res.status !== 200) throw new Error('Something went wrong')
     const data = await res.data.data.addSetsReps.exercises[0]
     setSet_Id(data.sets[data.sets.length - 1]._id)
     setSelectedSet(setLength + 1)
@@ -140,6 +134,7 @@ export default function UserExercises() {
           reps: +reps,
         },
       })
+      if (res.status !== 200) return Alert.alert('❌ Uhh!', 'ℹ️ Something Went Wrong')
       // console.log(res.data.data)
       setIsSetAdded(!isSetAdded)
     } catch (err) {
@@ -160,7 +155,7 @@ export default function UserExercises() {
           }
         }
       }`
-      if (selectedSet === 1) return Alert.alert('Error', 'You have only one set')
+      if (selectedSet === 1) return Alert.alert('❌ Hold on', "💪 You can't delete Set 1")
       const res = await axios.post(BASE_URL, {
         query: EXERCISE_DELETE_QUERY,
         variables: {
@@ -182,6 +177,8 @@ export default function UserExercises() {
   const [set_Id, setSet_Id] = React.useState('')
   const setTitleRef = React.useRef<any>(null)
   const repsInputRef = React.useRef<any>(null)
+  const colorScheme = Appearance.getColorScheme()
+  console.log(colorScheme)
 
   return (
     <>
