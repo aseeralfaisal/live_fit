@@ -172,6 +172,7 @@ const resolvers = {
                   reps,
                   weight
                 })
+                // console.log(set)
               }
             })
           })

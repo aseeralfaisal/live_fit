@@ -32,13 +32,13 @@ const typeDefs = gql`
     set: Int
     reps: Int
     weight: Int
-    id: String
+    _id: String
   }
   input setRepsWeightinput {
     set: Int
     reps: Int
     weight: Int
-    id: String
+    _id: String
   }
   type Mutation {
     addUser(name: String!, pass: String!): User!
