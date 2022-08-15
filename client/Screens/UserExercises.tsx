@@ -61,7 +61,7 @@ export default function UserExercises() {
         },
       })
       const { getUserWorkout } = res.data.data
-      console.log(getUserWorkout)
+      // console.log(getUserWorkout)
       getUserWorkout.map(({ exercises }: any) => setUserExercises(exercises))
     }
     getUserExercises()
@@ -105,9 +105,32 @@ export default function UserExercises() {
         exerciseName: exerciseName,
       },
     })
-    if (res.status) {
+    if (res.status === 200) {
       setIsSetAdded(!isSetAdded)
     }
+  }
+
+  const updateSet = async () => {
+    const EXERCISE_UPDATE_QUERY = `mutation updateSet($workoutName: String!, $userName: String!, $updateSetId: String!, $reps: Int, $weight: Int) {
+      updateSet(workoutName: $workoutName, userName: $userName, id: $updateSetId, reps: $reps, weight: $weight) {
+        exercises {
+          sets {
+            reps
+            weight
+          }
+        }
+      }
+    }`
+    const res = await axios.post(BASE_URL, {
+      query: EXERCISE_UPDATE_QUERY,
+      variables: {
+        workoutName: 'Workout_NEW',
+        userName: userVal,
+        updateSetId: '62f90d2b8bccd2b0d4e63fb7',
+        weight: 103,
+        reps: 1,
+      },
+    })
   }
 
   const [selectedSet, setSelectedSet] = React.useState(1)
@@ -207,6 +230,7 @@ export default function UserExercises() {
                                       setReps(item.reps)
                                       setWeight(item.weight)
                                       setSelectedSet(index + 1)
+                                      console.log(item)
                                     }}>
                                     <Text
                                       style={[
@@ -253,10 +277,9 @@ export default function UserExercises() {
                         </View>
                         <Pressable
                           onPress={() => {
-                            setUserExercises([...UserExercises], {})
                             setSelectedSet(set.sets.length + 1)
-                            // addSet(set.name)
-                            console.log(UserExercises)
+                            addSet(set.name)
+                            // console.log(UserExercises)
                           }}
                           style={{
                             alignItems: 'center',
