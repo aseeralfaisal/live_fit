@@ -9,6 +9,7 @@ import {
   Pressable,
   TouchableNativeFeedback,
   TouchableWithoutFeedback,
+  Modal,
 } from 'react-native'
 import Header from '../Components/Header'
 import { useAppSelector } from '../redux/hooks'
@@ -26,9 +27,10 @@ export default function UserExercises() {
   const workoutName = route.params.workoutName
   const [UserExercises, setUserExercises] = React.useState<any>([])
   const window = Dimensions.get('window')
-  const [set, setSet] = React.useState<string>('')
   const [reps, setReps] = React.useState<string>('')
+  const [repsLocal, setRepsLocal] = React.useState<string>('')
   const [weight, setWeight] = React.useState<string>('')
+  const [weightLocal, setWeightLocal] = React.useState<string>('')
   const [isSetAdded, setIsSetAdded] = React.useState(false)
 
   const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
@@ -46,8 +48,8 @@ export default function UserExercises() {
             target
             sets {
               reps
-              set
               weight
+              _id
             }
           }
         }
@@ -95,7 +97,6 @@ export default function UserExercises() {
       variables: {
         setsReps: [
           {
-            set: +set,
             reps: +reps,
             weight: +weight,
           },
@@ -110,31 +111,39 @@ export default function UserExercises() {
     }
   }
 
-  const updateSet = async () => {
-    const EXERCISE_UPDATE_QUERY = `mutation updateSet($workoutName: String!, $userName: String!, $updateSetId: String!, $reps: Int, $weight: Int) {
-      updateSet(workoutName: $workoutName, userName: $userName, id: $updateSetId, reps: $reps, weight: $weight) {
-        exercises {
-          sets {
-            reps
+  const updateSet = async (reps: string, weight: string) => {
+    try {
+      const EXERCISE_UPDATE_QUERY = `mutation updateSet($workoutName: String!, $userName: String!, $updateSetId: String!, $reps: Int, $weight: Int) {
+        updateSet(workoutName: $workoutName, userName: $userName, id: $updateSetId, reps: $reps, weight: $weight) {
+          exercises {
+            sets {
+              reps
             weight
           }
         }
       }
     }`
-    const res = await axios.post(BASE_URL, {
-      query: EXERCISE_UPDATE_QUERY,
-      variables: {
-        workoutName: 'Workout_NEW',
-        userName: userVal,
-        updateSetId: '62f90d2b8bccd2b0d4e63fb7',
-        weight: 103,
-        reps: 1,
-      },
-    })
+      const res = await axios.post(BASE_URL, {
+        query: EXERCISE_UPDATE_QUERY,
+        variables: {
+          workoutName: 'Workout_NEW',
+          userName: userVal,
+          updateSetId: set_Id,
+          weight: +weight,
+          reps: +reps,
+        },
+      })
+      console.log(res.data.data)
+      setIsSetAdded(!isSetAdded)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   const [selectedSet, setSelectedSet] = React.useState(1)
   const [setNumber, setSetNumber] = React.useState(0)
+  const [set_Id, setSet_Id] = React.useState('')
+  const setTitleRef = React.useRef<any>(null)
 
   return (
     <>
@@ -218,9 +227,13 @@ export default function UserExercises() {
                       <View>
                         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
                           <FlatList
+                            ref={setTitleRef}
                             data={set.sets}
                             horizontal
-                            showsHorizontalScrollIndicator={false}
+                            scrollEnabled
+                            showsHorizontalScrollIndicator
+                            scrollToOverflowEnabled
+                            initialNumToRender={10}
                             renderItem={({ item, index }) => {
                               return (
                                 <>
@@ -230,6 +243,7 @@ export default function UserExercises() {
                                       setReps(item.reps)
                                       setWeight(item.weight)
                                       setSelectedSet(index + 1)
+                                      setSet_Id(item._id)
                                       console.log(item)
                                     }}>
                                     <Text
@@ -260,26 +274,32 @@ export default function UserExercises() {
                             <View style={{ alignItems: 'center' }}>
                               <Text style={styles.setRepsWeightTitle}>Reps</Text>
                               <TextInput
-                                placeholder='Reps'
-                                value={reps.toString()}
+                                placeholder={reps.toString()}
+                                onChangeText={(reps) => updateSet(reps, weight)}
+                                placeholderTextColor='#555'
                                 style={styles.setRepsInput}
                               />
                             </View>
                             <View style={{ alignItems: 'center' }}>
                               <Text style={styles.setRepsWeightTitle}>Weight</Text>
                               <TextInput
-                                placeholder='Weight'
-                                value={weight.toString()}
+                                placeholder={weight.toString()}
+                                onChangeText={(weight) => updateSet(reps, weight)}
+                                placeholderTextColor='#555'
                                 style={styles.setRepsInput}
                               />
                             </View>
                           </View>
                         </View>
                         <Pressable
-                          onPress={() => {
+                          onPress={async () => {
+                            await addSet(set.name)
                             setSelectedSet(set.sets.length + 1)
-                            addSet(set.name)
-                            // console.log(UserExercises)
+                            await setTitleRef.current.scrollToIndex({
+                              animated: false,
+                              index: set.sets.length - 1,
+                              viewPosition: 0.5,
+                            })
                           }}
                           style={{
                             alignItems: 'center',
@@ -291,17 +311,6 @@ export default function UserExercises() {
                           }}>
                           <Text style={[styles.titleTxt, { color: '#555' }]}>Add Set</Text>
                         </Pressable>
-                        <Pressable
-                          style={{
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            backgroundColor: '#DDDADA99',
-                            borderRadius: 8,
-                            height: 40,
-                            marginBottom: 20,
-                          }}>
-                          <Text style={[styles.titleTxt, { color: '#555' }]}>Finish set</Text>
-                        </Pressable>
                       </View>
                     )}
                   </View>
@@ -312,6 +321,11 @@ export default function UserExercises() {
             keyExtractor={(_, idx) => idx.toString()}
           />
         </View>
+        {/* <Modal transparent animationType='slide'>
+          <View style={{ top: '60%', backgroundColor: '#fff', height: '100%', alignItems: 'center' }}>
+            <Text>{reps}</Text>
+          </View>
+        </Modal> */}
       </View>
     </>
   )
@@ -336,6 +350,8 @@ const styles = StyleSheet.create({
     height: 58,
     textAlign: 'center',
     textAlignVertical: 'center',
+    // borderRightWidth: 0.5,
+    // borderColor: '#ccc',
   },
   titleTxt: {
     fontFamily: 'Poppins',
