@@ -27,6 +27,11 @@ export default function UserExercises() {
   const [reps, setReps] = React.useState<string>('')
   const [weight, setWeight] = React.useState<string>('')
   const [isSetAdded, setIsSetAdded] = React.useState(false)
+  const [selectedSet, setSelectedSet] = React.useState(0)
+  const [setNumber, setSetNumber] = React.useState(1)
+  const [set_Id, setSet_Id] = React.useState('')
+  const setTitleRef = React.useRef<any>(null)
+  const repsInputRef = React.useRef<any>(null)
 
   const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
   React.useEffect(() => {
@@ -172,11 +177,6 @@ export default function UserExercises() {
     }
   }
 
-  const [selectedSet, setSelectedSet] = React.useState(0)
-  const [setNumber, setSetNumber] = React.useState(1)
-  const [set_Id, setSet_Id] = React.useState('')
-  const setTitleRef = React.useRef<any>(null)
-  const repsInputRef = React.useRef<any>(null)
 
   return (
     <>
