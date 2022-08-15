@@ -105,7 +105,7 @@ export default function UserExercises() {
       },
     })
     if (res.status === 200) {
-      const data = res.data.data.addSetsReps.exercises[0]
+      const data = await res.data.data.addSetsReps.exercises[0]
       setSet_Id(data.sets[data.sets.length - 1]._id)
       setSelectedSet(setLength + 1)
       await setTitleRef.current.scrollToIndex({
