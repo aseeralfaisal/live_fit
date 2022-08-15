@@ -170,7 +170,7 @@ const resolvers = {
               if (set.id === id) {
                 set.$set({
                   reps,
-                  weight
+                  weight,
                 })
                 // console.log(set)
               }
