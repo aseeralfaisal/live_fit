@@ -1,21 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-export const userSlice = createSlice({
-  name: 'user',
+export const workoutSlice = createSlice({
+  name: 'workout',
   initialState: {
-    userVal: '',
-    pass: '',
     workouts: [],
     specificExercises: [],
     exerciseTarget: '',
   },
   reducers: {
-    changeUserVal: (state, action) => {
-      state.userVal = action.payload
-    },
-    changePassVal: (state, action) => {
-      state.pass = action.payload
-    },
     setWorkouts: (state, action) => {
       state.workouts = action.payload
     },
@@ -28,13 +20,4 @@ export const userSlice = createSlice({
   },
 })
 
-export const {
-  changeUserVal,
-  changePassVal,
-  setWorkouts,
-  setSpecificExercises,
-  setExerciseTarget,
-  setIsWorkoutpage,
-} = userSlice.actions
-
-export default userSlice.reducer
+export const { setWorkouts, setSpecificExercises, setExerciseTarget } = workoutSlice.actions

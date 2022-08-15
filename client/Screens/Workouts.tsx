@@ -1,18 +1,18 @@
 import * as React from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, Image, FlatList } from 'react-native'
 import Header from '../Components/Header'
-import { useNavigation, NavigationProp } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
 import axios from 'axios'
 import { useAppSelector } from '../redux/hooks'
 import { useDispatch } from 'react-redux'
-import { setExerciseTarget, setWorkouts } from '../redux/userSlice'
+import { setWorkouts } from '../redux/states/workoutSlice'
 
 export default function Workouts() {
   const navigation = useNavigation<any>()
   const dispatch = useDispatch()
   const userVal = useAppSelector((state) => state.user.userVal)
-  const workouts = useAppSelector((state) => state.user.workouts)
+  const workouts = useAppSelector((state) => state.workout.workouts)
 
   const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
 

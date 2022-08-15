@@ -6,32 +6,27 @@ import {
   TouchableOpacity,
   Dimensions,
   Image,
-  Modal,
   FlatList,
   TextInput,
-  ColorPropType,
-  TouchableNativeFeedback,
   Pressable,
 } from 'react-native'
 import Header from '../Components/Header'
 import axios from 'axios'
 import { useAppSelector } from '../redux/hooks'
-import { setSpecificExercises } from '../redux/userSlice'
+import { setSpecificExercises } from '../redux/states/workoutSlice'
 import { useDispatch } from 'react-redux'
-import { AddButton } from '../Components/AddButton'
 import { SpecificExerciseView } from '../Components/popups/SpecificExerciseView'
 import { Btn } from '../Components/Button'
-import { TouchableHighlight } from 'react-native-gesture-handler'
 
 export default function SpecificExercise() {
   const dispatch = useDispatch()
-  const exerciseTarget = useAppSelector((state) => state.user.exerciseTarget)
+  const exerciseTarget = useAppSelector((state) => state.workout.exerciseTarget)
   const [specificWorkout, setSpecificWorkout] = React.useState<boolean>(false)
   const [exerciseItem, setExerciseItem] = React.useState<object>({})
   const [searchVal, setSearchVal] = React.useState('')
   const window = Dimensions.get('window')
   const userVal = useAppSelector((state) => state.user.userVal)
-  const specificExercises = useAppSelector((state) => state.user.specificExercises)
+  const specificExercises = useAppSelector((state) => state.workout.specificExercises)
 
   const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
   const GET_EXERCISE_QUERY = `mutation Mutation($target: String!) {

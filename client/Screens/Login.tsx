@@ -4,7 +4,7 @@ import UserIcon from '../assets/icons/userIcon.svg'
 import PassIcon from '../assets/icons/passIcon.svg'
 import { useState } from 'react'
 import { useAppSelector, useAppDispatch } from '../redux/hooks'
-import { changeUserVal, changePassVal } from '../redux/userSlice'
+import { changeUserVal, changePassVal } from '../redux/states/userSlice'
 import axios from 'axios'
 
 export const Login = ({ setIsAuthenticated }: any) => {
