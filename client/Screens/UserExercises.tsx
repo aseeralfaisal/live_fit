@@ -77,12 +77,12 @@ export default function UserExercises() {
     setReps('0')
     const ADD_SET_QUERY = `mutation AddSetsReps($userName: String, $workoutName: String, $exerciseName: String, $setsReps: [setRepsWeightinput]) {
       addSetsReps(userName: $userName, workoutName: $workoutName, exerciseName: $exerciseName, setsReps: $setsReps) {
-        workoutName
         userName
+        workoutName
         exercises {
           sets {
-            set
             reps
+            set
             weight
             _id
           }
