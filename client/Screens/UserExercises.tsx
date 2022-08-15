@@ -72,7 +72,9 @@ export default function UserExercises() {
     }
   }, [isSetAdded])
 
-  const addSet = async (exerciseName: string) => {
+  const addSet = async (setName: string, setLength: number) => {
+    setWeight('0')
+    setReps('0')
     const ADD_SET_QUERY = `mutation AddSetsReps($setsReps: [setRepsWeightinput], $userName: String, $workoutName: String, $exerciseName: String) {
       addSetsReps(setsReps: $setsReps, userName: $userName, workoutName: $workoutName, exerciseName: $exerciseName) {
         workoutName
@@ -103,11 +105,18 @@ export default function UserExercises() {
         ],
         userName: userVal,
         workoutName: 'Workout_NEW',
-        exerciseName: exerciseName,
+        exerciseName: setName,
       },
     })
     if (res.status === 200) {
+      setSelectedSet(setLength + 1)
+      await setTitleRef.current.scrollToIndex({
+        animated: true,
+        index: setLength - 1,
+        viewPosition: 0.5,
+      })
       setIsSetAdded(!isSetAdded)
+      repsInputRef.current.focus()
     }
   }
 
@@ -131,6 +140,34 @@ export default function UserExercises() {
           updateSetId: set_Id,
           weight: +weight,
           reps: +reps,
+        },
+      })
+      console.log(res.data.data)
+      setIsSetAdded(!isSetAdded)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+  const deleteSet = async () => {
+    try {
+      const EXERCISE_DELETE_QUERY = `mutation DeleteSet($workoutName: String!, $userName: String!, $deleteSetId: String!) {
+        deleteSet(workoutName: $workoutName, userName: $userName, id: $deleteSetId) {
+          exercises {
+            sets {
+              set
+              reps
+              weight
+              _id
+            }
+          }
+        }
+      }`
+      const res = await axios.post(BASE_URL, {
+        query: EXERCISE_DELETE_QUERY,
+        variables: {
+          workoutName: 'Workout_NEW',
+          userName: userVal,
+          deleteSetId: set_Id,
         },
       })
       console.log(res.data.data)
@@ -245,8 +282,9 @@ export default function UserExercises() {
                                       setWeight(item.weight)
                                       setSelectedSet(index + 1)
                                       setSet_Id(item._id)
-                                      repsInputRef.current.focus()
-                                    }}>
+                                    }}
+                                    onLongPress={() => deleteSet()}
+                                    >
                                     <Text
                                       style={[
                                         styles.setTitle,
@@ -299,13 +337,7 @@ export default function UserExercises() {
                         </View>
                         <Pressable
                           onPress={async () => {
-                            await addSet(set.name)
-                            setSelectedSet(set.sets.length + 1)
-                            await setTitleRef.current.scrollToIndex({
-                              animated: false,
-                              index: set.sets.length - 1,
-                              viewPosition: 0.5,
-                            })
+                            await addSet(set.name, set.sets.length)
                           }}
                           style={{
                             alignItems: 'center',
