@@ -10,6 +10,7 @@ import {
   TouchableNativeFeedback,
   TouchableWithoutFeedback,
   Modal,
+  Alert,
 } from 'react-native'
 import Header from '../Components/Header'
 import { useAppSelector } from '../redux/hooks'
@@ -159,6 +160,7 @@ export default function UserExercises() {
           }
         }
       }`
+      if (selectedSet === 1) return Alert.alert('Error', 'You have only one set')
       const res = await axios.post(BASE_URL, {
         query: EXERCISE_DELETE_QUERY,
         variables: {
@@ -167,6 +169,7 @@ export default function UserExercises() {
           deleteSetId: set_Id,
         },
       })
+      if (res.status !== 200) return
       // console.log(res.data.data)
       setIsSetAdded(!isSetAdded)
     } catch (err) {
