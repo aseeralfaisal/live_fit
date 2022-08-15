@@ -6,18 +6,22 @@ export const workoutSlice = createSlice({
     workouts: [],
     specificExercises: [],
     exerciseTarget: '',
+    UserExercises: [],
   },
   reducers: {
-    setWorkouts: (state, action) => {
-      state.workouts = action.payload
+    setWorkouts: (state, { payload }) => {
+      state.workouts = payload
     },
-    setSpecificExercises: (state, action) => {
-      state.specificExercises = action.payload
+    setSpecificExercises: (state, { payload }) => {
+      state.specificExercises = payload
     },
-    setExerciseTarget: (state, action) => {
-      state.exerciseTarget = action.payload
+    setExerciseTarget: (state, { payload }) => {
+      state.exerciseTarget = payload
+    },
+    setUserExercises: (state, { payload }) => {
+      state.UserExercises = payload
     },
   },
 })
 
-export const { setWorkouts, setSpecificExercises, setExerciseTarget } = workoutSlice.actions
+export const { setWorkouts, setSpecificExercises, setExerciseTarget, setUserExercises } = workoutSlice.actions

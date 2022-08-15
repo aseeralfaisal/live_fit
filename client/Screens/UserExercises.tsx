@@ -16,13 +16,14 @@ import { useDispatch } from 'react-redux'
 import axios from 'axios'
 import { useRoute } from '@react-navigation/native'
 import { FlatList, TextInput } from 'react-native-gesture-handler'
+import { setUserExercises } from '../redux/states/workoutSlice'
 
 export default function UserExercises() {
   const dispatch = useDispatch()
   const userVal = useAppSelector((state) => state.user.userVal)
+  const UserExercises = useAppSelector((state) => state.workout.UserExercises)
   const route: any = useRoute()
   const workoutName = route.params.workoutName
-  const [UserExercises, setUserExercises] = React.useState<any>([])
   const window = Dimensions.get('window')
   const [reps, setReps] = React.useState<string>('')
   const [weight, setWeight] = React.useState<string>('')
@@ -59,7 +60,7 @@ export default function UserExercises() {
       })
       const { getUserWorkout } = res.data.data
       // console.log(getUserWorkout)
-      getUserWorkout.map(({ exercises }: any) => setUserExercises(exercises))
+      getUserWorkout.map(({ exercises }: any) => dispatch(setUserExercises(exercises)))
     }
     getUserExercises()
     return () => {
