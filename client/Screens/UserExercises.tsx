@@ -89,6 +89,7 @@ export default function UserExercises() {
             set
             reps
             weight
+            _id
           }
         }
       }
@@ -109,6 +110,7 @@ export default function UserExercises() {
       },
     })
     if (res.status === 200) {
+      console.log(res.data.data)
       setSelectedSet(setLength + 1)
       await setTitleRef.current.scrollToIndex({
         animated: true,

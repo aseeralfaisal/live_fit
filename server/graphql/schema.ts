@@ -52,7 +52,7 @@ const typeDefs = gql`
       workoutName: String
       exerciseName: String
       setsReps: [setRepsWeightinput]
-    ): Workout
+    ): setRepsWeight
     deleteSet(workoutName: String!, userName: String!, id: String!): Workout
     updateSet(workoutName: String!, userName: String!, id: String!, reps: Int, weight: Int): Workout
   }
