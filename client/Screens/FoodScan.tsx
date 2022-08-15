@@ -59,7 +59,7 @@ export default function FoodScan() {
   const clarifaiApp = new Clarifai.App({
     apiKey: 'd5f2958f4b0b4b38acfbc2921cf5de81',
   })
-  const clarifaiDetectObjectsAsync = async (source) => {
+  const clarifaiDetectObjectsAsync = async (source: any) => {
     try {
       const newPredictions = await clarifaiApp.models.predict(
         { id: Clarifai.FOOD_MODEL },

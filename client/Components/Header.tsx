@@ -8,7 +8,6 @@ import {
 } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { useAppSelector } from '../redux/hooks'
-import { useRoute } from '@react-navigation/native'
 
 export default function Header() {
   const userVal = useAppSelector((state) => state.user.userVal)
