@@ -6,7 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import axios from 'axios'
 import { useAppSelector } from '../redux/hooks'
 import { useDispatch } from 'react-redux'
-import { setWorkouts } from '../redux/states/workoutSlice'
+import { setWorkoutName, setWorkouts } from '../redux/states/workoutSlice'
 
 export default function Workouts() {
   const navigation = useNavigation<any>()
@@ -67,11 +67,10 @@ export default function Workouts() {
               const { workoutName }: any = item
               return (
                 <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('UserExercises', {
-                      workoutName,
-                    })
-                  }>
+                  onPress={() => {
+                    dispatch(setWorkoutName(workoutName))
+                    navigation.navigate('UserExercises')
+                  }}>
                   <LinearGradient
                     colors={['#92A3FD', '#92A3FD']}
                     style={{ marginHorizontal: 16, marginVertical: 8, borderRadius: 12 }}>

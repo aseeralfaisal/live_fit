@@ -22,8 +22,7 @@ export default function UserExercises() {
   const dispatch = useDispatch()
   const userVal = useAppSelector((state) => state.user.userVal)
   const UserExercises = useAppSelector((state) => state.workout.UserExercises)
-  const route: any = useRoute()
-  const workoutName = route.params.workoutName
+  const workoutName = useAppSelector((state) => state.workout.workoutName)
   const window = Dimensions.get('window')
   const [reps, setReps] = React.useState<string>('')
   const [weight, setWeight] = React.useState<string>('')
@@ -178,8 +177,6 @@ export default function UserExercises() {
   const [set_Id, setSet_Id] = React.useState('')
   const setTitleRef = React.useRef<any>(null)
   const repsInputRef = React.useRef<any>(null)
-  const colorScheme = Appearance.getColorScheme()
-  console.log(colorScheme)
 
   return (
     <>

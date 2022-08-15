@@ -4,6 +4,7 @@ export const workoutSlice = createSlice({
   name: 'workout',
   initialState: {
     workouts: [],
+    workoutName: '',
     specificExercises: [],
     exerciseTarget: '',
     UserExercises: [],
@@ -21,7 +22,11 @@ export const workoutSlice = createSlice({
     setUserExercises: (state, { payload }) => {
       state.UserExercises = payload
     },
+    setWorkoutName: (state, { payload }) => {
+      state.workoutName = payload
+    },
   },
 })
 
-export const { setWorkouts, setSpecificExercises, setExerciseTarget, setUserExercises } = workoutSlice.actions
+export const { setWorkouts, setSpecificExercises, setExerciseTarget, setUserExercises, setWorkoutName } =
+  workoutSlice.actions
