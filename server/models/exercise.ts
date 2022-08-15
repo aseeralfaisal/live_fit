@@ -4,7 +4,6 @@ const sets = new mongoose.Schema({
   set: Number,
   reps: Number,
   weight: Number,
-  _id: String
 })
 const exercisesSchema = new mongoose.Schema({
   equipment: String,

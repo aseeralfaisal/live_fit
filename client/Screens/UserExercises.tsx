@@ -144,6 +144,7 @@ export default function UserExercises() {
   const [setNumber, setSetNumber] = React.useState(0)
   const [set_Id, setSet_Id] = React.useState('')
   const setTitleRef = React.useRef<any>(null)
+  const repsInputRef = React.useRef<any>(null)
 
   return (
     <>
@@ -244,7 +245,7 @@ export default function UserExercises() {
                                       setWeight(item.weight)
                                       setSelectedSet(index + 1)
                                       setSet_Id(item._id)
-                                      console.log(item)
+                                      repsInputRef.current.focus()
                                     }}>
                                     <Text
                                       style={[
@@ -274,6 +275,9 @@ export default function UserExercises() {
                             <View style={{ alignItems: 'center' }}>
                               <Text style={styles.setRepsWeightTitle}>Reps</Text>
                               <TextInput
+                                ref={repsInputRef}
+                                textAlign='center'
+                                keyboardType='numeric'
                                 placeholder={reps.toString()}
                                 onChangeText={(reps) => updateSet(reps, weight)}
                                 placeholderTextColor='#555'
@@ -283,6 +287,8 @@ export default function UserExercises() {
                             <View style={{ alignItems: 'center' }}>
                               <Text style={styles.setRepsWeightTitle}>Weight</Text>
                               <TextInput
+                                textAlign='center'
+                                keyboardType='numeric'
                                 placeholder={weight.toString()}
                                 onChangeText={(weight) => updateSet(reps, weight)}
                                 placeholderTextColor='#555'
