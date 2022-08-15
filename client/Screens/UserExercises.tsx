@@ -104,18 +104,17 @@ export default function UserExercises() {
         exerciseName: setName,
       },
     })
-    if (res.status === 200) {
-      const data = await res.data.data.addSetsReps.exercises[0]
-      setSet_Id(data.sets[data.sets.length - 1]._id)
-      setSelectedSet(setLength + 1)
-      await setTitleRef.current.scrollToIndex({
-        animated: true,
-        index: setLength - 1,
-        viewPosition: 0.5,
-      })
-      setIsSetAdded(!isSetAdded)
-      repsInputRef.current.focus()
-    }
+    // if (res.status === 200) throw new Error('Something went wrong')
+    const data = await res.data.data.addSetsReps.exercises[0]
+    setSet_Id(data.sets[data.sets.length - 1]._id)
+    setSelectedSet(setLength + 1)
+    await setTitleRef.current.scrollToIndex({
+      animated: true,
+      index: setLength - 1,
+      viewPosition: 0.5,
+    })
+    setIsSetAdded(!isSetAdded)
+    repsInputRef.current.focus()
   }
 
   const updateSet = async (reps: string, weight: string) => {
@@ -140,7 +139,7 @@ export default function UserExercises() {
           reps: +reps,
         },
       })
-      console.log(res.data.data)
+      // console.log(res.data.data)
       setIsSetAdded(!isSetAdded)
     } catch (err) {
       console.log(err)
@@ -168,7 +167,7 @@ export default function UserExercises() {
           deleteSetId: set_Id,
         },
       })
-      console.log(res.data.data)
+      // console.log(res.data.data)
       setIsSetAdded(!isSetAdded)
     } catch (err) {
       console.log(err)
@@ -314,7 +313,12 @@ export default function UserExercises() {
                                 textAlign='center'
                                 keyboardType='numeric'
                                 placeholder={reps.toString()}
-                                onChangeText={(reps) => updateSet(reps, weight)}
+                                onSubmitEditing={async (e) => {
+                                  e.preventDefault()
+                                  const reps = e.nativeEvent.text
+                                  setReps(reps)
+                                  await updateSet(reps, weight)
+                                }}
                                 placeholderTextColor='#555'
                                 style={styles.setRepsInput}
                               />
@@ -325,7 +329,12 @@ export default function UserExercises() {
                                 textAlign='center'
                                 keyboardType='numeric'
                                 placeholder={weight.toString()}
-                                onChangeText={(weight) => updateSet(reps, weight)}
+                                onSubmitEditing={async (e) => {
+                                  e.preventDefault()
+                                  const weight = e.nativeEvent.text
+                                  setWeight(weight)
+                                  await updateSet(reps, weight)
+                                }}
                                 placeholderTextColor='#555'
                                 style={styles.setRepsInput}
                               />
