@@ -105,7 +105,8 @@ export default function UserExercises() {
       },
     })
     if (res.status === 200) {
-      console.log(res.data.data)
+      const data = res.data.data.addSetsReps.exercises[0]
+      setSet_Id(data.sets[data.sets.length - 1]._id)
       setSelectedSet(setLength + 1)
       await setTitleRef.current.scrollToIndex({
         animated: true,
@@ -280,8 +281,7 @@ export default function UserExercises() {
                                       setSelectedSet(index + 1)
                                       setSet_Id(item._id)
                                     }}
-                                    onLongPress={() => deleteSet()}
-                                    >
+                                    onLongPress={() => deleteSet()}>
                                     <Text
                                       style={[
                                         styles.setTitle,
