@@ -75,16 +75,11 @@ export default function UserExercises() {
   const addSet = async (setName: string, setLength: number) => {
     setWeight('0')
     setReps('0')
-    const ADD_SET_QUERY = `mutation AddSetsReps($setsReps: [setRepsWeightinput], $userName: String, $workoutName: String, $exerciseName: String) {
-      addSetsReps(setsReps: $setsReps, userName: $userName, workoutName: $workoutName, exerciseName: $exerciseName) {
+    const ADD_SET_QUERY = `mutation AddSetsReps($userName: String, $workoutName: String, $exerciseName: String, $setsReps: [setRepsWeightinput]) {
+      addSetsReps(userName: $userName, workoutName: $workoutName, exerciseName: $exerciseName, setsReps: $setsReps) {
         workoutName
         userName
         exercises {
-          equipment
-          gifUrl
-          id
-          name
-          target
           sets {
             set
             reps

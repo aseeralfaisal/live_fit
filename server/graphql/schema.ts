@@ -5,6 +5,12 @@ const typeDefs = gql`
     user: String!
     pass: String!
   }
+  type setRepsWeight {
+    set: Int
+    reps: Int
+    weight: Int
+    _id: String
+  }
   type Exercise {
     equipment: String!
     gifUrl: String!
@@ -24,15 +30,9 @@ const typeDefs = gql`
     target: String!
   }
   type Workout {
-    workoutName: String!
     userName: String!
+    workoutName: String!
     exercises: [Exercise!]
-  }
-  type setRepsWeight {
-    set: Int
-    reps: Int
-    weight: Int
-    _id: String
   }
   input setRepsWeightinput {
     set: Int
@@ -52,7 +52,7 @@ const typeDefs = gql`
       workoutName: String
       exerciseName: String
       setsReps: [setRepsWeightinput]
-    ): setRepsWeight
+    ): Workout
     deleteSet(workoutName: String!, userName: String!, id: String!): Workout
     updateSet(workoutName: String!, userName: String!, id: String!, reps: Int, weight: Int): Workout
   }
