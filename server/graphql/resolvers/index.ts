@@ -159,6 +159,29 @@ const resolvers = {
         console.log(err)
       }
     },
+    async updateSet(_: any, { workoutName, userName, id, reps, weight }) {
+      try {
+        const user = await User.findOne({ user: userName })
+        if (user) {
+          const workoutFound = await Workouts.findOne({ workoutName })
+          if (!workoutFound) return new ApolloError('Invalid workout name')
+          workoutFound.exercises.forEach(async (item) => {
+            item.sets.forEach(async (set) => {
+              if (set.id === id) {
+                set.$set({
+                  reps,
+                  weight
+                })
+              }
+            })
+          })
+          await workoutFound.save()
+          return workoutFound
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    },
   },
 }
 export default resolvers

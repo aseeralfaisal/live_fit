@@ -3,11 +3,9 @@ import exercisesSchema from './exercise'
 
 const Workouts = new mongoose.Schema(
   {
-    userName: { type: String },
-    workoutName: { type: String },
-    exercises: {
-      type: [exercisesSchema],
-    },
+    userName: String,
+    workoutName: String,
+    exercises: [exercisesSchema],
   },
   { timestamps: true }
 )
