@@ -7,6 +7,7 @@ import axios from 'axios'
 import { useAppSelector } from '../redux/hooks'
 import { useDispatch } from 'react-redux'
 import { setWorkoutName, setWorkouts } from '../redux/states/workoutSlice'
+import FormSVG from '../assets/form.svg'
 
 export default function Workouts() {
   const navigation = useNavigation<any>()
@@ -72,13 +73,23 @@ export default function Workouts() {
                     navigation.navigate('UserExercises')
                   }}>
                   <LinearGradient
-                    colors={['#92A3FD', '#92A3FD']}
-                    style={{ marginHorizontal: 16, marginVertical: 8, borderRadius: 12 }}>
+                    colors={['#C58BF233', '#92A3FD33']}
+                    style={{
+                      marginHorizontal: 16,
+                      marginVertical: 8,
+                      borderRadius: 12,
+                      flexDirection: 'row',
+                    }}>
+                    {/* <Image
+                      source={require('../assets/form.png')}
+                      style={{ width: 60, height: 60, resizeMode: 'contain', marginLeft: 10 }}
+                    /> */}
                     <Text
                       style={[
                         styles.tileTitle,
-                        { textAlign: 'left', color: '#fff', margin: 10, padding: 10 },
+                        { textAlign: 'left', color: '#555', margin: 10, padding: 10 },
                       ]}>
+                        <Text>⭐ </Text>
                       {workoutName.replace('_', ' ').toString()}
                     </Text>
                   </LinearGradient>
