@@ -110,7 +110,7 @@ export default function UserExercises() {
     await setTitleRef.current.scrollToIndex({
       animated: true,
       index: setLength - 1,
-      viewPosition: 0.5,
+      viewPosition: -1,
     })
     setIsSetAdded(!isSetAdded)
     repsInputRef.current.focus()
@@ -256,14 +256,12 @@ export default function UserExercises() {
                     </TouchableOpacity>
                     {setNumber === indx && (
                       <View>
-                        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                        <View style={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}>
                           <FlatList
                             ref={setTitleRef}
                             data={set.sets}
                             horizontal
-                            scrollEnabled
                             showsHorizontalScrollIndicator={false}
-                            initialNumToRender={10}
                             renderItem={({ item, index }) => {
                               return (
                                 <>
@@ -308,7 +306,7 @@ export default function UserExercises() {
                                 textAlign='center'
                                 keyboardType='numeric'
                                 placeholder={reps?.toString()}
-                                onSubmitEditing={async (e) => {
+                                onEndEditing={async (e) => {
                                   e.preventDefault()
                                   const reps = e.nativeEvent.text
                                   setReps(reps)
@@ -324,7 +322,7 @@ export default function UserExercises() {
                                 textAlign='center'
                                 keyboardType='numeric'
                                 placeholder={weight?.toString()}
-                                onSubmitEditing={async (e) => {
+                                onEndEditing={async (e) => {
                                   e.preventDefault()
                                   const weight = e.nativeEvent.text
                                   setWeight(weight)

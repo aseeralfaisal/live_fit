@@ -136,6 +136,8 @@ export default function SpecificExercise() {
             backgroundColor: 'rgba(100,100,100,0.05)',
             marginHorizontal: 20,
             borderRadius: 12,
+            flex: 1,
+            marginBottom: 60
           }}>
           <FlatList
             data={specificExercises}
