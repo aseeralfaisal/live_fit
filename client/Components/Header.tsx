@@ -6,8 +6,34 @@ import { useRoute } from '@react-navigation/native'
 
 export default function Header() {
   const route = useRoute()
-  console.log(route.name)
+  const routeName = route.name
   const userVal = useAppSelector((state) => state.user.userVal)
+
+  if (routeName === 'TargetExercise') {
+    return (
+      <>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-around',
+            alignItems: 'center',
+            paddingTop: 50,
+            paddingBottom: 10,
+            marginBottom: 20,
+            backgroundColor: '#eee',
+          }}>
+          <TouchableOpacity activeOpacity={0.2}>
+            <Text style={styles.actionTitles}>Discard</Text>
+          </TouchableOpacity>
+          <Text style={styles.title}>Add Exercise</Text>
+          <TouchableOpacity activeOpacity={0.2}>
+            <Text style={styles.actionTitles}>Create</Text>
+          </TouchableOpacity>
+        </View>
+        <StatusBar style='dark' />
+      </>
+    )
+  }
 
   return (
     <>
@@ -45,9 +71,19 @@ const styles = StyleSheet.create({
     marginHorizontal: 28,
   },
   userName: {
-    fontSize: 18,
+    fontSize: 16,
     fontFamily: 'Poppins_Bold',
     color: '#555',
     textTransform: 'capitalize',
+  },
+  title: {
+    fontSize: 16,
+    color: '#555',
+    fontFamily: 'Poppins_Bold',
+  },
+  actionTitles: {
+    fontSize: 14,
+    color: '#92A3FD',
+    fontFamily: 'Poppins_Bold',
   },
 })
