@@ -262,8 +262,7 @@ export default function UserExercises() {
                             data={set.sets}
                             horizontal
                             scrollEnabled
-                            showsHorizontalScrollIndicator
-                            scrollToOverflowEnabled
+                            showsHorizontalScrollIndicator={false}
                             initialNumToRender={10}
                             renderItem={({ item, index }) => {
                               return (
@@ -337,7 +336,7 @@ export default function UserExercises() {
                             </View>
                           </View>
                         </View>
-                        <Pressable
+                        <TouchableOpacity
                           onPress={async () => {
                             await addSet(set.name, set.sets.length)
                           }}
@@ -350,7 +349,7 @@ export default function UserExercises() {
                             marginVertical: 20,
                           }}>
                           <Text style={[styles.titleTxt, { color: '#555' }]}>Add Set</Text>
-                        </Pressable>
+                        </TouchableOpacity>
                       </View>
                     )}
                   </View>
