@@ -18,6 +18,7 @@ import { useDispatch } from 'react-redux'
 import { SpecificExerciseView } from '../Components/popups/SpecificExerciseView'
 import AddIconSVG from '../assets/icons/add.svg'
 import { CREATE_WORKOUT_QUERY } from '../Queries/CREATE_WORKOUT_QUERY'
+import { GET_TARGET_EXERCISE_QUERY } from '../Queries/GET_TARGET_EXERCISE_QUERY'
 
 export default function TargetExercise() {
   const dispatch = useDispatch()
@@ -30,21 +31,11 @@ export default function TargetExercise() {
   const specificExercises = useAppSelector((state) => state.workout.specificExercises)
 
   const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
-  const GET_EXERCISE_QUERY = `mutation Mutation($target: String!) {
-    getExercise(target: $target) {
-      gifUrl
-      id
-      name
-      target
-      equipment
-    }
-  }`
-
   React.useEffect(() => {
     let isMounted = true
     const getExerciseList = async () => {
       const fetchData = await axios.post(BASE_URL, {
-        query: GET_EXERCISE_QUERY,
+        query: GET_TARGET_EXERCISE_QUERY,
         variables: {
           target: exerciseTarget,
         },
