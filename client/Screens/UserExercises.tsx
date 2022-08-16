@@ -17,6 +17,10 @@ import axios from 'axios'
 import { useRoute } from '@react-navigation/native'
 import { FlatList, TextInput } from 'react-native-gesture-handler'
 import { setUserExercises } from '../redux/states/workoutSlice'
+import { ADD_SET_QUERY } from '../Queries/ADD_SET_QUERY'
+import { EXERCISE_UPDATE_QUERY } from '../Queries/EXERCISE_UPDATE_QUERY'
+import { GET_EXERCISE_QUERY } from '../Queries/GET_EXERCISE_QUERY'
+import { EXERCISE_DELETE_QUERY } from '../Queries/EXERCISE_DELETE_QUERY'
 
 export default function UserExercises() {
   const dispatch = useDispatch()
@@ -36,25 +40,6 @@ export default function UserExercises() {
   const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
   React.useEffect(() => {
     const getUserExercises = async () => {
-      const GET_EXERCISE_QUERY = `mutation GetUserWorkout($userName: String!, $workoutName: String!) {
-        getUserWorkout(userName: $userName, workoutName: $workoutName) {
-          workoutName
-          userName
-          exercises {
-            equipment
-            gifUrl
-            id
-            name
-            target
-            sets {
-              reps
-              weight
-              _id
-            }
-          }
-        }
-      }`
-
       const res = await axios.post(BASE_URL, {
         query: GET_EXERCISE_QUERY,
         variables: {
@@ -74,20 +59,6 @@ export default function UserExercises() {
   const addSet = async (setName: string, setLength: number) => {
     setWeight('0')
     setReps('0')
-    const ADD_SET_QUERY = `mutation AddSetsReps($userName: String, $workoutName: String, $exerciseName: String, $setsReps: [setRepsWeightinput]) {
-      addSetsReps(userName: $userName, workoutName: $workoutName, exerciseName: $exerciseName, setsReps: $setsReps) {
-        userName
-        workoutName
-        exercises {
-          sets {
-            reps
-            set
-            weight
-            _id
-          }
-        }
-      }
-    }`
 
     const res = await axios.post(BASE_URL, {
       query: ADD_SET_QUERY,
@@ -118,16 +89,6 @@ export default function UserExercises() {
 
   const updateSet = async (reps: string, weight: string) => {
     try {
-      const EXERCISE_UPDATE_QUERY = `mutation updateSet($workoutName: String!, $userName: String!, $updateSetId: String!, $reps: Int, $weight: Int) {
-        updateSet(workoutName: $workoutName, userName: $userName, id: $updateSetId, reps: $reps, weight: $weight) {
-          exercises {
-            sets {
-              reps
-            weight
-          }
-        }
-      }
-    }`
       const res = await axios.post(BASE_URL, {
         query: EXERCISE_UPDATE_QUERY,
         variables: {
@@ -147,18 +108,6 @@ export default function UserExercises() {
   }
   const deleteSet = async () => {
     try {
-      const EXERCISE_DELETE_QUERY = `mutation DeleteSet($workoutName: String!, $userName: String!, $deleteSetId: String!) {
-        deleteSet(workoutName: $workoutName, userName: $userName, id: $deleteSetId) {
-          exercises {
-            sets {
-              set
-              reps
-              weight
-              _id
-            }
-          }
-        }
-      }`
       if (selectedSet === 1) return Alert.alert('❌ Hold on', "💪 You can't delete Set 1")
       const res = await axios.post(BASE_URL, {
         query: EXERCISE_DELETE_QUERY,
