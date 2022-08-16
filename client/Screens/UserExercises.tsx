@@ -262,6 +262,7 @@ export default function UserExercises() {
                             data={set.sets}
                             horizontal
                             showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={{ paddingHorizontal: 72, paddingVertical: 20 }}
                             renderItem={({ item, index }) => {
                               return (
                                 <>
