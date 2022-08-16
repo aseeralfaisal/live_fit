@@ -16,7 +16,7 @@ export default function StackScreen() {
       <View style={{ flex: 1, backgroundColor: 'rgba(80,80,80,0.3)' }}>
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name='dashboard' component={TabScreen} />
-          <Stack.Screen name='SpecificExercise' children={() => <TargetExercise />} />
+          <Stack.Screen name='TargetExercise' children={() => <TargetExercise />} />
           <Stack.Screen name='UserExercises' children={() => <UserExercises />} />
           <Stack.Screen name='Map' children={() => <Map />} />
           <Stack.Screen name='Workouts' children={() => <Workouts />} />

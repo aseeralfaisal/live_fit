@@ -1,15 +1,12 @@
 import * as React from 'react'
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-} from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { useAppSelector } from '../redux/hooks'
+import { useRoute } from '@react-navigation/native'
 
 export default function Header() {
+  const route = useRoute()
+  console.log(route.name)
   const userVal = useAppSelector((state) => state.user.userVal)
 
   return (
@@ -21,9 +18,7 @@ export default function Header() {
             style={{ width: 50, resizeMode: 'contain' }}
           />
           <View style={{ marginLeft: 10 }}>
-            <Text style={{ color: '#aaa', fontFamily: 'Poppins' }}>
-              Welcome
-            </Text>
+            <Text style={{ color: '#aaa', fontFamily: 'Poppins' }}>Welcome</Text>
             <Text style={styles.userName}>{userVal}</Text>
           </View>
         </View>

@@ -113,7 +113,7 @@ export default function Workouts() {
                   <TouchableOpacity
                     onPress={() => {
                       dispatch(setExerciseTarget(item.name))
-                      navigation.navigate('SpecificExercise')
+                      navigation.navigate('TargetExercise')
                     }}>
                     <LinearGradient
                       colors={['#C58BF233', '#EEA4CE22']}
