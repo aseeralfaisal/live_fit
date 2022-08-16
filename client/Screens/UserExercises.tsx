@@ -324,7 +324,7 @@ export default function UserExercises() {
                               <TextInput
                                 textAlign='center'
                                 keyboardType='numeric'
-                                placeholder={weight.toString()}
+                                placeholder={weight?.toString()}
                                 onSubmitEditing={async (e) => {
                                   e.preventDefault()
                                   const weight = e.nativeEvent.text
