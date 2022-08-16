@@ -6,7 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import axios from 'axios'
 import { useAppSelector } from '../redux/hooks'
 import { useDispatch } from 'react-redux'
-import { setWorkoutName, setWorkouts } from '../redux/states/workoutSlice'
+import { setWorkoutName, setWorkouts, setExerciseTarget } from '../redux/states/workoutSlice'
 import FormSVG from '../assets/form.svg'
 
 export default function Workouts() {
@@ -89,7 +89,7 @@ export default function Workouts() {
                         styles.tileTitle,
                         { textAlign: 'left', color: '#555', margin: 10, padding: 10 },
                       ]}>
-                        <Text>⭐ </Text>
+                      <Text>⭐ </Text>
                       {workoutName.replace('_', ' ').toString()}
                     </Text>
                   </LinearGradient>
@@ -98,7 +98,7 @@ export default function Workouts() {
             }}
             keyExtractor={(item, idx) => idx.toString()}
           />
-          {/* <Text style={styles.txt}>Explore</Text>
+          <Text style={styles.txt}>Explore</Text>
           <FlatList
             data={targetBodyPart}
             renderItem={({ item }) => {
@@ -151,7 +151,7 @@ export default function Workouts() {
             }}
             numColumns={2}
             keyExtractor={(_, idx) => idx.toString()}
-          /> */}
+          />
         </View>
       </View>
     </>
