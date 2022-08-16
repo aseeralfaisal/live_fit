@@ -16,9 +16,9 @@ import { useAppSelector } from '../redux/hooks'
 import { setSpecificExercises } from '../redux/states/workoutSlice'
 import { useDispatch } from 'react-redux'
 import { SpecificExerciseView } from '../Components/popups/SpecificExerciseView'
-import { Btn } from '../Components/Button'
+import AddIconSVG from '../assets/icons/add.svg'
 
-export default function SpecificExercise() {
+export default function TargetExercise() {
   const dispatch = useDispatch()
   const exerciseTarget = useAppSelector((state) => state.workout.exerciseTarget)
   const [specificWorkout, setSpecificWorkout] = React.useState<boolean>(false)
@@ -137,7 +137,7 @@ export default function SpecificExercise() {
             marginHorizontal: 20,
             borderRadius: 12,
             flex: 1,
-            marginBottom: 60
+            // marginBottom: 50,
           }}>
           <FlatList
             data={specificExercises}
@@ -245,9 +245,24 @@ export default function SpecificExercise() {
           />
         </View>
       </View>
-      <TouchableOpacity activeOpacity={0.9} style={{ position: 'absolute', top: '92%', left: '5%' }}>
-        <Btn title='Add exercise' loading={false} />
-      </TouchableOpacity>
+      {/* <TouchableOpacity style={{ position: 'relative' }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            height: 60,
+            marginHorizontal: 20,
+            alignItems: 'center',
+          }}>
+          <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
+            <Image
+              source={require('../assets/icons/add.png')}
+              style={{ width: 30, height: 30, resizeMode: 'contain' }}
+            />
+            <Text style={styles.addExerciseTitle}>Create a workout</Text>
+          </View>
+        </View>
+      </TouchableOpacity> */}
       <SpecificExerciseView
         specificWorkout={specificWorkout}
         setSpecificWorkout={setSpecificWorkout}
@@ -258,6 +273,12 @@ export default function SpecificExercise() {
 }
 
 const styles = StyleSheet.create({
+  addExerciseTitle: {
+    marginHorizontal: 10,
+    fontFamily: 'Poppins_Bold',
+    color: 'rgb(80,80,80)',
+    fontSize: 14,
+  },
   txt: {
     marginHorizontal: 8,
     fontFamily: 'Poppins_Bold',
@@ -284,6 +305,20 @@ const styles = StyleSheet.create({
     padding: 5,
     marginHorizontal: 15,
   },
+  WorkoutNameinput: {
+    height: 40,
+    borderRadius: 8,
+    backgroundColor: 'rgba(100,100,100,0.05)',
+    borderWidth: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    fontFamily: 'Poppins',
+    marginHorizontal: 16,
+    borderColor: '#ccc',
+    width: 180,
+    paddingHorizontal: 10,
+    fontSize: 14,
+  },
   input: {
     height: 48,
     borderRadius: 16,
@@ -292,7 +327,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     fontFamily: 'Poppins',
     marginHorizontal: 20,
-    // borderWidth: 1,
   },
   inputTextField: {
     width: 250,

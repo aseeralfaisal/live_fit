@@ -128,10 +128,9 @@ const styles = StyleSheet.create({
   },
   gradientBar: {
     padding: 15,
-    borderRadius: 25,
+    borderRadius: 16,
     marginHorizontal: 20,
     height: 130,
-    // width: '95%',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
