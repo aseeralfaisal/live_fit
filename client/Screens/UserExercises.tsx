@@ -24,8 +24,8 @@ export default function UserExercises() {
   const UserExercises = useAppSelector((state) => state.workout.UserExercises)
   const workoutName = useAppSelector((state) => state.workout.workoutName)
   const window = Dimensions.get('window')
-  const [reps, setReps] = React.useState<string>('')
-  const [weight, setWeight] = React.useState<string>('')
+  const [reps, setReps] = React.useState<string>(UserExercises[0]?.sets[0].reps)
+  const [weight, setWeight] = React.useState<string>(UserExercises[0]?.sets[0].weight)
   const [isSetAdded, setIsSetAdded] = React.useState(false)
   const [selectedSet, setSelectedSet] = React.useState(0)
   const [setNumber, setSetNumber] = React.useState(1)
@@ -63,8 +63,6 @@ export default function UserExercises() {
         },
       })
       const { getUserWorkout } = res.data.data
-      setReps(getUserWorkout[0].exercises[0].sets[0].reps)
-      setWeight(getUserWorkout[0].exercises[0].sets[0].weight)
       getUserWorkout.map(({ exercises }: any) => dispatch(setUserExercises(exercises)))
     }
     getUserExercises()
@@ -310,7 +308,7 @@ export default function UserExercises() {
                                 ref={repsInputRef}
                                 textAlign='center'
                                 keyboardType='numeric'
-                                placeholder={reps.toString()}
+                                placeholder={reps?.toString()}
                                 onSubmitEditing={async (e) => {
                                   e.preventDefault()
                                   const reps = e.nativeEvent.text

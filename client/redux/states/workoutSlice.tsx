@@ -27,6 +27,5 @@ export const workoutSlice = createSlice({
     },
   },
 })
-
 export const { setWorkouts, setSpecificExercises, setExerciseTarget, setUserExercises, setWorkoutName } =
   workoutSlice.actions
