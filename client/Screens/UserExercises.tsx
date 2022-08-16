@@ -63,7 +63,8 @@ export default function UserExercises() {
         },
       })
       const { getUserWorkout } = res.data.data
-      // console.log(getUserWorkout)
+      setReps(getUserWorkout[0].exercises[0].sets[0].reps)
+      setWeight(getUserWorkout[0].exercises[0].sets[0].weight)
       getUserWorkout.map(({ exercises }: any) => dispatch(setUserExercises(exercises)))
     }
     getUserExercises()
@@ -176,7 +177,6 @@ export default function UserExercises() {
       console.log(err)
     }
   }
-
 
   return (
     <>
@@ -299,47 +299,45 @@ export default function UserExercises() {
                             }}
                             keyExtractor={(_, idx) => idx.toString()}
                           />
-                          {selectedSet !== 0 && (
-                            <View
-                              style={{
-                                flexDirection: 'row',
-                                justifyContent: 'center',
-                              }}>
-                              <View style={{ alignItems: 'center' }}>
-                                <Text style={styles.setRepsWeightTitle}>Reps</Text>
-                                <TextInput
-                                  ref={repsInputRef}
-                                  textAlign='center'
-                                  keyboardType='numeric'
-                                  placeholder={reps.toString()}
-                                  onSubmitEditing={async (e) => {
-                                    e.preventDefault()
-                                    const reps = e.nativeEvent.text
-                                    setReps(reps)
-                                    await updateSet(reps, weight)
-                                  }}
-                                  placeholderTextColor='#555'
-                                  style={styles.setRepsInput}
-                                />
-                              </View>
-                              <View style={{ alignItems: 'center' }}>
-                                <Text style={styles.setRepsWeightTitle}>Weight</Text>
-                                <TextInput
-                                  textAlign='center'
-                                  keyboardType='numeric'
-                                  placeholder={weight.toString()}
-                                  onSubmitEditing={async (e) => {
-                                    e.preventDefault()
-                                    const weight = e.nativeEvent.text
-                                    setWeight(weight)
-                                    await updateSet(reps, weight)
-                                  }}
-                                  placeholderTextColor='#555'
-                                  style={styles.setRepsInput}
-                                />
-                              </View>
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              justifyContent: 'center',
+                            }}>
+                            <View style={{ alignItems: 'center' }}>
+                              <Text style={styles.setRepsWeightTitle}>Reps</Text>
+                              <TextInput
+                                ref={repsInputRef}
+                                textAlign='center'
+                                keyboardType='numeric'
+                                placeholder={reps.toString()}
+                                onSubmitEditing={async (e) => {
+                                  e.preventDefault()
+                                  const reps = e.nativeEvent.text
+                                  setReps(reps)
+                                  await updateSet(reps, weight)
+                                }}
+                                placeholderTextColor='#555'
+                                style={styles.setRepsInput}
+                              />
                             </View>
-                          )}
+                            <View style={{ alignItems: 'center' }}>
+                              <Text style={styles.setRepsWeightTitle}>Weight</Text>
+                              <TextInput
+                                textAlign='center'
+                                keyboardType='numeric'
+                                placeholder={weight.toString()}
+                                onSubmitEditing={async (e) => {
+                                  e.preventDefault()
+                                  const weight = e.nativeEvent.text
+                                  setWeight(weight)
+                                  await updateSet(reps, weight)
+                                }}
+                                placeholderTextColor='#555'
+                                style={styles.setRepsInput}
+                              />
+                            </View>
+                          </View>
                         </View>
                         <Pressable
                           onPress={async () => {
