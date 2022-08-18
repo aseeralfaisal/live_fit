@@ -4,6 +4,7 @@ export const EXERCISE_UPDATE_QUERY = `mutation updateSet($workoutName: String!, 
         sets {
           reps
         weight
+        _id
       }
     }
   }

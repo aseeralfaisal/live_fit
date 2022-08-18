@@ -122,97 +122,98 @@ export default function TargetExercise() {
             data={specificExercises}
             removeClippedSubviews={true}
             maxToRenderPerBatch={10}
-            ItemSeparatorComponent={() => {
-              return (
-                <View
-                  style={{
-                    borderColor: 'rgba(100,100,100,0.1)',
-                    borderBottomWidth: 1,
-                  }}></View>
-              )
-            }}
+            // ItemSeparatorComponent={() => {
+            //   return (
+            //     <View
+            //       style={{
+            //         borderColor: 'rgba(100,100,100,0.1)',
+            //         borderBottomWidth: 1,
+            //       }}></View>
+            //   )
+            // }}
             renderItem={({ item }: any) => {
               return (
                 <>
                   {item.name.toLowerCase().includes(searchVal.toLowerCase()) ? (
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                      <View
-                        style={{
-                          marginHorizontal: window.width - window.width / 1.05,
-                          padding: 8,
-                          borderRadius: 8,
-                        }}>
-                        <Pressable
-                          onLongPress={() => {
-                            setExerciseItem(item)
-                            setSpecificWorkout(!specificWorkout)
-                          }}
-                          onPressIn={() => selectExercises(item)}
+                        <View
                           style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
+                            marginHorizontal: window.width - window.width / 1.05,
+                            padding: 8,
+                            borderRadius: 8,
                           }}>
-                          <View>
-                            {selected(item) && (
+                          <Pressable
+                            onLongPress={() => {
+                              setExerciseItem(item)
+                              setSpecificWorkout(!specificWorkout)
+                            }}
+                            onPressIn={() => selectExercises(item)}
+                            style={{
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                            }}>
+                            <View>
+                              {selected(item) && (
+                                <View
+                                  style={{
+                                    backgroundColor: '#92A3FD',
+                                    marginLeft: -20,
+                                    marginRight: 16,
+                                    width: 4,
+                                    height: '100%',
+                                    position: 'absolute',
+                                    borderRadius: 20,
+                                  }}></View>
+                              )}
                               <View
                                 style={{
-                                  backgroundColor: '#92A3FD',
-                                  marginLeft: -20,
-                                  marginRight: 16,
-                                  width: 4,
-                                  height: '100%',
-                                  position: 'absolute',
-                                  borderRadius: 20,
-                                }}></View>
-                            )}
-                            <View
-                              style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                marginVertical: 5,
-                              }}>
-                              <View
-                                style={{
-                                  width: 65,
-                                  height: 65,
-                                  borderRadius: 100,
-                                  overflow: 'hidden',
-                                  borderWidth: 1,
-                                  borderColor: selected(item) ? '#92A3FD' : '#fff',
+                                  flexDirection: 'row',
+                                  justifyContent: 'space-between',
+                                  alignItems: 'center',
+                                  marginVertical: 5,
                                 }}>
-                                <Image
-                                  source={{ uri: item.gifUrl }}
+                                <View
                                   style={{
                                     width: 65,
                                     height: 65,
                                     borderRadius: 100,
-                                  }}
-                                />
+                                    overflow: 'hidden',
+                                    borderWidth: 1,
+                                    borderColor: selected(item) ? '#92A3FD' : '#fff',
+                                  }}>
+                                  <Image
+                                    source={{ uri: item.gifUrl }}
+                                    style={{
+                                      width: 65,
+                                      height: 65,
+                                      borderRadius: 100,
+                                    }}
+                                  />
+                                </View>
+                                <Text
+                                  style={[
+                                    styles.titleTxt,
+                                    { marginLeft: 15, color: selected(item) ? '#92A3FD' : '#555' },
+                                  ]}>
+                                  {item.name.split(' ')[0]} {item.name.split(' ')[1]}{' '}
+                                  {item.name.split(' ')[2]}
+                                </Text>
                               </View>
-                              <Text
-                                style={[
-                                  styles.titleTxt,
-                                  { marginLeft: 15, color: selected(item) ? '#92A3FD' : '#555' },
-                                ]}>
-                                {item.name.split(' ')[0]} {item.name.split(' ')[1]} {item.name.split(' ')[2]}
-                              </Text>
                             </View>
-                          </View>
-                        </Pressable>
+                          </Pressable>
+                        </View>
+                        <TouchableOpacity
+                          activeOpacity={0.6}
+                          onPress={() => {
+                            setExerciseItem(item)
+                            setSpecificWorkout(!specificWorkout)
+                          }}>
+                          <Image
+                            source={require('../assets/icons/workout_btn.png')}
+                            style={{ resizeMode: 'contain', width: 30, marginRight: 18 }}
+                          />
+                        </TouchableOpacity>
                       </View>
-                      <TouchableOpacity
-                        activeOpacity={0.6}
-                        onPress={() => {
-                          setExerciseItem(item)
-                          setSpecificWorkout(!specificWorkout)
-                        }}>
-                        <Image
-                          source={require('../assets/icons/workout_btn.png')}
-                          style={{ resizeMode: 'contain', width: 30, marginRight: 18 }}
-                        />
-                      </TouchableOpacity>
-                    </View>
                   ) : (
                     <></>
                   )}
