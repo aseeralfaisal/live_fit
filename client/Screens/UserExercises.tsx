@@ -21,8 +21,6 @@ import { ADD_SET_QUERY } from '../Queries/ADD_SET_QUERY'
 import { EXERCISE_UPDATE_QUERY } from '../Queries/EXERCISE_UPDATE_QUERY'
 import { GET_EXERCISE_QUERY } from '../Queries/GET_EXERCISE_QUERY'
 import { EXERCISE_DELETE_QUERY } from '../Queries/EXERCISE_DELETE_QUERY'
-import { iteratorSymbol } from 'immer/dist/internal'
-import CreateWorkoutModal from '../Components/popups/CreateWorkoutModal'
 
 export default function UserExercises() {
   const dispatch = useDispatch()
@@ -235,7 +233,7 @@ export default function UserExercises() {
                                 style={{
                                   flexDirection: 'row',
                                   justifyContent: 'space-around',
-                                  marginBottom: 10,
+                                  marginVertical: 20,
                                 }}>
                                 <SetRepsListTitle title='SET' />
                                 <SetRepsListTitle title='REPS' />

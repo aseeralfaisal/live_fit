@@ -7,7 +7,6 @@ import axios from 'axios'
 import { useAppSelector } from '../redux/hooks'
 import { useDispatch } from 'react-redux'
 import { setWorkoutName, setWorkouts, setExerciseTarget } from '../redux/states/workoutSlice'
-import FormSVG from '../assets/form.svg'
 
 export default function Workouts() {
   const navigation = useNavigation<any>()
