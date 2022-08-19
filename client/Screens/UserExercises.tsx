@@ -219,7 +219,6 @@ export default function UserExercises() {
                         </Text>
                       </View>
                     </TouchableOpacity>
-                    {exerSetId === set.id && (
                       <View>
                         <View style={{ marginTop: 20 }}></View>
                         <FlatList
@@ -329,7 +328,6 @@ export default function UserExercises() {
                           <Text style={[styles.titleTxt, { color: '#555' }]}>Add Set</Text>
                         </TouchableOpacity>
                       </View>
-                    )}
                   </View>
                 </>
               )
