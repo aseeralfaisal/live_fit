@@ -99,7 +99,7 @@ export default function UserExercises() {
       console.log(err)
     }
   }
-  const deleteSet = async () => {
+  const deleteSet = async (exerSetId: string) => {
     try {
       const res = await axios.post(BASE_URL, {
         query: EXERCISE_DELETE_QUERY,
@@ -219,115 +219,117 @@ export default function UserExercises() {
                         </Text>
                       </View>
                     </TouchableOpacity>
-                      <View>
-                        <View style={{ marginTop: 20 }}></View>
-                        <FlatList
-                          scrollEnabled
-                          ListHeaderComponent={() => {
-                            return (
+                    <View>
+                      <View style={{ marginTop: 20 }}></View>
+                      <FlatList
+                        scrollEnabled
+                        ListHeaderComponent={() => {
+                          return (
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-around',
+                                marginBottom: 10,
+                              }}>
+                              <SetRepsListTitle title='SET' />
+                              <SetRepsListTitle title='REPS' />
+                              <SetRepsListTitle title='WEIGHT' />
+                              <SetRepsListTitle title='STATUS' />
+                            </View>
+                          )
+                        }}
+                        data={set.sets}
+                        renderItem={({ item, index }) => {
+                          return (
+                            <>
                               <View
                                 style={{
                                   flexDirection: 'row',
                                   justifyContent: 'space-around',
-                                  marginBottom: 10,
+                                  alignItems: 'center',
+                                  backgroundColor: selectedList.includes(item)
+                                    ? '#90EEBB'
+                                    : index % 2 === 0
+                                    ? '#00000000'
+                                    : '#92A3FD22',
+                                  marginVertical: 5,
+                                  borderRadius: 8,
                                 }}>
-                                <SetRepsListTitle title='SET' />
-                                <SetRepsListTitle title='REPS' />
-                                <SetRepsListTitle title='WEIGHT' />
-                                <SetRepsListTitle title='STATUS' />
-                              </View>
-                            )
-                          }}
-                          data={set.sets}
-                          renderItem={({ item, index }) => {
-                            return (
-                              <>
-                                <View
-                                  style={{
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-around',
-                                    alignItems: 'center',
-                                    backgroundColor: selectedList.includes(item)
-                                      ? '#90EEBB'
-                                      : index % 2 === 0
-                                      ? '#00000000'
-                                      : '#92A3FD22',
-                                    marginVertical: 5,
-                                    borderRadius: 8,
-                                  }}>
-                                  <View style={{ alignItems: 'center' }}>
-                                    <TextInput
-                                      textAlign='center'
-                                      keyboardType='numeric'
-                                      placeholder={(index + 1)?.toString()}
-                                      editable={false}
-                                      placeholderTextColor='#777'
-                                      style={[styles.setRepsInput, { fontSize: 16 }]}
-                                    />
-                                  </View>
-                                  <View style={{ alignItems: 'center' }}>
-                                    <TextInput
-                                      ref={repsInputRef}
-                                      keyboardType='numeric'
-                                      placeholder={item.reps?.toString()}
-                                      onFocus={() => setExerSetId(item._id)}
-                                      onEndEditing={async (ev) => {
-                                        setExerSetId(item._id)
-                                        setReps(ev.nativeEvent.text)
-                                        await updateSet(ev.nativeEvent.text, item.weight)
-                                      }}
-                                      placeholderTextColor='#777'
-                                      style={[styles.setRepsInput, { marginLeft: 20 }]}
-                                    />
-                                  </View>
-                                  <View style={{ alignItems: 'center' }}>
-                                    <TextInput
-                                      keyboardType='numeric'
-                                      placeholder={item.weight?.toString()}
-                                      onFocus={() => setExerSetId(item._id)}
-                                      onEndEditing={async (ev) => {
-                                        setReps(ev.nativeEvent.text)
-                                        await updateSet(item.reps, ev.nativeEvent.text)
-                                      }}
-                                      placeholderTextColor='#777'
-                                      style={styles.setRepsInput}
-                                    />
-                                  </View>
-                                  <Pressable
-                                    style={{ alignItems: 'center' }}
-                                    onPress={() => selectedExerList(item)}>
-                                    <View style={{ width: 36, height: 25 }}>
-                                      <Image
-                                        source={
-                                          selectedList.includes(item)
-                                            ? require('../assets/icons/done.png')
-                                            : require('../assets/icons/not_done.png')
-                                        }
-                                        style={{ width: 22, height: 22, resizeMode: 'contain', opacity: 0.7 }}
-                                      />
-                                    </View>
-                                  </Pressable>
+                                <TouchableOpacity
+                                  style={{ alignItems: 'center' }}
+                                  onLongPress={() => deleteSet(item._id)}>
+                                  <TextInput
+                                    textAlign='center'
+                                    keyboardType='numeric'
+                                    placeholder={(index + 1)?.toString()}
+                                    editable={false}
+                                    placeholderTextColor='#777'
+                                    style={[styles.setRepsInput, { fontSize: 16 }]}
+                                  />
+                                </TouchableOpacity>
+                                <View style={{ alignItems: 'center' }}>
+                                  <TextInput
+                                    ref={repsInputRef}
+                                    keyboardType='numeric'
+                                    placeholder={item.reps?.toString()}
+                                    onFocus={() => setExerSetId(item._id)}
+                                    onEndEditing={async (ev) => {
+                                      setExerSetId(item._id)
+                                      setReps(ev.nativeEvent.text)
+                                      await updateSet(ev.nativeEvent.text, item.weight)
+                                    }}
+                                    placeholderTextColor='#777'
+                                    style={[styles.setRepsInput, { marginLeft: 20 }]}
+                                  />
                                 </View>
-                              </>
-                            )
-                          }}
-                          keyExtractor={(_, idx) => idx.toString()}
-                        />
-                        <TouchableOpacity
-                          onPress={async () => {
-                            await addSet(set.name, set.sets.length)
-                          }}
-                          style={{
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            backgroundColor: '#DDDADA99',
-                            borderRadius: 8,
-                            height: 40,
-                            marginVertical: 20,
-                          }}>
-                          <Text style={[styles.titleTxt, { color: '#555' }]}>Add Set</Text>
-                        </TouchableOpacity>
-                      </View>
+                                <View style={{ alignItems: 'center' }}>
+                                  <TextInput
+                                    keyboardType='numeric'
+                                    placeholder={item.weight?.toString()}
+                                    onFocus={() => setExerSetId(item._id)}
+                                    onEndEditing={async (ev) => {
+                                      setReps(ev.nativeEvent.text)
+                                      await updateSet(item.reps, ev.nativeEvent.text)
+                                    }}
+                                    placeholderTextColor='#777'
+                                    style={styles.setRepsInput}
+                                  />
+                                </View>
+                                <Pressable
+                                  style={{ alignItems: 'center' }}
+                                  onPress={() => selectedExerList(item)}>
+                                  <View style={{ width: 36, height: 25 }}>
+                                    <Image
+                                      source={
+                                        selectedList.includes(item)
+                                          ? require('../assets/icons/done.png')
+                                          : require('../assets/icons/not_done.png')
+                                      }
+                                      style={{ width: 22, height: 22, resizeMode: 'contain', opacity: 0.7 }}
+                                    />
+                                  </View>
+                                </Pressable>
+                              </View>
+                            </>
+                          )
+                        }}
+                        keyExtractor={(_, idx) => idx.toString()}
+                      />
+                      <TouchableOpacity
+                        onPress={async () => {
+                          await addSet(set.name, set.sets.length)
+                        }}
+                        style={{
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          backgroundColor: '#DDDADA99',
+                          borderRadius: 8,
+                          height: 40,
+                          marginVertical: 20,
+                        }}>
+                        <Text style={[styles.titleTxt, { color: '#555' }]}>Add Set</Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </>
               )
