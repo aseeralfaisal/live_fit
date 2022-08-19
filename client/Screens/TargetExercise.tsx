@@ -98,7 +98,7 @@ export default function TargetExercise() {
           flex: 1,
           backgroundColor: '#fff',
         }}>
-        <Header />
+        <Header CreateUpdateWorkout={CreateUpdateWorkout} />
         <View style={[styles.input, { borderColor: inputBorderColor, borderWidth: 1 }]}>
           <TextInput
             onFocus={() => setInputBorderColor('#92A3FD')}
@@ -122,15 +122,6 @@ export default function TargetExercise() {
             data={specificExercises}
             removeClippedSubviews={true}
             maxToRenderPerBatch={10}
-            // ItemSeparatorComponent={() => {
-            //   return (
-            //     <View
-            //       style={{
-            //         borderColor: 'rgba(100,100,100,0.1)',
-            //         borderBottomWidth: 1,
-            //       }}></View>
-            //   )
-            // }}
             renderItem={({ item }: any) => {
               return (
                 <>

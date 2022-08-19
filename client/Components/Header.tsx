@@ -4,7 +4,10 @@ import { StatusBar } from 'expo-status-bar'
 import { useAppSelector } from '../redux/hooks'
 import { useRoute } from '@react-navigation/native'
 
-export default function Header() {
+interface propsTypes {
+  CreateUpdateWorkout: Function
+}
+export default function Header({ CreateUpdateWorkout }: propsTypes) {
   const route = useRoute()
   const routeName = route.name
   const userVal = useAppSelector((state) => state.user.userVal)
@@ -26,7 +29,7 @@ export default function Header() {
             <Text style={styles.actionTitles}>Discard</Text>
           </TouchableOpacity>
           <Text style={styles.title}>Add Exercise</Text>
-          <TouchableOpacity activeOpacity={0.2}>
+          <TouchableOpacity activeOpacity={0.2} onPress={() => CreateUpdateWorkout()}>
             <Text style={styles.actionTitles}>Create</Text>
           </TouchableOpacity>
         </View>
