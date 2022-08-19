@@ -9,6 +9,7 @@ import {
   FlatList,
   TextInput,
   Pressable,
+  Alert,
 } from 'react-native'
 import Header from '../Components/Header'
 import axios from 'axios'
@@ -19,16 +20,22 @@ import { SpecificExerciseView } from '../Components/popups/SpecificExerciseView'
 import AddIconSVG from '../assets/icons/add.svg'
 import { CREATE_WORKOUT_QUERY } from '../Queries/CREATE_WORKOUT_QUERY'
 import { GET_TARGET_EXERCISE_QUERY } from '../Queries/GET_TARGET_EXERCISE_QUERY'
+import CreateWorkoutModal from '../Components/popups/CreateWorkoutModal'
+import { useNavigation } from '@react-navigation/native'
 
 export default function TargetExercise() {
   const dispatch = useDispatch()
   const exerciseTarget = useAppSelector((state) => state.workout.exerciseTarget)
+  const workoutNameUserInput = useAppSelector((state) => state.workout.workoutNameUserInput)
   const [specificWorkout, setSpecificWorkout] = React.useState<boolean>(false)
   const [exerciseItem, setExerciseItem] = React.useState<object>({})
   const [searchVal, setSearchVal] = React.useState('')
   const window = Dimensions.get('window')
   const userVal = useAppSelector((state) => state.user.userVal)
   const specificExercises = useAppSelector((state) => state.workout.specificExercises)
+  const [createWorkoutPopup, setCreateWorkoutPopup] = React.useState(false)
+
+  const navigation = useNavigation()
 
   const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
   React.useEffect(() => {
@@ -77,15 +84,20 @@ export default function TargetExercise() {
 
   const CreateUpdateWorkout = async () => {
     try {
+      if (workoutNameUserInput === '') {
+        return Alert.alert('🥴 Hold on!', 'Type a workout name first')
+      }
+      setCreateWorkoutPopup(true)
       const res = await axios.post(BASE_URL, {
         query: CREATE_WORKOUT_QUERY,
         variables: {
           exercises: exerciseArray,
           userName: userVal,
-          workoutName: 'Workout_NEW',
+          workoutName: workoutNameUserInput,
         },
       })
       console.log(res.data)
+      navigation.navigate("Workouts")
     } catch ({ response }: any) {
       console.log(response)
     }
@@ -98,7 +110,16 @@ export default function TargetExercise() {
           flex: 1,
           backgroundColor: '#fff',
         }}>
-        <Header CreateUpdateWorkout={CreateUpdateWorkout} />
+        <Header CreateUpdateWorkout={CreateUpdateWorkout} setCreateWorkoutPopup={setCreateWorkoutPopup} />
+        {createWorkoutPopup ? (
+          <>
+            <CreateWorkoutModal
+              CreateUpdateWorkout={CreateUpdateWorkout}
+              createWorkoutPopup={createWorkoutPopup}
+              setCreateWorkoutPopup={setCreateWorkoutPopup}
+            />
+          </>
+        ) : null}
         <View style={[styles.input, { borderColor: inputBorderColor, borderWidth: 1 }]}>
           <TextInput
             onFocus={() => setInputBorderColor('#92A3FD')}
@@ -127,84 +148,83 @@ export default function TargetExercise() {
                 <>
                   {item.name.toLowerCase().includes(searchVal.toLowerCase()) ? (
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <View
+                      <View
+                        style={{
+                          marginHorizontal: window.width - window.width / 1.05,
+                          padding: 8,
+                          borderRadius: 8,
+                        }}>
+                        <Pressable
+                          onLongPress={() => {
+                            setExerciseItem(item)
+                            setSpecificWorkout(!specificWorkout)
+                          }}
+                          onPressIn={() => selectExercises(item)}
                           style={{
-                            marginHorizontal: window.width - window.width / 1.05,
-                            padding: 8,
-                            borderRadius: 8,
+                            flexDirection: 'row',
+                            alignItems: 'center',
                           }}>
-                          <Pressable
-                            onLongPress={() => {
-                              setExerciseItem(item)
-                              setSpecificWorkout(!specificWorkout)
-                            }}
-                            onPressIn={() => selectExercises(item)}
-                            style={{
-                              flexDirection: 'row',
-                              alignItems: 'center',
-                            }}>
-                            <View>
-                              {selected(item) && (
-                                <View
-                                  style={{
-                                    backgroundColor: '#92A3FD',
-                                    marginLeft: -20,
-                                    marginRight: 16,
-                                    width: 4,
-                                    height: '100%',
-                                    position: 'absolute',
-                                    borderRadius: 20,
-                                  }}></View>
-                              )}
+                          <View>
+                            {selected(item) && (
                               <View
                                 style={{
-                                  flexDirection: 'row',
-                                  justifyContent: 'space-between',
-                                  alignItems: 'center',
-                                  marginVertical: 5,
+                                  backgroundColor: '#92A3FD',
+                                  marginLeft: -20,
+                                  marginRight: 16,
+                                  width: 4,
+                                  height: '100%',
+                                  position: 'absolute',
+                                  borderRadius: 20,
+                                }}></View>
+                            )}
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                marginVertical: 5,
+                              }}>
+                              <View
+                                style={{
+                                  width: 65,
+                                  height: 65,
+                                  borderRadius: 100,
+                                  overflow: 'hidden',
+                                  borderWidth: 1,
+                                  borderColor: selected(item) ? '#92A3FD' : '#fff',
                                 }}>
-                                <View
+                                <Image
+                                  source={{ uri: item.gifUrl }}
                                   style={{
                                     width: 65,
                                     height: 65,
                                     borderRadius: 100,
-                                    overflow: 'hidden',
-                                    borderWidth: 1,
-                                    borderColor: selected(item) ? '#92A3FD' : '#fff',
-                                  }}>
-                                  <Image
-                                    source={{ uri: item.gifUrl }}
-                                    style={{
-                                      width: 65,
-                                      height: 65,
-                                      borderRadius: 100,
-                                    }}
-                                  />
-                                </View>
-                                <Text
-                                  style={[
-                                    styles.titleTxt,
-                                    { marginLeft: 15, color: selected(item) ? '#92A3FD' : '#555' },
-                                  ]}>
-                                  {item.name.split(' ')[0]} {item.name.split(' ')[1]}{' '}
-                                  {item.name.split(' ')[2]}
-                                </Text>
+                                  }}
+                                />
                               </View>
+                              <Text
+                                style={[
+                                  styles.titleTxt,
+                                  { marginLeft: 15, color: selected(item) ? '#92A3FD' : '#555' },
+                                ]}>
+                                {item.name.split(' ')[0]} {item.name.split(' ')[1]} {item.name.split(' ')[2]}
+                              </Text>
                             </View>
-                          </Pressable>
-                        </View>
-                        <TouchableOpacity
-                          activeOpacity={0.6}
-                          onPress={() => {
-                            setExerciseItem(item)
-                            setSpecificWorkout(!specificWorkout)
-                          }}>
-                          <Image
-                            source={require('../assets/icons/workout_btn.png')}
-                            style={{ resizeMode: 'contain', width: 30, marginRight: 18 }}
-                          />
-                        </TouchableOpacity>
+                          </View>
+                        </Pressable>
                       </View>
+                      <TouchableOpacity
+                        activeOpacity={0.6}
+                        onPress={() => {
+                          setExerciseItem(item)
+                          setSpecificWorkout(!specificWorkout)
+                        }}>
+                        <Image
+                          source={require('../assets/icons/workout_btn.png')}
+                          style={{ resizeMode: 'contain', width: 30, marginRight: 18 }}
+                        />
+                      </TouchableOpacity>
+                    </View>
                   ) : (
                     <></>
                   )}
