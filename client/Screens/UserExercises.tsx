@@ -237,7 +237,9 @@ export default function UserExercises() {
                                     flexDirection: 'row',
                                     justifyContent: 'space-around',
                                     alignItems: 'center',
-                                    backgroundColor: selectedList.find(a => a._id === item._id)
+                                    backgroundColor: selectedList.find(
+                                      ({ _id }: { _id: string }) => _id === item._id
+                                    )
                                       ? '#90EEBB'
                                       : index % 2 === 0
                                       ? '#00000000'
@@ -247,7 +249,11 @@ export default function UserExercises() {
                                   }}>
                                   <TouchableOpacity
                                     style={{ alignItems: 'center' }}
-                                    onPress={() => console.log(selectedList.find(a => a._id === item._id))}
+                                    onPress={() =>
+                                      console.log(
+                                        selectedList.find(({ _id }: { _id: string }) => _id === item._id)
+                                      )
+                                    }
                                     onLongPress={() => deleteSet(item._id)}>
                                     <TextInput
                                       textAlign='center'
@@ -292,7 +298,7 @@ export default function UserExercises() {
                                     <View style={{ width: 36, height: 25 }}>
                                       <Image
                                         source={
-                                          selectedList.find(a => a._id === item._id)
+                                          selectedList.find(({ _id }: { _id: string }) => _id === item._id)
                                             ? require('../assets/icons/done.png')
                                             : require('../assets/icons/not_done.png')
                                         }
