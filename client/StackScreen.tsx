@@ -2,6 +2,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { View } from 'react-native'
 import BMI from './Screens/BMI'
+import ChooseExercises from './Screens/ChooseExercises'
 import FoodScan from './Screens/FoodScan'
 import TargetExercise from './Screens/TargetExercise'
 import UserExercises from './Screens/UserExercises'
@@ -17,6 +18,7 @@ export default function StackScreen() {
         <Stack.Navigator screenOptions={{ headerShown: false }}>
           <Stack.Screen name='dashboard' component={TabScreen} />
           <Stack.Screen name='TargetExercise' children={() => <TargetExercise />} />
+          <Stack.Screen name='ChooseExercises' children={() => <ChooseExercises />} />
           <Stack.Screen name='UserExercises' children={() => <UserExercises />} />
           <Stack.Screen name='Map' children={() => <Map />} />
           <Stack.Screen name='Workouts' children={() => <Workouts />} />

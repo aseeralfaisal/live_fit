@@ -7,6 +7,7 @@ import axios from 'axios'
 import { useAppSelector } from '../redux/hooks'
 import { useDispatch } from 'react-redux'
 import { setWorkoutName, setWorkouts, setExerciseTarget } from '../redux/states/workoutSlice'
+import { Btn } from '../Components/Button'
 
 export default function Workouts() {
   const navigation = useNavigation<any>()
@@ -49,7 +50,7 @@ export default function Workouts() {
       getWorkoutList()
       isMounted = false
     }
-  }, [])
+  }, [workouts])
 
   return (
     <>
@@ -59,8 +60,8 @@ export default function Workouts() {
           backgroundColor: '#fff',
         }}>
         <Header />
-        <View style={{ paddingHorizontal: 15 }}>
-          <Text style={styles.txt}>Your Workouts</Text>
+        <Text style={styles.txt}>Your Workouts</Text>
+        <View style={{ flex: 1, marginHorizontal: 4 }}>
           <FlatList
             data={workouts}
             renderItem={({ item }) => {
@@ -78,17 +79,17 @@ export default function Workouts() {
                       marginVertical: 8,
                       borderRadius: 12,
                       flexDirection: 'row',
+                      alignItems: 'center',
                     }}>
-                    {/* <Image
+                    <Image
                       source={require('../assets/form.png')}
-                      style={{ width: 60, height: 60, resizeMode: 'contain', marginLeft: 10 }}
-                    /> */}
+                      style={{ width: 40, height: 40, resizeMode: 'contain', marginLeft: 10 }}
+                    />
                     <Text
                       style={[
                         styles.tileTitle,
                         { textAlign: 'left', color: '#555', margin: 10, padding: 10 },
                       ]}>
-                      <Text>⭐ </Text>
                       {workoutName.replace('_', ' ').toString()}
                     </Text>
                   </LinearGradient>
@@ -97,61 +98,14 @@ export default function Workouts() {
             }}
             keyExtractor={(item, idx) => idx.toString()}
           />
-          <Text style={styles.txt}>Explore</Text>
-          <FlatList
-            data={targetBodyPart}
-            renderItem={({ item }) => {
-              return (
-                <View
-                  style={{
-                    flex: 1 / 2,
-                    flexDirection: 'column',
-                    marginVertical: 9,
-                    alignItems: 'center',
-                  }}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      dispatch(setExerciseTarget(item.name))
-                      navigation.navigate('TargetExercise')
-                    }}>
-                    <LinearGradient
-                      colors={['#C58BF233', '#EEA4CE22']}
-                      style={{ alignItems: 'center', borderRadius: 15 }}>
-                      <View
-                        style={{
-                          width: 120,
-                          height: 120,
-                          borderRadius: 100,
-                          alignItems: 'center',
-                          overflow: 'hidden',
-                          paddingTop: '15%',
-                        }}>
-                        <Image
-                          source={item.img}
-                          style={{ width: 80, height: 80, resizeMode: 'contain', borderRadius: 100 }}
-                        />
-                      </View>
-                      <View
-                        style={{
-                          borderBottomLeftRadius: 13,
-                          borderBottomRightRadius: 13,
-                          borderTopLeftRadius: 3,
-                          borderTopRightRadius: 3,
-                          opacity: 0.85,
-                          width: 145,
-                          paddingBottom: 10,
-                        }}>
-                        <Text style={styles.tileTitle}>{item.name}</Text>
-                      </View>
-                    </LinearGradient>
-                  </TouchableOpacity>
-                </View>
-              )
-            }}
-            numColumns={2}
-            keyExtractor={(_, idx) => idx.toString()}
-          />
         </View>
+        <TouchableOpacity
+          style={{ flexDirection: 'row', justifyContent: 'center' }}
+          onPress={() => {
+            navigation.navigate('ChooseExercises')
+          }}>
+          <Btn title='Create a workout' loading={false} />
+        </TouchableOpacity>
       </View>
     </>
   )
@@ -159,7 +113,7 @@ export default function Workouts() {
 
 const styles = StyleSheet.create({
   txt: {
-    marginHorizontal: 8,
+    marginHorizontal: 18,
     fontFamily: 'Poppins_Bold',
     color: 'rgb(80,80,80)',
     fontSize: 20,

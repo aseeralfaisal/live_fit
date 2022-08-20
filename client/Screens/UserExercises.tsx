@@ -357,7 +357,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
     fontFamily: 'Poppins_Bold',
     color: '#555',
-    fontSize: 18,
+    fontSize: 20,
   },
   titleTxt: {
     fontFamily: 'Poppins_Bold',

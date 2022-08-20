@@ -1,19 +1,19 @@
 import { Modal, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { useDispatch } from 'react-redux'
-import { useSelector } from 'react-redux'
-import { setExerciseTarget, setWorkoutNameUserInput } from '../../redux/states/workoutSlice'
+import { useAppSelector } from '../../redux/hooks'
+import { setWorkoutNameUserInput } from '../../redux/states/workoutSlice'
 
 const Wrapper = ({ elements }: any) => {
   return <View style={{ top: '70%', height: '100%', backgroundColor: '#fff' }}>{elements}</View>
 }
 
 const CreateWorkoutModal = ({ CreateUpdateWorkout, setCreateWorkoutPopup }: any) => {
-  const workoutNameUserInput = useSelector((state: any) => state.workout.workoutNameUserInput)
+  const workoutNameUserInput = useAppSelector((state) => state.workout.workoutNameUserInput)
   const dispatch = useDispatch()
 
   const saveFunction = () => {
     CreateUpdateWorkout()
-    setWorkoutNameUserInput('')
+    dispatch(setWorkoutNameUserInput(''))
     setCreateWorkoutPopup(false)
   }
 
