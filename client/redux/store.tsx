@@ -1,7 +1,6 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { userSlice } from './states/userSlice'
 import { workoutSlice } from './states/workoutSlice'
-import storage from 'redux-persist/lib/storage'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { persistReducer, persistStore } from 'redux-persist'
 import thunk from 'redux-thunk'
@@ -18,7 +17,8 @@ const persistedReducer = persistReducer(persistConfig, reducer)
 
 export const store = configureStore({
   reducer: persistedReducer,
-  middleware: [thunk]
+  middleware: [thunk],
+  devTools: true
 })
 
 export type RootState = ReturnType<typeof store.getState>
