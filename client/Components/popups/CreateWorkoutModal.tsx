@@ -28,6 +28,7 @@ const CreateWorkoutModal = ({ CreateUpdateWorkout, setCreateWorkoutPopup }: any)
                 <View style={{ marginVertical: 25 }}>
                   <TextInput
                     placeholder='Workout Name...'
+                    placeholderTextColor="#bbb"
                     value={workoutNameUserInput}
                     onChangeText={(txt) => dispatch(setWorkoutNameUserInput(txt))}
                     style={styles.workoutNameInput}
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#92A3FD',
     marginHorizontal: 40,
     height: 50,
-    borderRadius: 12,
+    borderRadius: 20,
   },
   saveWorkoutBtnText: {
     color: '#fff',
@@ -77,13 +78,14 @@ const styles = StyleSheet.create({
   },
   workoutNameInput: {
     textAlign: 'center',
-    fontFamily: 'Poppins_Bold',
+    fontFamily: 'Poppins',
     fontSize: 14,
-    borderWidth: 0,
-    backgroundColor: '#cccccc55',
+    borderWidth: 1,
+    backgroundColor: '#F8F9F9',
+    borderColor: '#ccc',
     color: '#777',
     marginHorizontal: 40,
-    borderRadius: 12,
+    borderRadius: 16,
     height: 50,
   },
 })

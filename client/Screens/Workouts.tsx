@@ -61,7 +61,11 @@ export default function Workouts() {
         }}>
         <Header />
         <Text style={styles.txt}>Your Workouts</Text>
-        <View style={{ flex: 1, marginHorizontal: 4 }}>
+        <View
+          style={{
+            flex: 1,
+            marginTop: 14,
+          }}>
           <FlatList
             data={workouts}
             renderItem={({ item }) => {
@@ -80,17 +84,14 @@ export default function Workouts() {
                       borderRadius: 12,
                       flexDirection: 'row',
                       alignItems: 'center',
-                      height: 60
+                      height: 60,
                     }}>
                     <Image
                       source={require('../assets/icons/exer_dark.png')}
                       style={{ width: 40, height: 40, resizeMode: 'contain', marginLeft: 10 }}
                     />
                     <Text
-                      style={[
-                        styles.tileTitle,
-                        { textAlign: 'left', color: '#555', marginHorizontal: 10 },
-                      ]}>
+                      style={[styles.tileTitle, { textAlign: 'left', color: '#555', marginHorizontal: 10 }]}>
                       {workoutName.replace('_', ' ').toString()}
                     </Text>
                   </LinearGradient>
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 30,
     height: 50,
     borderRadius: 20,
-    marginBottom: 20
+    marginBottom: 20,
   },
   saveWorkoutBtnText: {
     color: '#fff',

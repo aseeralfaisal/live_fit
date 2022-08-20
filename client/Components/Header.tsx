@@ -2,12 +2,13 @@ import * as React from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { useAppSelector } from '../redux/hooks'
-import { useRoute } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 
 export default function Header({ CreateUpdateWorkout, setCreateWorkoutPopup }: any) {
   const route = useRoute()
   const routeName = route.name
   const userVal = useAppSelector((state) => state.user.userVal)
+  const navigation = useNavigation()
 
   if (routeName === 'TargetExercise') {
     return (
@@ -20,9 +21,8 @@ export default function Header({ CreateUpdateWorkout, setCreateWorkoutPopup }: a
             paddingTop: 50,
             paddingBottom: 10,
             marginBottom: 20,
-            backgroundColor: '#eee',
           }}>
-          <TouchableOpacity activeOpacity={0.2}>
+          <TouchableOpacity activeOpacity={0.2} onPress={() => navigation.goBack()}>
             <Text style={styles.actionTitles}>Discard</Text>
           </TouchableOpacity>
           <Text style={styles.title}>Add Exercise</Text>

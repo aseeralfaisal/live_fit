@@ -172,7 +172,6 @@ export default function UserExercises() {
                       padding: 8,
                       borderRadius: 8,
                     }}>
-                    {console.log((selectedList.length + 1) * 100 - 100)}
                     <TouchableOpacity
                       onPress={() => {
                         if (exerciseId === set.id) return dispatch(setExerciseId(''))
@@ -367,7 +366,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#92A3FD',
     marginHorizontal: 28,
     height: 50,
-    borderRadius: 12,
+    borderRadius: 20,
     marginVertical: 8
   },
   saveWorkoutBtnText: {

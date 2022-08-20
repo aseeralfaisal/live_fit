@@ -1,21 +1,14 @@
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import * as MediaLibrary from 'expo-media-library'
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  FlatList,
-  Button,
-} from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, FlatList, Button } from 'react-native'
 import { Camera } from 'expo-camera'
 import { useState, useEffect, createRef } from 'react'
 import * as Clarifai from 'clarifai'
 import * as ImageManipulator from 'expo-image-manipulator'
 import axios from 'axios'
 import * as Permissions from 'expo-permissions'
+import { TapGestureHandler } from 'react-native-gesture-handler'
 // import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 // import * as icons from '@fortawesome/free-solid-svg-icons'
 
@@ -38,7 +31,7 @@ export default function FoodScan() {
   const [iconSize, setIconSize] = useState(30)
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       try {
         let camPermission = await Camera.getCameraPermissionsAsync()
         const mediaPermission = await MediaLibrary.getPermissionsAsync()
@@ -54,7 +47,6 @@ export default function FoodScan() {
       }
     })()
   })
-
 
   const clarifaiApp = new Clarifai.App({
     apiKey: 'd5f2958f4b0b4b38acfbc2921cf5de81',
@@ -126,25 +118,24 @@ export default function FoodScan() {
     await clarifaiDetectObjectsAsync(manipResponse.base64)
   }
 
+
   return (
     <View style={styles.container}>
       {camView ? (
         <Camera
           style={{ width: '100%', height: '99.9%' }}
+          autoFocus
+          whiteBalance='shadow'
           type={type}
           ref={cameraRef}
-          ratio='16:8'
-        >
-          <View style={styles.buttonContainer}>
+          ratio='16:8'>
+          {/* <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.snapBtn} onPress={() => takeSnap()}>
               <Text style={styles.nuDataTxt}>Get Nutrion Data</Text>
-            </TouchableOpacity>
-          </View>
+              </TouchableOpacity>
+            </View> */}
           {pic && (
-            <TouchableOpacity
-              style={styles.nuInfosBtn}
-              onPress={() => setCamView(false)}
-            >
+            <TouchableOpacity style={styles.nuInfosBtn} onPress={() => setCamView(false)}>
               <Text style={styles.preTxt}>{predictions}</Text>
               {calories !== '' ? (
                 <Text style={styles.calTxt}>
@@ -159,31 +150,20 @@ export default function FoodScan() {
       ) : (
         <View style={{ margin: 55, alignItems: 'flex-start' }}>
           {/* <Text style={[styles.nuDataTxt, { fontSize: 24, width: 290 }]}>All the Nutrients</Text> */}
-          <Text
-            style={[
-              styles.nuDataTxt,
-              { fontSize: 32, margin: 14, textTransform: 'capitalize' },
-            ]}
-          >
+          <Text style={[styles.nuDataTxt, { fontSize: 32, margin: 14, textTransform: 'capitalize' }]}>
             {predictions}
           </Text>
           <View style={styles.nuTextParent}>
             {/* <FontAwesomeIcon icon={icons.faAnglesRight} size={iconSize} style={{ margin: 10 }} /> */}
-            <Text style={styles.nutrientDataTxt}>
-              Serving Size: {servingSize} g
-            </Text>
+            <Text style={styles.nutrientDataTxt}>Serving Size: {servingSize} g</Text>
           </View>
           <View style={styles.nuTextParent}>
             {/* <FontAwesomeIcon icon={icons.faAnglesRight} size={iconSize} style={{ margin: 10 }} /> */}
-            <Text style={styles.nutrientDataTxt}>
-              Calories: {calories} cals
-            </Text>
+            <Text style={styles.nutrientDataTxt}>Calories: {calories} cals</Text>
           </View>
           <View style={styles.nuTextParent}>
             {/* <FontAwesomeIcon icon={icons.faAnglesRight} size={iconSize} style={{ margin: 10 }} /> */}
-            <Text style={styles.nutrientDataTxt}>
-              Carbohydrates: {carbs} gm
-            </Text>
+            <Text style={styles.nutrientDataTxt}>Carbohydrates: {carbs} gm</Text>
           </View>
           <View style={styles.nuTextParent}>
             {/* <FontAwesomeIcon icon={icons.faAnglesRight} size={iconSize} style={{ margin: 10 }} /> */}
@@ -191,9 +171,7 @@ export default function FoodScan() {
           </View>
           <View style={styles.nuTextParent}>
             {/* <FontAwesomeIcon icon={icons.faAnglesRight} size={iconSize} style={{ margin: 10 }} /> */}
-            <Text style={styles.nutrientDataTxt}>
-              Saturated Fat: {saturatedFat} gm
-            </Text>
+            <Text style={styles.nutrientDataTxt}>Saturated Fat: {saturatedFat} gm</Text>
           </View>
           <View style={styles.nuTextParent}>
             {/* <FontAwesomeIcon icon={icons.faAnglesRight} size={iconSize} style={{ margin: 10 }} /> */}
@@ -205,15 +183,11 @@ export default function FoodScan() {
           </View>
           <View style={styles.nuTextParent}>
             {/* <FontAwesomeIcon icon={icons.faAnglesRight} size={iconSize} style={{ margin: 10 }} /> */}
-            <Text style={styles.nutrientDataTxt}>
-              Pottasium: {pottasium} mg
-            </Text>
+            <Text style={styles.nutrientDataTxt}>Pottasium: {pottasium} mg</Text>
           </View>
           <View style={styles.nuTextParent}>
             {/* <FontAwesomeIcon icon={icons.faAnglesRight} size={iconSize} style={{ margin: 10 }} /> */}
-            <Text style={styles.nutrientDataTxt}>
-              Cholestrol: {cholestrol} mg
-            </Text>
+            <Text style={styles.nutrientDataTxt}>Cholestrol: {cholestrol} mg</Text>
           </View>
           <View style={styles.nuTextParent}>
             {/* <FontAwesomeIcon icon={icons.faAnglesRight} size={iconSize} style={{ margin: 10 }} /> */}
@@ -227,8 +201,7 @@ export default function FoodScan() {
               padding: 10,
               justifyContent: 'center',
             }}
-            onPress={() => setCamView(true)}
-          >
+            onPress={() => setCamView(true)}>
             <Text style={styles.text}>Exit Menu</Text>
           </TouchableOpacity>
         </View>

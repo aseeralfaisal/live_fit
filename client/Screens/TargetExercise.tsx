@@ -96,7 +96,7 @@ export default function TargetExercise() {
         },
       })
       // console.log(res.data)
-      navigation.navigate("Workouts")
+      navigation.navigate('Workouts')
     } catch ({ response }: any) {
       console.log(response)
     }
@@ -142,18 +142,26 @@ export default function TargetExercise() {
             data={specificExercises}
             removeClippedSubviews={true}
             maxToRenderPerBatch={10}
-            renderItem={({ item }: any) => {
+            renderItem={({ item, index }: any) => {
               return (
                 <>
                   {item.name.toLowerCase().includes(searchVal.toLowerCase()) ? (
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        backgroundColor: selected(item) ? '#92A3FD33' : '#00000000',
+                        marginTop: index !== 0 ? 2 : 0,
+                        borderTopLeftRadius: index === 0 ? 12 : 0,
+                        borderTopRightRadius: index === 0 ? 12 : 0,
+                      }}>
                       <View
                         style={{
                           marginHorizontal: window.width - window.width / 1.05,
                           padding: 8,
                           borderRadius: 8,
                         }}>
-                        <Pressable
+                        <TouchableOpacity
                           onLongPress={() => {
                             setExerciseItem(item)
                             setSpecificWorkout(!specificWorkout)
@@ -164,7 +172,7 @@ export default function TargetExercise() {
                             alignItems: 'center',
                           }}>
                           <View>
-                            {selected(item) && (
+                            {/* {selected(item) && (
                               <View
                                 style={{
                                   backgroundColor: '#92A3FD',
@@ -175,13 +183,13 @@ export default function TargetExercise() {
                                   position: 'absolute',
                                   borderRadius: 20,
                                 }}></View>
-                            )}
+                            )} */}
                             <View
                               style={{
                                 flexDirection: 'row',
                                 justifyContent: 'space-between',
                                 alignItems: 'center',
-                                marginVertical: 5,
+                                marginVertical: 3,
                               }}>
                               <View
                                 style={{
@@ -201,16 +209,12 @@ export default function TargetExercise() {
                                   }}
                                 />
                               </View>
-                              <Text
-                                style={[
-                                  styles.titleTxt,
-                                  { marginLeft: 15, color: selected(item) ? '#92A3FD' : '#555' },
-                                ]}>
+                              <Text style={[styles.titleTxt, { marginLeft: 15, color: '#555' }]}>
                                 {item.name.split(' ')[0]} {item.name.split(' ')[1]} {item.name.split(' ')[2]}
                               </Text>
                             </View>
                           </View>
-                        </Pressable>
+                        </TouchableOpacity>
                       </View>
                       <TouchableOpacity
                         activeOpacity={0.6}
@@ -258,11 +262,34 @@ export default function TargetExercise() {
         setSpecificWorkout={setSpecificWorkout}
         exerciseItem={exerciseItem}
       />
+      <View style={{ backgroundColor: '#FFF' }}>
+        <TouchableOpacity
+          style={styles.saveWorkoutBtn}
+          // onPress={() => createWorkoutPopup()}
+          >
+          <Text style={styles.saveWorkoutBtnText}>Add exercises</Text>
+        </TouchableOpacity>
+      </View>
     </>
   )
 }
 
 const styles = StyleSheet.create({
+  saveWorkoutBtn: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    backgroundColor: '#92A3FD',
+    marginHorizontal: 30,
+    height: 50,
+    borderRadius: 20,
+    marginBottom: 20,
+  },
+  saveWorkoutBtnText: {
+    color: '#fff',
+    fontFamily: 'Poppins_Bold',
+    textAlignVertical: 'center',
+    fontSize: 14,
+  },
   addExerciseTitle: {
     marginHorizontal: 10,
     fontFamily: 'Poppins_Bold',
