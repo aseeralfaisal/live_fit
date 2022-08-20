@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18,
     letterSpacing: 5,
-    fontFamily: 'Comfortaa-Bold',
+    fontFamily: 'Poppins_Bold',
   },
   nuInfosBtn: {
     width: '100%',
@@ -267,13 +267,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     textTransform: 'capitalize',
     letterSpacing: 3,
-    fontFamily: 'Comfortaa-Bold',
+    fontFamily: 'Poppins_Bold',
   },
   calTxt: {
     color: '#111',
     fontSize: 15,
     textAlign: 'center',
-    fontFamily: 'Comfortaa-Bold',
+    fontFamily: 'Poppins_Bold',
   },
   camera: {
     flex: 1,
@@ -314,11 +314,11 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 18,
     color: 'white',
-    fontFamily: 'Comfortaa-Bold',
+    fontFamily: 'Poppins',
   },
   nutrientDataTxt: {
     fontSize: 20,
     color: '#000',
-    fontFamily: 'Comfortaa-Bold',
+    fontFamily: 'Poppins',
   },
 })

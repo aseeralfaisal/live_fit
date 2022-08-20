@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import * as NavigationBar from 'expo-navigation-bar'
 import Workouts from './Screens/Workouts'
 import About from './Screens/About'
+import FoodScan from './Screens/FoodScan'
 
 export default function TabScreen() {
   const Tab = createBottomTabNavigator<any>()
@@ -102,7 +103,7 @@ export default function TabScreen() {
         />
         <Tab.Screen
           name='FoodScan'
-          component={Home}
+          component={FoodScan}
           options={{
             tabBarLabel: 'Camera',
             tabBarShowLabel: false,
