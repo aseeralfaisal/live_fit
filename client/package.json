@@ -13,6 +13,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-native-fontawesome": "^0.3.0",
+    "@react-native-async-storage/async-storage": "~1.15.0",
     "@react-navigation/bottom-tabs": "^6.3.1",
     "@react-navigation/material-bottom-tabs": "^6.2.1",
     "@react-navigation/native": "^6.0.10",
@@ -56,7 +57,9 @@
     "react-native-safe-area-context": "3.3.2",
     "react-native-svg": "12.1.1",
     "react-native-web": "0.17.1",
-    "react-redux": "^8.0.2"
+    "react-redux": "^8.0.2",
+    "redux-persist": "^6.0.0",
+    "redux-thunk": "^2.4.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

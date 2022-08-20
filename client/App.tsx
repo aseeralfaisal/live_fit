@@ -3,9 +3,10 @@ import { useFonts } from 'expo-font'
 import AppLoading from 'expo-app-loading'
 import TabScreen from './TabScreen'
 import { Login } from './Screens/Login'
-import store from './redux/store'
 import { Provider } from 'react-redux'
 import StackScreen from './StackScreen'
+import { persistor, store } from './redux/store'
+import { PersistGate } from 'redux-persist/integration/react'
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -20,7 +21,9 @@ export default function App() {
   } else {
     return (
       <Provider store={store}>
-        {isAuthenticated ? <StackScreen /> : <Login setIsAuthenticated={setIsAuthenticated} />}
+        <PersistGate loading={null} persistor={persistor}>
+          {isAuthenticated ? <StackScreen /> : <Login setIsAuthenticated={setIsAuthenticated} />}
+        </PersistGate>
       </Provider>
     )
   }

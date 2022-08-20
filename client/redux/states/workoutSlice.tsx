@@ -9,6 +9,8 @@ export const workoutSlice = createSlice({
     specificExercises: [],
     exerciseTarget: '',
     UserExercises: [],
+    selectedList: [],
+    exerciseId: '',
   },
   reducers: {
     setWorkouts: (state, { payload }) => {
@@ -29,6 +31,18 @@ export const workoutSlice = createSlice({
     setWorkoutNameUserInput: (state, { payload }) => {
       state.workoutNameUserInput = payload
     },
+    setExerciseId: (state, { payload }) => {
+      state.exerciseId = payload
+    },
+    setSelectedList: (state: any, action) => {
+      const { payload } = action
+      const found = state.selectedList.find(({ _id }: { _id: string }) => _id === payload._id)
+      if (found) {
+        state.selectedList = state.selectedList.filter(({ _id }: { _id: string }) => _id !== payload._id)
+      } else {
+        state.selectedList = [...state.selectedList, payload]
+      }
+    },
   },
 })
 export const {
@@ -38,4 +52,6 @@ export const {
   setUserExercises,
   setWorkoutName,
   setWorkoutNameUserInput,
+  setSelectedList,
+  setExerciseId,
 } = workoutSlice.actions

@@ -95,7 +95,7 @@ export default function TargetExercise() {
           workoutName: workoutNameUserInput,
         },
       })
-      console.log(res.data)
+      // console.log(res.data)
       navigation.navigate("Workouts")
     } catch ({ response }: any) {
       console.log(response)

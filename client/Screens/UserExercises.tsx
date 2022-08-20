@@ -1,22 +1,11 @@
 import * as React from 'react'
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  Dimensions,
-  TouchableOpacity,
-  Pressable,
-  Alert,
-  Appearance,
-  TouchableWithoutFeedback,
-} from 'react-native'
+import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, Pressable, Alert } from 'react-native'
 import Header from '../Components/Header'
 import { useAppSelector } from '../redux/hooks'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
 import { FlatList, TextInput } from 'react-native-gesture-handler'
-import { setUserExercises } from '../redux/states/workoutSlice'
+import { setUserExercises, setSelectedList, setExerciseId } from '../redux/states/workoutSlice'
 import { ADD_SET_QUERY } from '../Queries/ADD_SET_QUERY'
 import { EXERCISE_UPDATE_QUERY } from '../Queries/EXERCISE_UPDATE_QUERY'
 import { GET_EXERCISE_QUERY } from '../Queries/GET_EXERCISE_QUERY'
@@ -27,12 +16,14 @@ export default function UserExercises() {
   const userVal = useAppSelector((state) => state.user.userVal)
   const UserExercises = useAppSelector((state) => state.workout.UserExercises)
   const workoutName = useAppSelector((state) => state.workout.workoutName)
+  const selectedList = useAppSelector((state) => state.workout.selectedList)
+  const exerciseId = useAppSelector((state) => state.workout.exerciseId)
   const window = Dimensions.get('window')
   const [reps, setReps] = React.useState<string>('')
   const [weight, setWeight] = React.useState<string>('')
   const [isSetAdded, setIsSetAdded] = React.useState(false)
-  const [selectedList, setSelectedList] = React.useState<object[]>([])
-  const [exerciseId, setExerciseId] = React.useState('')
+  // const [selectedList, setSelectedList] = React.useState<object[]>([])
+  // const [exerciseId, setExerciseId] = React.useState('')
   const [setItemId, setSetItemId] = React.useState('')
   const repsInputRef = React.useRef<any>(null)
 
@@ -58,7 +49,6 @@ export default function UserExercises() {
   const addSet = async (setName: string, setLength: number) => {
     setWeight('0')
     setReps('0')
-
     const res = await axios.post(BASE_URL, {
       query: ADD_SET_QUERY,
       variables: {
@@ -74,14 +64,14 @@ export default function UserExercises() {
       },
     })
     if (res.status !== 200) throw new Error('Something went wrong')
-    console.log(res.data.data)
+    // console.log(res.data.data)
     setIsSetAdded(!isSetAdded)
     // repsInputRef.current.focus()
   }
 
   const updateSet = async (reps: string, weight: string) => {
     try {
-      console.log('REPS', reps, 'WEIGHT', weight)
+      // console.log('REPS', reps, 'WEIGHT', weight)
       const res = await axios.post(BASE_URL, {
         query: EXERCISE_UPDATE_QUERY,
         variables: {
@@ -121,11 +111,7 @@ export default function UserExercises() {
     _id: string
   }
   const selectedExerList = (item: exerListTypes) => {
-    if (selectedList.includes(item)) {
-      setSelectedList(selectedList.filter(({ _id }: any) => _id !== item._id))
-    } else {
-      setSelectedList([...selectedList, item])
-    }
+    dispatch(setSelectedList(item))
   }
   const SetRepsListTitle = ({ title }: { title: string }) => {
     return (
@@ -187,8 +173,8 @@ export default function UserExercises() {
                     }}>
                     <TouchableOpacity
                       onPress={() => {
-                        if (exerciseId === set.id) return setExerciseId('')
-                        return setExerciseId(set.id)
+                        if (exerciseId === set.id) return dispatch(setExerciseId(''))
+                        return dispatch(setExerciseId(set.id))
                       }}
                       style={{
                         flexDirection: 'row',
@@ -251,7 +237,7 @@ export default function UserExercises() {
                                     flexDirection: 'row',
                                     justifyContent: 'space-around',
                                     alignItems: 'center',
-                                    backgroundColor: selectedList.includes(item)
+                                    backgroundColor: selectedList.find(a => a._id === item._id)
                                       ? '#90EEBB'
                                       : index % 2 === 0
                                       ? '#00000000'
@@ -261,6 +247,7 @@ export default function UserExercises() {
                                   }}>
                                   <TouchableOpacity
                                     style={{ alignItems: 'center' }}
+                                    onPress={() => console.log(selectedList.find(a => a._id === item._id))}
                                     onLongPress={() => deleteSet(item._id)}>
                                     <TextInput
                                       textAlign='center'
@@ -305,7 +292,7 @@ export default function UserExercises() {
                                     <View style={{ width: 36, height: 25 }}>
                                       <Image
                                         source={
-                                          selectedList.includes(item)
+                                          selectedList.find(a => a._id === item._id)
                                             ? require('../assets/icons/done.png')
                                             : require('../assets/icons/not_done.png')
                                         }
