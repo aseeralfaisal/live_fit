@@ -10,6 +10,7 @@ import { ADD_SET_QUERY } from '../Queries/ADD_SET_QUERY'
 import { EXERCISE_UPDATE_QUERY } from '../Queries/EXERCISE_UPDATE_QUERY'
 import { GET_EXERCISE_QUERY } from '../Queries/GET_EXERCISE_QUERY'
 import { EXERCISE_DELETE_QUERY } from '../Queries/EXERCISE_DELETE_QUERY'
+import { AnimatedCircularProgress } from 'react-native-circular-progress'
 
 export default function UserExercises() {
   const dispatch = useDispatch()
@@ -171,6 +172,7 @@ export default function UserExercises() {
                       padding: 8,
                       borderRadius: 8,
                     }}>
+                    {console.log((selectedList.length + 1) * 100 - 100)}
                     <TouchableOpacity
                       onPress={() => {
                         if (exerciseId === set.id) return dispatch(setExerciseId(''))
@@ -202,6 +204,15 @@ export default function UserExercises() {
                               borderWidth: 0,
                               borderRadius: 100,
                             }}
+                          />
+                        </View>
+                        <View style={{ position: 'absolute' }}>
+                          <AnimatedCircularProgress
+                            size={65}
+                            width={2}
+                            fill={100}
+                            tintColor='#92A3FD33'
+                            backgroundColor='#eee'
                           />
                         </View>
                         <Text style={[styles.titleTxt, { marginLeft: 15, color: '#555' }]}>
@@ -335,11 +346,9 @@ export default function UserExercises() {
             keyExtractor={(item, idx) => idx.toString()}
           />
         </View>
-        {/* <Modal transparent animationType='slide'>
-          <View style={{ top: '60%', backgroundColor: '#fff', height: '100%', alignItems: 'center' }}>
-            <Text>{reps}</Text>
-          </View>
-        </Modal> */}
+        <TouchableOpacity style={styles.saveWorkoutBtn}>
+          <Text style={styles.saveWorkoutBtnText}>Start Workout</Text>
+        </TouchableOpacity>
       </View>
     </>
   )
@@ -351,6 +360,21 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_Bold',
     color: '#555',
     fontSize: 20,
+  },
+  saveWorkoutBtn: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    backgroundColor: '#92A3FD',
+    marginHorizontal: 28,
+    height: 50,
+    borderRadius: 12,
+    marginVertical: 8
+  },
+  saveWorkoutBtnText: {
+    color: '#fff',
+    fontFamily: 'Poppins_Bold',
+    textAlignVertical: 'center',
+    fontSize: 14,
   },
   titleTxt: {
     fontFamily: 'Poppins_Bold',

@@ -21,16 +21,20 @@ export const SpecificExerciseView = ({ specificWorkout, setSpecificWorkout, exer
             alignItems: 'center',
             height: '100%',
             justifyContent: 'center',
-            marginTop: 40
+            marginTop: 40,
           }}>
-          <Text style={[styles.titleTxt, { fontSize: 28, width: '90%', textAlign: 'center', marginBottom: 40 }]}>
+          <Text
+            style={[styles.titleTxt, { fontSize: 28, width: '90%', textAlign: 'center', marginBottom: 40 }]}>
             {exerciseItem?.name}
           </Text>
           <Image
             source={{ uri: exerciseItem?.gifUrl }}
             style={{ width: 250, height: 250, resizeMode: 'contain' }}
           />
-          <TouchableOpacity activeOpacity={0.6} style={{ marginTop: 160 }} onPress={() => setSpecificWorkout(!specificWorkout)}>
+          <TouchableOpacity
+            activeOpacity={0.6}
+            style={{ marginTop: 160 }}
+            onPress={() => setSpecificWorkout(!specificWorkout)}>
             <ForwardSVG />
           </TouchableOpacity>
         </View>

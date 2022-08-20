@@ -75,20 +75,21 @@ export default function Workouts() {
                   <LinearGradient
                     colors={['#C58BF233', '#92A3FD33']}
                     style={{
-                      marginHorizontal: 16,
+                      marginHorizontal: 20,
                       marginVertical: 8,
                       borderRadius: 12,
                       flexDirection: 'row',
                       alignItems: 'center',
+                      height: 60
                     }}>
                     <Image
-                      source={require('../assets/form.png')}
+                      source={require('../assets/icons/exer_dark.png')}
                       style={{ width: 40, height: 40, resizeMode: 'contain', marginLeft: 10 }}
                     />
                     <Text
                       style={[
                         styles.tileTitle,
-                        { textAlign: 'left', color: '#555', margin: 10, padding: 10 },
+                        { textAlign: 'left', color: '#555', marginHorizontal: 10 },
                       ]}>
                       {workoutName.replace('_', ' ').toString()}
                     </Text>
@@ -100,11 +101,11 @@ export default function Workouts() {
           />
         </View>
         <TouchableOpacity
-          style={{ flexDirection: 'row', justifyContent: 'center' }}
+          style={styles.saveWorkoutBtn}
           onPress={() => {
             navigation.navigate('ChooseExercises')
           }}>
-          <Btn title='Create a workout' loading={false} />
+          <Text style={styles.saveWorkoutBtnText}>Create a workout</Text>
         </TouchableOpacity>
       </View>
     </>
@@ -112,15 +113,29 @@ export default function Workouts() {
 }
 
 const styles = StyleSheet.create({
+  saveWorkoutBtn: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    backgroundColor: '#92A3FD',
+    marginHorizontal: 30,
+    height: 50,
+    borderRadius: 20,
+    marginBottom: 20
+  },
+  saveWorkoutBtnText: {
+    color: '#fff',
+    fontFamily: 'Poppins_Bold',
+    textAlignVertical: 'center',
+    fontSize: 14,
+  },
   txt: {
-    marginHorizontal: 18,
+    marginHorizontal: 20,
     fontFamily: 'Poppins_Bold',
     color: 'rgb(80,80,80)',
     fontSize: 20,
   },
   tileTitle: {
     fontFamily: 'Poppins_Bold',
-    // color: '#92A3FD',
     color: '#555',
     textTransform: 'capitalize',
     fontSize: 14,
