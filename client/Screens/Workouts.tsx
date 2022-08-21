@@ -79,9 +79,9 @@ export default function Workouts() {
                   <LinearGradient
                     colors={['#C58BF233', '#92A3FD33']}
                     style={{
-                      marginHorizontal: 20,
+                      marginHorizontal: 30,
                       marginVertical: 8,
-                      borderRadius: 12,
+                      borderRadius: 20,
                       flexDirection: 'row',
                       alignItems: 'center',
                       height: 60,
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   txt: {
-    marginHorizontal: 20,
+    marginHorizontal: 30,
     fontFamily: 'Poppins_Bold',
     color: 'rgb(80,80,80)',
     fontSize: 20,
