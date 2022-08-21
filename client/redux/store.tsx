@@ -8,6 +8,7 @@ import thunk from 'redux-thunk'
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
+  whitelist: ['workout'],
 }
 const reducer = combineReducers<any>({
   user: userSlice.reducer,
@@ -18,10 +19,10 @@ const persistedReducer = persistReducer(persistConfig, reducer)
 export const store = configureStore({
   reducer: persistedReducer,
   middleware: [thunk],
-  devTools: true
+  devTools: true,
 })
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
 
-export const persistor : any = persistStore(store)
+export const persistor: any = persistStore(store)
