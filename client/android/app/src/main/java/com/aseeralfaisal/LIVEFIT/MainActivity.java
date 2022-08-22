@@ -1,4 +1,4 @@
-package com.mainapp;
+package com.aseeralfaisal.LIVEFIT;
 
 import android.os.Build;
 import android.os.Bundle;

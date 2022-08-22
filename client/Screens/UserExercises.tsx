@@ -141,6 +141,16 @@ export default function UserExercises() {
       </View>
     )
   }
+  const [timer, setTimer] = React.useState(0)
+  React.useEffect(() => {
+    const incrementTimer = () => {
+      setTimeout(() => {
+        setTimer(timer + 1)
+      }, 1000)
+    }
+    incrementTimer()
+    // return () => clearTimeout(incrementTimer)
+  })
 
   return (
     <>
@@ -149,7 +159,7 @@ export default function UserExercises() {
           flex: 1,
           backgroundColor: '#fff',
         }}>
-        <Header />
+        <Header timer={timer} />
         <Text style={[styles.txt, { marginHorizontal: 20 }]}>Exercises</Text>
         <View
           style={{
@@ -172,6 +182,8 @@ export default function UserExercises() {
                       padding: 8,
                       borderRadius: 8,
                     }}>
+                    {/* {console.log("TOTAL SET", UserExercises.reduce((prev, i) => prev + i.sets.length, 0))} */}
+                    {/* {console.log("TOTAL SELECTED", selectedList.find(a => a._id))} */}
                     <TouchableOpacity
                       onPress={() => {
                         if (exerciseId === set.id) return dispatch(setExerciseId(''))
@@ -259,11 +271,10 @@ export default function UserExercises() {
                                   }}>
                                   <TouchableOpacity
                                     style={{ alignItems: 'center' }}
-                                    // onPress={() =>
-                                    //   console.log(
-                                    //     selectedList.find(({ _id }: { _id: string }) => _id === item._id)
-                                    //   )
-                                    // }
+                                    onPress={() => {
+                                      console.log(selectedList.some((a) => a._id === item._id))
+                                      console.log(set.sets.length)
+                                    }}
                                     onLongPress={() => deleteSet(item._id)}>
                                     <TextInput
                                       textAlign='center'
@@ -367,7 +378,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 28,
     height: 50,
     borderRadius: 20,
-    marginVertical: 8
+    marginVertical: 8,
   },
   saveWorkoutBtnText: {
     color: '#fff',

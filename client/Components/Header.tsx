@@ -3,13 +3,14 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { useAppSelector } from '../redux/hooks'
 import { useNavigation, useRoute } from '@react-navigation/native'
+import * as dayjs from 'dayjs'
 
-export default function Header({ CreateUpdateWorkout, setCreateWorkoutPopup }: any) {
+export default function Header({ CreateUpdateWorkout, setCreateWorkoutPopup, timer }: any) {
   const route = useRoute()
   const routeName = route.name
   const userVal = useAppSelector((state) => state.user.userVal)
   const navigation = useNavigation()
-
+  
   if (routeName === 'TargetExercise') {
     return (
       <>
@@ -32,6 +33,24 @@ export default function Header({ CreateUpdateWorkout, setCreateWorkoutPopup }: a
         </View>
         <StatusBar style='dark' />
       </>
+    )
+  }
+  if (routeName === 'UserExercises') {
+    // console.log(dayjs(timer).format("hh:mm:ss"))
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          paddingTop: 50,
+          paddingBottom: 10,
+          marginBottom: 20,
+          marginHorizontal: 20
+        }}>
+          <Text style={styles.title}>{timer}</Text>
+          <Text style={styles.title}>Finish Workout</Text>
+        </View>
     )
   }
 

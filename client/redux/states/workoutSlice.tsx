@@ -36,7 +36,7 @@ export const workoutSlice = createSlice({
     },
     setSelectedList: (state: any, action) => {
       const { payload } = action
-      const found = state.selectedList.find(({ _id }: { _id: string }) => _id === payload._id)
+      const found = state.selectedList.some(({ _id }: { _id: string }) => _id === payload._id)
       if (found) {
         state.selectedList = state.selectedList.filter(({ _id }: { _id: string }) => _id !== payload._id)
       } else {

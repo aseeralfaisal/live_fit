@@ -3,11 +3,16 @@
     "name": "LIVEFIT",
     "slug": "LIVEFIT",
     "version": "1.0.0",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "cover"
+    },
+    "android": {
+      "package": "com.aseeralfaisal.LIVEFIT"
     }
   }
 }
