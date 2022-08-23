@@ -135,7 +135,7 @@ export default function Home() {
       <View style={{ marginLeft: 20, marginTop: 40 }}>
         <LineChart data={data} width={screenWidth} height={250} chartConfig={chartConfig} />
       </View>
-        <StatusBar style='lights' />
+        <StatusBar style='dark' />
     </View>
   )
 }

@@ -83,7 +83,7 @@ export const Login = ({ setIsAuthenticated }: any) => {
           <Text style={[styles.title, { color: '#92A3FD' }]}>Register</Text>
         </TouchableOpacity>
       </View>
-      <StatusBar style='light' />
+      <StatusBar style='dark' />
     </View>
   )
 }
