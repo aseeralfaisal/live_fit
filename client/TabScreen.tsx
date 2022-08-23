@@ -7,6 +7,7 @@ import * as NavigationBar from 'expo-navigation-bar'
 import Workouts from './Screens/Workouts'
 import About from './Screens/About'
 import FoodScan from './Screens/FoodScan'
+import MapBox from './Screens/MapBox'
 
 export default function TabScreen() {
   const Tab = createBottomTabNavigator<any>()
@@ -56,10 +57,10 @@ export default function TabScreen() {
           }}
         />
         <Tab.Screen
-          name='Workout'
-          component={Workouts}
+          name='MapBox'
+          component={Home}
           options={{
-            tabBarLabel: 'HomeStack',
+            tabBarLabel: 'MapBox',
             headerShown: false,
             tabBarShowLabel: false,
             tabBarIcon: ({ focused, color }) => (

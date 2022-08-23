@@ -3,9 +3,8 @@
     "name": "LIVEFIT",
     "slug": "LIVEFIT",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
+    "plugins": ["@react-native-mapbox-gl/maps"],
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
@@ -13,6 +12,11 @@
     },
     "android": {
       "package": "com.aseeralfaisal.LIVEFIT"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f0eb014b-ba89-4c74-a142-16cfb0077c5a"
+      }
     }
   }
 }

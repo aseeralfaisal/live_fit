@@ -5,6 +5,8 @@ import { useNavigation, NavigationProp, useRoute } from '@react-navigation/nativ
 import { LinearGradient } from 'expo-linear-gradient'
 import { LineChart } from 'react-native-chart-kit'
 import { Dimensions } from 'react-native'
+import { StatusBar } from 'expo-status-bar'
+
 const screenWidth = Dimensions.get('window').width - 50
 
 type navigationList = {
@@ -15,6 +17,8 @@ type navigationList = {
 }
 
 export default function Home() {
+ 
+
   const navigation = useNavigation<NavigationProp<navigationList>>()
   const data = {
     labels: ['SAT', 'SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI'],
@@ -55,7 +59,13 @@ export default function Home() {
               marginLeft: 12,
             }}>
             <View style={{ alignItems: 'center' }}>
-              <AnimatedCircularProgress size={80} width={14} fill={40} tintColor='#eeefff' backgroundColor='#3d5875' />
+              <AnimatedCircularProgress
+                size={80}
+                width={14}
+                fill={40}
+                tintColor='#eeefff'
+                backgroundColor='#3d5875'
+              />
               <Text
                 style={{
                   position: 'absolute',
@@ -87,17 +97,26 @@ export default function Home() {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}>
-            <Image source={require('../assets/icons/calories.png')} style={{ resizeMode: 'contain', width: 80 }} />
+            <Image
+              source={require('../assets/icons/calories.png')}
+              style={{ resizeMode: 'contain', width: 80 }}
+            />
             <View style={{ marginHorizontal: 10 }}>
               <Text style={styles.textDark}>Calories</Text>
               <Text style={styles.textDarkLighter}>Check your calorie intake</Text>
             </View>
           </View>
-          <Image source={require('../assets/icons/workout_btn.png')} style={{ resizeMode: 'contain', width: 40 }} />
+          <Image
+            source={require('../assets/icons/workout_btn.png')}
+            style={{ resizeMode: 'contain', width: 40 }}
+          />
         </LinearGradient>
       </TouchableOpacity>
 
-      <TouchableOpacity activeOpacity={0.5} style={{ marginTop: 20 }} onPress={() => navigation.navigate('Workouts')}>
+      <TouchableOpacity
+        activeOpacity={0.5}
+        style={{ marginTop: 20 }}
+        onPress={() => navigation.navigate('Workouts')}>
         <LinearGradient colors={['#C58BF255', '#EEA4CE33']} style={[styles.gradientBar, { height: 100 }]}>
           <Image
             source={require('../assets/icons/home_workout.png')}
@@ -107,12 +126,16 @@ export default function Home() {
             <Text style={styles.textDark}>Workout</Text>
             <Text style={styles.textDarkLighter}>Create and log your workouts</Text>
           </View>
-          <Image source={require('../assets/icons/workout_btn.png')} style={{ resizeMode: 'contain', width: 40 }} />
+          <Image
+            source={require('../assets/icons/workout_btn.png')}
+            style={{ resizeMode: 'contain', width: 40 }}
+          />
         </LinearGradient>
       </TouchableOpacity>
       <View style={{ marginLeft: 20, marginTop: 40 }}>
         <LineChart data={data} width={screenWidth} height={250} chartConfig={chartConfig} />
       </View>
+        <StatusBar style='lights' />
     </View>
   )
 }

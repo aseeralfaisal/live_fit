@@ -6,6 +6,7 @@ import { useState } from 'react'
 import { useAppSelector, useAppDispatch } from '../redux/hooks'
 import { changeUserVal, changePassVal } from '../redux/states/userSlice'
 import axios from 'axios'
+import { StatusBar } from 'expo-status-bar'
 
 export const Login = ({ setIsAuthenticated }: any) => {
   const dispatch = useAppDispatch()
@@ -82,6 +83,7 @@ export const Login = ({ setIsAuthenticated }: any) => {
           <Text style={[styles.title, { color: '#92A3FD' }]}>Register</Text>
         </TouchableOpacity>
       </View>
+      <StatusBar style='light' />
     </View>
   )
 }
@@ -109,7 +111,7 @@ const styles = StyleSheet.create({
     padding: 10,
     height: 48,
     borderRadius: 14,
-    backgroundColor: '#F7F8F8',
+    backgroundColor: '#F5F5F5',
     flexDirection: 'row',
     alignItems: 'center',
     fontFamily: 'Poppins',

@@ -125,15 +125,14 @@ export default function FoodScan() {
         <Camera
           style={{ width: '100%', height: '99.9%' }}
           autoFocus
-          whiteBalance='shadow'
           type={type}
           ref={cameraRef}
           ratio='16:8'>
-          {/* <View style={styles.buttonContainer}>
+          <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.snapBtn} onPress={() => takeSnap()}>
               <Text style={styles.nuDataTxt}>Get Nutrion Data</Text>
               </TouchableOpacity>
-            </View> */}
+            </View>
           {pic && (
             <TouchableOpacity style={styles.nuInfosBtn} onPress={() => setCamView(false)}>
               <Text style={styles.preTxt}>{predictions}</Text>
