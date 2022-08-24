@@ -4,6 +4,7 @@ const saltRounds = process.env.SALT_ROUNDS as unknown as number
 import exercises from '../../Data/exercises.json' assert { type: 'json' }
 import User from '../../models/user'
 import Workouts from '../../models/workouts'
+import axios from 'axios'
 
 interface argsType {
   name: string
@@ -179,6 +180,18 @@ const resolvers = {
           await workoutFound.save()
           return workoutFound
         }
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async getFoodCalories(_: any, { query }) {
+      try {
+        const res = await axios.get(`https://api.calorieninjas.com/v1/nutrition?query=${query}`, {
+          headers: {
+            'X-Api-Key': 'LUqUEvZwtBGEm9YqPvcb5g==rwCrBFMK8LHjYWQI',
+          },
+        })
+        return res.data.items
       } catch (err) {
         console.log(err)
       }

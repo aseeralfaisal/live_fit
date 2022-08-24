@@ -14,6 +14,7 @@ type navigationList = {
   Workouts: undefined
   BMI: undefined
   WalkSteps: undefined
+  Cals: undefined
 }
 
 export default function Home() {
@@ -87,7 +88,7 @@ export default function Home() {
           </View>
         </LinearGradient>
       </TouchableOpacity>
-      <TouchableOpacity activeOpacity={0.5}>
+      <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate("Cals")}>
         <LinearGradient
           colors={['#C58BF255', '#EEA4CE33']}
           style={[styles.gradientBar, { height: 100, marginTop: 15 }]}>

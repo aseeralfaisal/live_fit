@@ -11,6 +11,8 @@ import { EXERCISE_UPDATE_QUERY } from '../Queries/EXERCISE_UPDATE_QUERY'
 import { GET_EXERCISE_QUERY } from '../Queries/GET_EXERCISE_QUERY'
 import { EXERCISE_DELETE_QUERY } from '../Queries/EXERCISE_DELETE_QUERY'
 import { AnimatedCircularProgress } from 'react-native-circular-progress'
+import * as BackgroundFetch from 'expo-background-fetch'
+import * as TaskManager from 'expo-task-manager'
 
 export default function UserExercises() {
   const dispatch = useDispatch()
@@ -141,16 +143,21 @@ export default function UserExercises() {
       </View>
     )
   }
+  const [startExercise, setStartExercise] = React.useState(false)
   const [timer, setTimer] = React.useState(0)
   React.useEffect(() => {
     const incrementTimer = () => {
       setTimeout(() => {
-        setTimer(timer + 1)
+        startExercise && setTimer(timer + 1)
       }, 1000)
     }
     incrementTimer()
     // return () => clearTimeout(incrementTimer)
   })
+
+  const startWorkout = () => {
+    setStartExercise(!startExercise)
+  }
 
   return (
     <>
@@ -356,8 +363,8 @@ export default function UserExercises() {
             keyExtractor={(item, idx) => idx.toString()}
           />
         </View>
-        <TouchableOpacity style={styles.saveWorkoutBtn}>
-          <Text style={styles.saveWorkoutBtnText}>Start Workout</Text>
+        <TouchableOpacity style={styles.saveWorkoutBtn} onPress={() => startWorkout()}>
+          <Text style={styles.saveWorkoutBtnText}>{startExercise ? 'Finish Workout' : 'Start Workout'}</Text>
         </TouchableOpacity>
       </View>
     </>

@@ -40,6 +40,20 @@ const typeDefs = gql`
     weight: Int
     _id: String
   }
+  type foodCalorieItems {
+    sugar_g: Float
+    fiber_g: Float
+    serving_size_g: Float
+    sodium_mg: Float
+    name: String
+    potassium_mg: Float
+    fat_saturated_g: Float
+    fat_total_g: Float
+    calories: Float
+    cholesterol_mg: Float
+    protein_g: Float
+    carbohydrates_total_g: Float
+  }
   type Mutation {
     addUser(name: String!, pass: String!): User!
     loginUser(name: String!, pass: String!): User!
@@ -55,6 +69,7 @@ const typeDefs = gql`
     ): Workout
     deleteSet(workoutName: String!, userName: String!, id: String!): Workout
     updateSet(workoutName: String!, userName: String!, id: String!, reps: Int, weight: Int): Workout
+    getFoodCalories(query: String!): [foodCalorieItems]
   }
 `
 export default typeDefs
