@@ -9,8 +9,8 @@ const MapBox = () => {
   const [coordinates, setCoordinates] = useState([90.9629, 23.5937])
   // const [coordinates, setCoordinates] = useState<any>([])
   // const [coordinates2] = useState([90.9529, 23.593])
-  const [startPostion, setStartPostion] = useState("")
-  const [endPostion, setEndPostion] = useState("")
+  const [startPostion, setStartPostion] = useState<any>("")
+  const [endPostion, setEndPostion] = useState<any>("")
   const [route] = useState({
     type: 'FeatureCollection',
     features: [
