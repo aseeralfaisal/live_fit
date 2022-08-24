@@ -9,13 +9,19 @@ import * as ImageManipulator from 'expo-image-manipulator'
 import axios from 'axios'
 import * as Permissions from 'expo-permissions'
 import { TapGestureHandler } from 'react-native-gesture-handler'
+import { useNavigation } from '@react-navigation/native'
+import { useDispatch } from 'react-redux'
+import { setNutritionResult } from '../redux/states/nutritionSlice'
 // import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 // import * as icons from '@fortawesome/free-solid-svg-icons'
 
 export default function FoodScan() {
+  const dispatch = useDispatch()
+  const navigation = useNavigation()
   const [predictions, setPredictions] = useState(null)
   const [type, setType] = useState(Camera.Constants.Type.back)
   const [pic, setPic] = useState()
+  const [foodName, setFoodName] = useState('')
   const [servingSize, setServingSize] = useState('')
   const [calories, setCalories] = useState('')
   const [carbs, setCarbs] = useState('')
@@ -85,6 +91,7 @@ export default function FoodScan() {
       }
 
       nutrientData.data.items.forEach((item: Nutrients) => {
+        setFoodName(item?.name)
         setCalories(item?.calories)
         setCarbs(item?.carbohydrates_total_g)
         setCholestrol(item?.cholesterol_mg)
@@ -118,23 +125,38 @@ export default function FoodScan() {
     await clarifaiDetectObjectsAsync(manipResponse.base64)
   }
 
-
   return (
     <View style={styles.container}>
       {camView ? (
-        <Camera
-          style={{ width: '100%', height: '99.9%' }}
-          autoFocus
-          type={type}
-          ref={cameraRef}
-          ratio='16:8'>
+        <Camera style={{ width: '100%', height: '99.9%' }} autoFocus type={type} ref={cameraRef} ratio='16:8'>
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.snapBtn} onPress={() => takeSnap()}>
               <Text style={styles.nuDataTxt}>Get Nutrion Data</Text>
-              </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
+          </View>
           {pic && (
-            <TouchableOpacity style={styles.nuInfosBtn} onPress={() => setCamView(false)}>
+            <TouchableOpacity
+              style={styles.nuInfosBtn}
+              onPress={() => {
+                dispatch(
+                  setNutritionResult([
+                    {
+                      name: foodName,
+                      calories: calories,
+                      serving_size_g: servingSize,
+                      carbohydrates_total_g: carbs,
+                      protein_g: protein,
+                      fat_saturated_g: saturatedFat,
+                      fat_total_g: fatTotal,
+                      sodium_mg: sodium,
+                      potassium_mg: pottasium,
+                      cholesterol_mg: cholestrol,
+                      sugar_g: sugar,
+                    },
+                  ])
+                )
+                navigation.navigate('Cals')
+              }}>
               <Text style={styles.preTxt}>{predictions}</Text>
               {calories !== '' ? (
                 <Text style={styles.calTxt}>

@@ -1,14 +1,21 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import Header from '../Components/Header'
 import SearchRectangle from '../assets/icons/search_rectangle.svg'
 import axios from 'axios'
 import { GET_CALORIES } from '../Queries/GET_CALORIES'
 import { Picker } from '@react-native-picker/picker'
+import { useNavigation, useRoute } from '@react-navigation/native'
+import { useAppSelector } from '../redux/hooks'
+import { useDispatch } from 'react-redux'
+import { setNutritionResult } from '../redux/states/nutritionSlice'
 
 export default function Calories() {
+  const navigation = useNavigation()
+  const route = useRoute()
+  const dispatch = useDispatch()
   const [foodSeachVal, setFoodSeachVal] = React.useState('')
-  const [result, setResult] = React.useState([])
+  const nutritionResult = useAppSelector((state) => state.nutrition.nutritionResult)
   const [inputBorderColor, setInputBorderColor] = React.useState('#ccc')
   const [servingSize, setServingSize] = React.useState('100g')
 
@@ -22,12 +29,12 @@ export default function Calories() {
           query: `${servingSize} ${foodSeachVal}`,
         },
       })
-      setResult(res.data.data.getFoodCalories)
+      dispatch(setNutritionResult(res.data.data.getFoodCalories))
     } catch (err) {
       console.log(err)
     }
   }
-
+  
   return (
     <>
       <Header />
@@ -47,37 +54,41 @@ export default function Calories() {
               onEndEditing={() => searchMeals()}
               style={styles.inputTextField}
             />
-            <View style={{ width: 120, height: 55, paddingRight: 70, overflow: 'hidden' }}>
-              <Picker
-                style={{ color: '#999', fontFamily: 'Poppins' }}
-                selectedValue={servingSize}
-                onValueChange={(value) => setServingSize(value)}>
-                <Picker.Item label='10 g' value='10g' />
-                <Picker.Item label='20 g' value='20g' />
-                <Picker.Item label='30 g' value='30g' />
-                <Picker.Item label='40 g' value='40g' />
-                <Picker.Item label='50 g' value='50g' />
-                <Picker.Item label='60 g' value='60g' />
-                <Picker.Item label='70 g' value='70g' />
-                <Picker.Item label='80 g' value='80g' />
-                <Picker.Item label='90 g' value='90g' />
-                <Picker.Item label='100 g' value='100g' />
-              </Picker>
-            </View>
+            <Picker
+              style={{ color: '#999', fontFamily: 'Poppins', marginLeft: -45, width: 50, height: 20 }}
+              selectedValue={servingSize}
+              onValueChange={(value) => setServingSize(value)}>
+              <Picker.Item label='10 g' value='10g' />
+              <Picker.Item label='20 g' value='20g' />
+              <Picker.Item label='30 g' value='30g' />
+              <Picker.Item label='40 g' value='40g' />
+              <Picker.Item label='50 g' value='50g' />
+              <Picker.Item label='60 g' value='60g' />
+              <Picker.Item label='70 g' value='70g' />
+              <Picker.Item label='80 g' value='80g' />
+              <Picker.Item label='90 g' value='90g' />
+              <Picker.Item label='100 g' value='100g' />
+            </Picker>
+            <TouchableOpacity onPress={() => navigation.navigate('FoodScan')}>
+              <Image
+                source={require('../assets/icons/camera.png')}
+                style={{ width: 32, height: 32, resizeMode: 'contain' }}
+              />
+            </TouchableOpacity>
           </View>
         </View>
-        {foodSeachVal !== '' && result.length === 0 && (
+        {foodSeachVal !== '' && nutritionResult.length === 0 && (
           <View style={styles.searchResultParent}>
             <Text style={[styles.nutrientTextTitle, { textAlign: 'center' }]}>No items found!</Text>
           </View>
         )}
-        {foodSeachVal === '' && (
+        {nutritionResult === [] && (
           <View style={styles.searchResultParent}>
             <Text style={[styles.nutrientText, { textAlign: 'center' }]}>Search for a food item!</Text>
           </View>
         )}
         <FlatList
-          data={result}
+          data={nutritionResult}
           renderItem={({ item, index }: { item: any; index: number }) => {
             return (
               <View style={styles.searchResultParent}>

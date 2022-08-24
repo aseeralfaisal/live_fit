@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import { Alert, StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native'
 import MapboxGL from '@react-native-mapbox-gl/maps'
-// import * as Location from 'expo-location'
+import * as Location from 'expo-location'
 
 const MapBox = () => {
   const [coordinates, setCoordinates] = useState([90.9629, 23.5937])
@@ -24,17 +24,17 @@ const MapBox = () => {
   const token = 'pk.eyJ1IjoiaXN0aWEiLCJhIjoiY2wzZXJlNnllMDA5cTNobmV2dG1yZXF6ZSJ9.ok7F0WbbLNWemVziQlo0cA'
   MapboxGL.setAccessToken(token)
 
-  // useEffect(() => {
-  //   (async () => {
-  //     MapboxGL.setTelemetryEnabled(false)
-  //     let { status } = await Location.requestForegroundPermissionsAsync()
-  //     if (status !== 'granted') {
-  //       return alert('Permission to access location was denied')
-  //     }
-  //     let location = await Location.getCurrentPositionAsync({})
-  //     setCoordinates([location.coords.longitude, location.coords.latitude])
-  //   })()
-  // }, [])
+  useEffect(() => {
+    (async () => {
+      // MapboxGL.setTelemetryEnabled(false)
+      let { status } = await Location.requestForegroundPermissionsAsync()
+      if (status !== 'granted') {
+        return alert('Permission to access location was denied')
+      }
+      let location = await Location.getCurrentPositionAsync({})
+      setCoordinates([location.coords.longitude, location.coords.latitude])
+    })()
+  })
 
   return (
     <View style={styles.page}>
@@ -50,13 +50,13 @@ const MapBox = () => {
             />
           </MapboxGL.ShapeSource> */}
         </MapboxGL.MapView>
-        {/* <TouchableOpacity
+        <TouchableOpacity
           style={{ position: 'absolute', top: '80%', left: '50%', backgroundColor: 'darkblue' }}
           onPress={() => {
             Alert.alert('COORS ', coordinates.toString())
           }}>
           <Text style={{ color: '#fff', padding: 16 }}>Check</Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
       </View>
     </View>
   )

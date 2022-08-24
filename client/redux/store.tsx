@@ -4,6 +4,7 @@ import { workoutSlice } from './states/workoutSlice'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { persistReducer, persistStore } from 'redux-persist'
 import thunk from 'redux-thunk'
+import { nutritionSlice, setNutritionResult } from './states/nutritionSlice'
 
 const persistConfig = {
   key: 'root',
@@ -13,6 +14,7 @@ const persistConfig = {
 const reducer = combineReducers<any>({
   user: userSlice.reducer,
   workout: workoutSlice.reducer,
+  nutrition: nutritionSlice.reducer
 })
 const persistedReducer = persistReducer(persistConfig, reducer)
 
