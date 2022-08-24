@@ -10,7 +10,7 @@ export default function Header({ CreateUpdateWorkout, setCreateWorkoutPopup, tim
   const routeName = route.name
   const userVal = useAppSelector((state) => state.user.userVal)
   const navigation = useNavigation()
-  
+
   if (routeName === 'TargetExercise') {
     return (
       <>
@@ -35,6 +35,34 @@ export default function Header({ CreateUpdateWorkout, setCreateWorkoutPopup, tim
       </>
     )
   }
+  if (routeName === 'Cals') {
+    // console.log(dayjs(timer).format("hh:mm:ss"))
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          paddingTop: 50,
+          paddingHorizontal: 30,
+          backgroundColor: "#fff"
+        }}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Image
+            source={require('../assets/icons/back_Navs.png')}
+            style={{ width: 40, height: 40, borderWidth: 0.5, borderColor: '#ccc', borderRadius: 10 }}
+          />
+        </TouchableOpacity>
+        <Text style={styles.title}>Meal Planner</Text>
+        <TouchableOpacity>
+          <Image
+            source={require('../assets/icons/detail-Navs.png')}
+            style={{ width: 40, height: 40, borderWidth: 0.5, borderColor: '#ccc', borderRadius: 10 }}
+          />
+        </TouchableOpacity>
+      </View>
+    )
+  }
   if (routeName === 'UserExercises') {
     // console.log(dayjs(timer).format("hh:mm:ss"))
     return (
@@ -46,11 +74,11 @@ export default function Header({ CreateUpdateWorkout, setCreateWorkoutPopup, tim
           paddingTop: 50,
           paddingBottom: 10,
           marginBottom: 20,
-          marginHorizontal: 20
+          marginHorizontal: 20,
         }}>
-          <Text style={styles.title}>{timer}</Text>
-          <Text style={styles.title}>Finish Workout</Text>
-        </View>
+        <Text style={styles.title}>{timer}</Text>
+        <Text style={styles.title}>Finish Workout</Text>
+      </View>
     )
   }
 
