@@ -15,6 +15,7 @@ import * as ImagePicker from 'expo-image-picker'
 import axios from 'axios'
 import { useNavigation } from '@react-navigation/native'
 import MapView from 'react-native-maps'
+import { Btn } from '../Components/Button'
 // import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 // import * as icons from '@fortawesome/free-solid-svg-icons'
 
@@ -27,10 +28,11 @@ export default function About() {
       style={{
         flex: 1,
         backgroundColor: '#ffffff',
-      }}
-    >
+      }}>
       <Header />
-      <Text style={{ color: '#000' }}>Hiii</Text>
+      <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center' }}>
+        <Btn title='Log off' />
+      </TouchableOpacity>
     </View>
   )
 }
