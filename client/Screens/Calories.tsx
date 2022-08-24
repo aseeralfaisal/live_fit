@@ -34,7 +34,7 @@ export default function Calories() {
       console.log(err)
     }
   }
-  
+
   return (
     <>
       <Header />
@@ -77,12 +77,12 @@ export default function Calories() {
             </TouchableOpacity>
           </View>
         </View>
-        {foodSeachVal !== '' && nutritionResult.length === 0 && (
+        {/* {foodSeachVal !== '' && nutritionResult.length === 0 && (
           <View style={styles.searchResultParent}>
             <Text style={[styles.nutrientTextTitle, { textAlign: 'center' }]}>No items found!</Text>
           </View>
-        )}
-        {nutritionResult === [] && (
+        )} */}
+        {nutritionResult.length === 0 && (
           <View style={styles.searchResultParent}>
             <Text style={[styles.nutrientText, { textAlign: 'center' }]}>Search for a food item!</Text>
           </View>

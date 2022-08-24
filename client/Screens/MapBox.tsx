@@ -3,29 +3,32 @@ import { useEffect, useState } from 'react'
 import { Alert, StyleSheet, Text, Touchable, TouchableOpacity, View } from 'react-native'
 import MapboxGL from '@react-native-mapbox-gl/maps'
 import * as Location from 'expo-location'
+import { Btn } from '../Components/Button'
 
 const MapBox = () => {
   const [coordinates, setCoordinates] = useState([90.9629, 23.5937])
   // const [coordinates, setCoordinates] = useState<any>([])
-  const [coordinates2] = useState([90.9529, 23.593])
-  // const [route] = useState({
-  //   type: 'FeatureCollection',
-  //   features: [
-  //     {
-  //       type: 'Feature',
-  //       properties: {},
-  //       geometry: {
-  //         type: 'LineString',
-  //         coordinates: [coordinates, coordinates2],
-  //       },
-  //     },
-  //   ],
-  // })
+  // const [coordinates2] = useState([90.9529, 23.593])
+  const [startPostion, setStartPostion] = useState("")
+  const [endPostion, setEndPostion] = useState("")
+  const [route] = useState({
+    type: 'FeatureCollection',
+    features: [
+      {
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'LineString',
+          coordinates: [startPostion, endPostion],
+        },
+      },
+    ],
+  })
   const token = 'pk.eyJ1IjoiaXN0aWEiLCJhIjoiY2wzZXJlNnllMDA5cTNobmV2dG1yZXF6ZSJ9.ok7F0WbbLNWemVziQlo0cA'
   MapboxGL.setAccessToken(token)
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       // MapboxGL.setTelemetryEnabled(false)
       let { status } = await Location.requestForegroundPermissionsAsync()
       if (status !== 'granted') {
@@ -41,21 +44,32 @@ const MapBox = () => {
       <View style={styles.container}>
         <MapboxGL.MapView style={styles.map}>
           <MapboxGL.Camera zoomLevel={18} centerCoordinate={coordinates} />
-          <MapboxGL.PointAnnotation coordinate={coordinates} id='pointAnnotation' />
-          {/* <MapboxGL.PointAnnotation coordinate={coordinates2} id="pointAnnotation" /> */}
-          {/* <MapboxGL.ShapeSource id="line1" shape={route}>
+          <MapboxGL.PointAnnotation coordinate={startPostion} id='pointAnnotation' />
+          <MapboxGL.PointAnnotation coordinate={endPostion} id="pointAnnotation" />
+          <MapboxGL.ShapeSource id="line1" shape={route}>
             <MapboxGL.LineLayer
             id="linelayer1"
-            style={{ lineColor: "red", lineWidth: 3 }}
+            style={{ lineColor: "yellow", lineWidth: 3 }}
             />
-          </MapboxGL.ShapeSource> */}
+          </MapboxGL.ShapeSource>
         </MapboxGL.MapView>
         <TouchableOpacity
-          style={{ position: 'absolute', top: '80%', left: '50%', backgroundColor: 'darkblue' }}
+          style={{ position: 'absolute', top: '80%', left: '50%' }}
           onPress={() => {
-            Alert.alert('COORS ', coordinates.toString())
+            setStartPostion(coordinates)
           }}>
-          <Text style={{ color: '#fff', padding: 16 }}>Check</Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+            <Btn title='Start' loading={false} />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{ position: 'absolute', top: '80%', left: '50%' }}
+          onPress={() => {
+            setEndPostion(coordinates)
+          }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+            <Btn title='end' loading={false} />
+          </View>
         </TouchableOpacity>
       </View>
     </View>
