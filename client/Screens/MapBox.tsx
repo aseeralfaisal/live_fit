@@ -9,8 +9,8 @@ const MapBox = () => {
   const [coordinates, setCoordinates] = useState([90.9629, 23.5937])
   // const [coordinates, setCoordinates] = useState<any>([])
   // const [coordinates2] = useState([90.9529, 23.593])
-  const [startPostion, setStartPostion] = useState<any>("")
-  const [endPostion, setEndPostion] = useState<any>("")
+  const [startPostion, setStartPostion] = useState<any>('')
+  const [endPostion, setEndPostion] = useState<any>('')
   const [route] = useState({
     type: 'FeatureCollection',
     features: [
@@ -44,16 +44,17 @@ const MapBox = () => {
       <View style={styles.container}>
         <MapboxGL.MapView style={styles.map}>
           <MapboxGL.Camera zoomLevel={18} centerCoordinate={coordinates} />
-          <MapboxGL.PointAnnotation coordinate={startPostion} id='pointAnnotation' />
-          <MapboxGL.PointAnnotation coordinate={endPostion} id="pointAnnotation" />
-          <MapboxGL.ShapeSource id="line1" shape={route}>
+          <MapboxGL.PointAnnotation coordinate={coordinates} id='pointAnnotation' />
+          {/* <MapboxGL.PointAnnotation coordinate={endPostion} id="pointAnnotation" /> */}
+          {/* <MapboxGL.ShapeSource id="line1" shape={route}>
             <MapboxGL.LineLayer
             id="linelayer1"
             style={{ lineColor: "yellow", lineWidth: 3 }}
-            />
+            /> 
           </MapboxGL.ShapeSource>
+            */}
         </MapboxGL.MapView>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{ position: 'absolute', top: '80%', left: '50%' }}
           onPress={() => {
             setStartPostion(coordinates)
@@ -70,7 +71,7 @@ const MapBox = () => {
           <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
             <Btn title='end' loading={false} />
           </View>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   )
