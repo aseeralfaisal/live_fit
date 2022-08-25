@@ -7,9 +7,11 @@ import { useAppSelector, useAppDispatch } from '../redux/hooks'
 import { changeUserVal, changePassVal } from '../redux/states/userSlice'
 import axios from 'axios'
 import { StatusBar } from 'expo-status-bar'
+import { setIsAuthenticated } from '../redux/states/authenticatedSlice'
+import { useDispatch } from 'react-redux'
 
-export const Login = ({ setIsAuthenticated }: any) => {
-  const dispatch = useAppDispatch()
+export const Login = () => {
+  const dispatch = useDispatch()
   const userVal = useAppSelector((state) => state.user.userVal)
   const passVal = useAppSelector((state) => state.user.pass)
   const [loader, setLoader] = useState(false)
@@ -37,10 +39,10 @@ export const Login = ({ setIsAuthenticated }: any) => {
         },
       })
       if (fetchData.data.data !== null) {
-        setIsAuthenticated(true)
+        dispatch(setIsAuthenticated(true))
         setLoader(false)
       } else {
-        setIsAuthenticated(false)
+        dispatch(setIsAuthenticated(false))
         setLoader(false)
         fetchData.data?.errors.map((item: { message: string }) => {
           return alert(item.message)

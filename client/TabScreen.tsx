@@ -58,7 +58,7 @@ export default function TabScreen() {
         />
         <Tab.Screen
           name='MapBox'
-          component={Home}
+          component={MapBox}
           options={{
             tabBarLabel: 'MapBox',
             headerShown: false,

@@ -5,16 +5,18 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { persistReducer, persistStore } from 'redux-persist'
 import thunk from 'redux-thunk'
 import { nutritionSlice, setNutritionResult } from './states/nutritionSlice'
+import { authenticatedSlice } from './states/authenticatedSlice'
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['workout'],
+  whitelist: ['workout', 'auth'],
 }
 const reducer = combineReducers<any>({
   user: userSlice.reducer,
   workout: workoutSlice.reducer,
-  nutrition: nutritionSlice.reducer
+  nutrition: nutritionSlice.reducer,
+  auth: authenticatedSlice.reducer
 })
 const persistedReducer = persistReducer(persistConfig, reducer)
 
