@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
   nuInfosBtn: {
     width: '100%',
     height: 100,
-    top: -140,
+    top: -200,
     justifyContent: 'center',
     alignSelf: 'center',
     backgroundColor: '#eee',

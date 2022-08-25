@@ -15,14 +15,17 @@ export default function App() {
     Poppins_Bold: require('./assets/fonts/Poppins-Bold.ttf'),
   })
 
-  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
+  const Main = () => {
+    const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
+    return isAuthenticated ? <StackScreen /> : <Login />
+  }
   if (!fontsLoaded) {
     return <AppLoading />
   } else {
     return (
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          {isAuthenticated ? <StackScreen /> : <Login />}
+          <Main />
         </PersistGate>
       </Provider>
     )

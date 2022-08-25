@@ -16,12 +16,15 @@ import axios from 'axios'
 import { useNavigation } from '@react-navigation/native'
 import MapView from 'react-native-maps'
 import { Btn } from '../Components/Button'
+import { useDispatch } from 'react-redux'
+import { setIsAuthenticated } from '../redux/states/authenticatedSlice'
 // import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 // import * as icons from '@fortawesome/free-solid-svg-icons'
 
 export default function About() {
   let colorScheme = useColorScheme()
   const navigation = useNavigation()
+  const dispatch = useDispatch()
 
   return (
     <View
@@ -30,7 +33,9 @@ export default function About() {
         backgroundColor: '#ffffff',
       }}>
       <Header />
-      <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center' }}>
+      <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center' }} onPress={() => {
+        dispatch(setIsAuthenticated(false))
+      }}>
         <Btn title='Log off' />
       </TouchableOpacity>
     </View>
