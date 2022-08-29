@@ -1,21 +1,14 @@
 {
   "cli": {
-    "version": ">= 1.0.0"
+    "version": ">= 1.2.0"
   },
   "build": {
     "development": {
-      "distribution": "internal",
-      "android": {
-        "gradleCommand": ":app:assembleDebug"
-      },
-      "ios": {
-        "buildConfiguration": "Debug"
-      }
+      "developmentClient": true,
+      "distribution": "internal"
     },
     "preview": {
-      "android": {
-        "buildType": "apk"
-      }
+      "distribution": "internal"
     },
     "production": {}
   },

@@ -18,8 +18,6 @@ type navigationList = {
 }
 
 export default function Home() {
- 
-
   const navigation = useNavigation<NavigationProp<navigationList>>()
   const data = {
     labels: ['SAT', 'SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI'],
@@ -57,7 +55,6 @@ export default function Home() {
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginLeft: 12,
             }}>
             <View style={{ alignItems: 'center' }}>
               <AnimatedCircularProgress
@@ -81,14 +78,14 @@ export default function Home() {
               <Text style={[styles.topbarText, { fontWeight: 'bold' }]}>Mass Index</Text>
               <Text style={[styles.topbarText, { width: 170 }]}>Normal weight</Text>
             </View>
-            <Image
-              source={require('../assets/icons/workout_btn.png')}
-              style={{ resizeMode: 'contain', width: 40, marginLeft: -10 }}
-            />
+              <Image
+                source={require('../assets/icons/workout_btn.png')}
+                style={{ resizeMode: 'contain', width: 40 }}
+              />
           </View>
         </LinearGradient>
       </TouchableOpacity>
-      <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate("Cals")}>
+      <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate('Cals')}>
         <LinearGradient
           colors={['#C58BF255', '#EEA4CE33']}
           style={[styles.gradientBar, { height: 100, marginTop: 15 }]}>
@@ -136,7 +133,7 @@ export default function Home() {
       <View style={{ marginLeft: 20, marginTop: 40 }}>
         <LineChart data={data} width={screenWidth} height={250} chartConfig={chartConfig} />
       </View>
-        <StatusBar style='dark' />
+      <StatusBar style='dark' />
     </View>
   )
 }
