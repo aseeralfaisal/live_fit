@@ -1,13 +1,12 @@
-import * as dotenv from 'dotenv'
-dotenv.config()
-import { ApolloServer } from 'apollo-server-express'
-import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core'
-import express from 'express'
-import http from 'http'
-import cors from 'cors'
-import resolvers from './graphql/resolvers/index'
-import typeDefs from './graphql/schema'
-import mongoose from 'mongoose'
+require('dotenv').config()
+const { ApolloServer } = require('apollo-server-express')
+const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core')
+const express = require('express')
+const http = require('http')
+const cors = require('cors')
+const resolvers = require('./graphql/resolvers/index')
+const typeDefs = require('./graphql/schema')
+const mongoose = require('mongoose')
 
 const mongoUri = process.env.MONGO_URI
 const PORT = process.env.PORT || 4000
@@ -40,3 +39,4 @@ async function startApolloServer() {
   console.log(`👌👌 Ready at http://localhost:${PORT}${server.graphqlPath} `)
 }
 startApolloServer()
+export {}

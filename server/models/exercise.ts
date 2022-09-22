@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+const mongoose = require('mongoose')
 
 const sets = new mongoose.Schema({
   set: Number,
@@ -14,4 +14,5 @@ const exercisesSchema = new mongoose.Schema({
   sets: [sets],
 })
 
-export default exercisesSchema
+module.exports = exercisesSchema
+export {}

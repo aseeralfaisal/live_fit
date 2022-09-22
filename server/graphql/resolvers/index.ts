@@ -1,10 +1,10 @@
-import bcrypt from 'bcrypt'
-import { ApolloError } from 'apollo-server-express'
+const bcrypt = require('bcrypt')
+const { ApolloError } = require('apollo-server-express')
 const saltRounds = process.env.SALT_ROUNDS as unknown as number
-import exercises from '../../Data/exercises.json' assert { type: 'json' }
-import User from '../../models/user'
-import Workouts from '../../models/workouts'
-import axios from 'axios'
+const exercises = require('../../Data/exercises.json')
+const User = require('../../models/user')
+const Workouts = require('../../models/workouts')
+const axios = require('axios')
 
 interface argsType {
   name: string
@@ -198,4 +198,5 @@ const resolvers = {
     },
   },
 }
-export default resolvers
+module.exports = resolvers
+export {}

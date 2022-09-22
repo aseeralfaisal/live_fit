@@ -1,4 +1,4 @@
-import { gql } from 'apollo-server-express';
+const { gql } = require('apollo-server-express');
 const typeDefs = gql `
   type User {
     user: String!
@@ -71,5 +71,5 @@ const typeDefs = gql `
     getFoodCalories(query: String!): [foodCalorieItems]
   }
 `;
-export default typeDefs;
+module.exports = typeDefs;
 //# sourceMappingURL=schema.js.map

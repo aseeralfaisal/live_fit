@@ -1,10 +1,12 @@
-import bcrypt from 'bcrypt';
-import { ApolloError } from 'apollo-server-express';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const bcrypt = require('bcrypt');
+const { ApolloError } = require('apollo-server-express');
 const saltRounds = process.env.SALT_ROUNDS;
-import exercises from '../../Data/exercises.json'  assert {type: 'json'};
-import User from '../../models/user.js';
-import Workouts from '../../models/workouts.js';
-import axios from 'axios';
+const exercises = require('../../Data/exercises.json');
+const User = require('../../models/user');
+const Workouts = require('../../models/workouts');
+const axios = require('axios');
 const resolvers = {
     Query: {
         getUser: () => User.find(),
@@ -210,5 +212,5 @@ const resolvers = {
         },
     },
 };
-export default resolvers;
+module.exports = resolvers;
 //# sourceMappingURL=index.js.map

@@ -1,5 +1,5 @@
-import mongoose from 'mongoose'
-import exercisesSchema from './exercise'
+const mongoose = require('mongoose')
+const exercisesSchema = require('./exercise')
 
 const Workouts = new mongoose.Schema(
   {
@@ -10,4 +10,4 @@ const Workouts = new mongoose.Schema(
   { timestamps: true }
 )
 
-export default mongoose.model('Workouts', Workouts)
+module.exports = mongoose.model('Workouts', Workouts)

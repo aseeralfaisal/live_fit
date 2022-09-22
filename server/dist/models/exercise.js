@@ -1,4 +1,6 @@
-import mongoose from 'mongoose';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose = require('mongoose');
 const sets = new mongoose.Schema({
     set: Number,
     reps: Number,
@@ -12,5 +14,5 @@ const exercisesSchema = new mongoose.Schema({
     target: String,
     sets: [sets],
 });
-export default exercisesSchema;
+module.exports = exercisesSchema;
 //# sourceMappingURL=exercise.js.map
