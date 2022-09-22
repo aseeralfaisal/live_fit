@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import exercisesSchema from './exercise';
+import exercisesSchema from './exercise.js';
 const Workouts = new mongoose.Schema({
     userName: String,
     workoutName: String,

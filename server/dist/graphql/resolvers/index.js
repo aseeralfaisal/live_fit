@@ -2,8 +2,8 @@ import bcrypt from 'bcrypt';
 import { ApolloError } from 'apollo-server-express';
 const saltRounds = process.env.SALT_ROUNDS;
 import exercises from '../../Data/exercises.json' assert { type: 'json' };
-import User from '../../models/user';
-import Workouts from '../../models/workouts';
+import User from '../../models/user.js';
+import Workouts from '../../models/workouts.js';
 import axios from 'axios';
 const resolvers = {
     Query: {
