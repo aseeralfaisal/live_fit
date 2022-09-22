@@ -5,7 +5,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "ts-node app.ts"
+    "build": "tsc",
+    "start": "node ./dist/app.js"
   },
   "dependencies": {
     "apollo-server-express": "^3.9.0",
