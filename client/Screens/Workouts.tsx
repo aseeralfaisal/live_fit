@@ -14,7 +14,6 @@ export default function Workouts() {
   const dispatch = useDispatch()
   const userVal = useAppSelector((state) => state.user.userVal)
   const workouts = useAppSelector((state) => state.workout.workouts)
-
   const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
 
   const targetBodyPart = [

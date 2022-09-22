@@ -11,8 +11,6 @@ import { EXERCISE_UPDATE_QUERY } from '../Queries/EXERCISE_UPDATE_QUERY'
 import { GET_EXERCISE_QUERY } from '../Queries/GET_EXERCISE_QUERY'
 import { EXERCISE_DELETE_QUERY } from '../Queries/EXERCISE_DELETE_QUERY'
 import { AnimatedCircularProgress } from 'react-native-circular-progress'
-import * as BackgroundFetch from 'expo-background-fetch'
-import * as TaskManager from 'expo-task-manager'
 
 export default function UserExercises() {
   const dispatch = useDispatch()
@@ -279,7 +277,9 @@ export default function UserExercises() {
                                   <TouchableOpacity
                                     style={{ alignItems: 'center' }}
                                     onPress={() => {
-                                      console.log(selectedList.some((a) => a._id === item._id))
+                                      console.log(
+                                        selectedList.some((a: { _id: string }) => a._id === item._id)
+                                      )
                                       console.log(set.sets.length)
                                     }}
                                     onLongPress={() => deleteSet(item._id)}>

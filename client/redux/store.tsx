@@ -10,7 +10,7 @@ import { authenticatedSlice } from './states/authenticatedSlice'
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['workout', 'auth'],
+  whitelist: ['workout', 'auth', 'user'],
 }
 const reducer = combineReducers<any>({
   user: userSlice.reducer,

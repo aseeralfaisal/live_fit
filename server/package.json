@@ -5,10 +5,9 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "nodemon app.ts"
+    "start": "ts-node app.ts"
   },
   "dependencies": {
-    "@types/sequelize": "^4.28.14",
     "apollo-server-express": "^3.9.0",
     "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
@@ -16,9 +15,6 @@
     "express": "^4.18.1",
     "graphql": "^16.5.0",
     "mongoose": "^6.5.1",
-    "pg": "^8.7.3",
-    "pg-hstore": "^2.3.4",
-    "sequelize": "^6.21.3",
     "ts-node": "^10.9.1"
   },
   "devDependencies": {

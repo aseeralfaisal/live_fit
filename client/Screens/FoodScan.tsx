@@ -77,6 +77,7 @@ export default function FoodScan() {
 
       interface Nutrients {
         item: Object
+        name: string
         calories: string
         carbohydrates_total_g: string
         cholesterol_mg: string
