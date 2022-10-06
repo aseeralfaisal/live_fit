@@ -11,6 +11,7 @@ import { EXERCISE_UPDATE_QUERY } from '../Queries/EXERCISE_UPDATE_QUERY'
 import { GET_EXERCISE_QUERY } from '../Queries/GET_EXERCISE_QUERY'
 import { EXERCISE_DELETE_QUERY } from '../Queries/EXERCISE_DELETE_QUERY'
 import { AnimatedCircularProgress } from 'react-native-circular-progress'
+import BackgroundJob from 'react-native-background-actions'
 import { BASE_URL } from '@env'
 
 export default function UserExercises() {
@@ -24,10 +25,36 @@ export default function UserExercises() {
   const [reps, setReps] = React.useState<string>('')
   const [weight, setWeight] = React.useState<string>('')
   const [isSetAdded, setIsSetAdded] = React.useState(false)
+  const [startExercise, setStartExercise] = React.useState(false)
   // const [selectedList, setSelectedList] = React.useState<object[]>([])
   // const [exerciseId, setExerciseId] = React.useState('')
   const [setItemId, setSetItemId] = React.useState('')
   const repsInputRef = React.useRef<any>(null)
+  const [timer, setTimer] = React.useState(0)
+
+  const workoutTimer = async (taskData: any) => {
+    const { delay } = taskData
+      for (let i = 0; BackgroundJob.isRunning(); i++) {
+        setTimer(i)
+        await BackgroundJob.updateNotification({ taskDesc: 'Timer -> ' + i })
+        await new Promise<void>((resolve) => setTimeout(() => resolve(), delay))
+      }
+  }
+
+  const options = {
+    taskName: 'workoutTimer',
+    taskTitle: 'LiveFit Timer',
+    taskDesc: 'Workout time',
+    taskIcon: {
+      name: 'ic_launcher',
+      type: 'mipmap',
+    },
+    color: '#ff00ff',
+    parameters: {
+      delay: 1000,
+    },
+    actions: '["Exit"]',
+  }
 
   React.useEffect(() => {
     const getUserExercises = async () => {
@@ -141,22 +168,23 @@ export default function UserExercises() {
       </View>
     )
   }
-  const [startExercise, setStartExercise] = React.useState(false)
-  const [timer, setTimer] = React.useState(0)
-  React.useEffect(() => {
-    const incrementTimer = () => {
-      setTimeout(() => {
-        startExercise && setTimer(timer + 1)
-      }, 1000)
-    }
-    incrementTimer()
-    // return () => clearTimeout(incrementTimer)
-  })
-
-  const startWorkout = () => {
+  let playing = BackgroundJob.isRunning()
+  const startWorkout = async () => {
     setStartExercise(!startExercise)
+    playing = !playing
+    if (playing) {
+      try {
+        console.log('Trying to start background service')
+        await BackgroundJob.start(workoutTimer, options)
+        console.log('Successful start!')
+      } catch (e) {
+        console.log('Error', e)
+      }
+    } else {
+      console.log('Stop background service')
+      await BackgroundJob.stop()
+    }
   }
-
   return (
     <>
       <View

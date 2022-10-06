@@ -6,43 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { LineChart } from 'react-native-chart-kit'
 import { Dimensions } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
-import BackgroundJob from 'react-native-background-actions'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
-import { BASE_URL } from '@env'
-
-const sleep = (time: any) => new Promise<void>((resolve) => setTimeout(() => resolve(), time))
-
-BackgroundJob.on('expiration', () => {
-  console.log('iOS: I am being closed!')
-})
-
-const taskRandom = async (taskData: any) => {
-  await new Promise(async (resolve) => {
-    const { delay } = taskData
-    console.log(delay, taskData)
-    console.log(BackgroundJob.isRunning(), delay)
-    for (let i = 0; BackgroundJob.isRunning(); i++) {
-      console.log('Runned -> ', i)
-      await BackgroundJob.updateNotification({ taskDesc: 'Runned -> ' + i })
-      await sleep(delay)
-    }
-  })
-}
-
-const options = {
-  taskName: 'Demo',
-  taskTitle: 'LiveFit Running',
-  taskDesc: 'Demo',
-  taskIcon: {
-    name: 'ic_launcher',
-    type: 'mipmap',
-  },
-  color: '#ff00ff',
-  parameters: {
-    delay: 1000,
-  },
-  actions: '["Exit"]',
-}
 
 const screenWidth = Dimensions.get('window').width - 50
 
@@ -55,24 +19,9 @@ type navigationList = {
 }
 
 export default function Home() {
-  const usingHermes = typeof HermesInternal === 'object' && HermesInternal !== null
-  let playing = BackgroundJob.isRunning()
-  const toggleBackground = async () => {
-    playing = !playing
-    if (playing) {
-      try {
-        console.log('Trying to start background service')
-        await BackgroundJob.start(taskRandom, options)
-        console.log('Successful start!')
-      } catch (e) {
-        console.log('Error', e)
-      }
-    } else {
-      console.log('Stop background service')
-      await BackgroundJob.stop()
-    }
-  }
   const navigation = useNavigation<NavigationProp<navigationList>>()
+  const usingHermes = typeof HermesInternal === 'object' && HermesInternal !== null
+
   const data = {
     labels: ['SAT', 'SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI'],
     datasets: [
@@ -102,16 +51,11 @@ export default function Home() {
         backgroundColor: '#fff',
       }}>
       <Header />
-      {/* {!usingHermes ? null : (
+      {!usingHermes ? null : (
             <View style={styles.engine}>
               <Text style={styles.footer}>Engine: Hermes</Text>
             </View>
           )}
-          <View style={styles.body}>
-            <TouchableOpacity
-              style={{ height: 100, width: 100, backgroundColor: 'red' }}
-              onPress={toggleBackground}></TouchableOpacity>
-          </View> */}
       <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate('BMI')}>
         <LinearGradient colors={['#92A3FD', '#9DCEFF']} style={styles.gradientBar}>
           <View
