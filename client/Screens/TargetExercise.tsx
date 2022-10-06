@@ -10,6 +10,7 @@ import {
   TextInput,
   Pressable,
   Alert,
+  ActivityIndicator,
 } from 'react-native'
 import Header from '../Components/Header'
 import axios from 'axios'
@@ -34,6 +35,7 @@ export default function TargetExercise() {
   const userVal = useAppSelector((state) => state.user.userVal)
   const specificExercises = useAppSelector((state) => state.workout.specificExercises)
   const [createWorkoutPopup, setCreateWorkoutPopup] = React.useState(false)
+  const [listLoader, setListLoader] = React.useState(true)
 
   const navigation = useNavigation()
   React.useEffect(() => {
@@ -50,7 +52,10 @@ export default function TargetExercise() {
     }
     if (isMounted) {
       getExerciseList()
-        .then((response) => dispatch(setSpecificExercises(response)))
+        .then((response) => {
+          dispatch(setSpecificExercises(response))
+          setListLoader(false)
+        })
         .catch((err) => console.log(err))
     }
     return () => {
@@ -137,41 +142,42 @@ export default function TargetExercise() {
             flex: 1,
             // marginBottom: 50,
           }}>
-          <FlatList
-            data={specificExercises}
-            removeClippedSubviews={true}
-            maxToRenderPerBatch={10}
-            renderItem={({ item, index }: any) => {
-              return (
-                <>
-                  {item.name.toLowerCase().includes(searchVal.toLowerCase()) ? (
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        backgroundColor: selected(item) ? '#92A3FD33' : '#00000000',
-                        marginTop: index !== 0 ? 2 : 0,
-                        borderTopLeftRadius: index === 0 ? 12 : 0,
-                        borderTopRightRadius: index === 0 ? 12 : 0,
-                      }}>
+          {!listLoader ? (
+            <FlatList
+              data={!listLoader && specificExercises}
+              removeClippedSubviews={true}
+              maxToRenderPerBatch={10}
+              renderItem={({ item, index }: any) => {
+                return (
+                  <>
+                    {item.name.toLowerCase().includes(searchVal.toLowerCase()) ? (
                       <View
                         style={{
-                          marginHorizontal: window.width - window.width / 1.05,
-                          padding: 8,
-                          borderRadius: 8,
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          backgroundColor: selected(item) ? '#92A3FD33' : '#00000000',
+                          marginTop: index !== 0 ? 2 : 0,
+                          borderTopLeftRadius: index === 0 ? 12 : 0,
+                          borderTopRightRadius: index === 0 ? 12 : 0,
                         }}>
-                        <TouchableOpacity
-                          onLongPress={() => {
-                            setExerciseItem(item)
-                            setSpecificWorkout(!specificWorkout)
-                          }}
-                          onPressIn={() => selectExercises(item)}
+                        <View
                           style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
+                            marginHorizontal: window.width - window.width / 1.05,
+                            padding: 8,
+                            borderRadius: 8,
                           }}>
-                          <View>
-                            {/* {selected(item) && (
+                          <TouchableOpacity
+                            onLongPress={() => {
+                              setExerciseItem(item)
+                              setSpecificWorkout(!specificWorkout)
+                            }}
+                            onPressIn={() => selectExercises(item)}
+                            style={{
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                            }}>
+                            <View>
+                              {/* {selected(item) && (
                               <View
                                 style={{
                                   backgroundColor: '#92A3FD',
@@ -183,59 +189,65 @@ export default function TargetExercise() {
                                   borderRadius: 20,
                                 }}></View>
                             )} */}
-                            <View
-                              style={{
-                                flexDirection: 'row',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                marginVertical: 3,
-                              }}>
                               <View
                                 style={{
-                                  width: 65,
-                                  height: 65,
-                                  borderRadius: 100,
-                                  overflow: 'hidden',
-                                  borderWidth: 1,
-                                  borderColor: selected(item) ? '#92A3FD' : '#fff',
+                                  flexDirection: 'row',
+                                  justifyContent: 'space-between',
+                                  alignItems: 'center',
+                                  marginVertical: 3,
                                 }}>
-                                <Image
-                                  source={{ uri: item.gifUrl }}
+                                <View
                                   style={{
                                     width: 65,
                                     height: 65,
                                     borderRadius: 100,
-                                  }}
-                                />
+                                    overflow: 'hidden',
+                                    borderWidth: 1,
+                                    borderColor: selected(item) ? '#92A3FD' : '#fff',
+                                  }}>
+                                  <Image
+                                    source={{ uri: item.gifUrl }}
+                                    style={{
+                                      width: 65,
+                                      height: 65,
+                                      borderRadius: 100,
+                                    }}
+                                  />
+                                </View>
+                                <Text style={[styles.titleTxt, { marginLeft: 15, color: '#555' }]}>
+                                  {item.name.split(' ')[0]} {item.name.split(' ')[1]}{' '}
+                                  {item.name.split(' ')[2]}
+                                </Text>
                               </View>
-                              <Text style={[styles.titleTxt, { marginLeft: 15, color: '#555' }]}>
-                                {item.name.split(' ')[0]} {item.name.split(' ')[1]} {item.name.split(' ')[2]}
-                              </Text>
                             </View>
-                          </View>
+                          </TouchableOpacity>
+                        </View>
+                        <TouchableOpacity
+                          activeOpacity={0.6}
+                          onPress={() => {
+                            setExerciseItem(item)
+                            setSpecificWorkout(!specificWorkout)
+                          }}>
+                          <Image
+                            source={require('../assets/icons/workout_btn.png')}
+                            style={{ resizeMode: 'contain', width: 30, marginRight: 18 }}
+                          />
                         </TouchableOpacity>
                       </View>
-                      <TouchableOpacity
-                        activeOpacity={0.6}
-                        onPress={() => {
-                          setExerciseItem(item)
-                          setSpecificWorkout(!specificWorkout)
-                        }}>
-                        <Image
-                          source={require('../assets/icons/workout_btn.png')}
-                          style={{ resizeMode: 'contain', width: 30, marginRight: 18 }}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  ) : (
-                    <></>
-                  )}
-                </>
-              )
-            }}
-            numColumns={1}
-            keyExtractor={(_, idx) => idx.toString()}
-          />
+                    ) : (
+                      <></>
+                    )}
+                  </>
+                )
+              }}
+              numColumns={1}
+              keyExtractor={(_, idx) => idx.toString()}
+            />
+          ) : (
+            <View style={{ flex: 1, marginTop: '50%' }}>
+              <ActivityIndicator color={'#92A3FD'} size={'large'} />
+            </View>
+          )}
         </View>
       </View>
       {/* <TouchableOpacity style={{ position: 'relative' }}>
@@ -265,7 +277,7 @@ export default function TargetExercise() {
         <TouchableOpacity
           style={styles.saveWorkoutBtn}
           // onPress={() => createWorkoutPopup()}
-          >
+        >
           <Text style={styles.saveWorkoutBtnText}>Add exercises</Text>
         </TouchableOpacity>
       </View>
