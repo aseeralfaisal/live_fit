@@ -21,6 +21,7 @@ import { CREATE_WORKOUT_QUERY } from '../Queries/CREATE_WORKOUT_QUERY'
 import { GET_TARGET_EXERCISE_QUERY } from '../Queries/GET_TARGET_EXERCISE_QUERY'
 import CreateWorkoutModal from '../Components/popups/CreateWorkoutModal'
 import { useNavigation } from '@react-navigation/native'
+import { BASE_URL } from '@env'
 
 export default function TargetExercise() {
   const dispatch = useDispatch()
@@ -35,8 +36,6 @@ export default function TargetExercise() {
   const [createWorkoutPopup, setCreateWorkoutPopup] = React.useState(false)
 
   const navigation = useNavigation()
-
-  const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
   React.useEffect(() => {
     let isMounted = true
     const getExerciseList = async () => {

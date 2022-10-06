@@ -9,6 +9,7 @@ import axios from 'axios'
 import { StatusBar } from 'expo-status-bar'
 import { setIsAuthenticated } from '../redux/states/authenticatedSlice'
 import { useDispatch } from 'react-redux'
+import { BASE_URL } from '@env'
 
 export const Login = () => {
   const dispatch = useDispatch()
@@ -22,7 +23,6 @@ export const Login = () => {
   const onPassVal = (pass: string) => {
     dispatch(changePassVal(pass))
   }
-  const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
   const loginAction = async () => {
     try {
       setLoader(true)

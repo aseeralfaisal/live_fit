@@ -9,6 +9,7 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 import { useAppSelector } from '../redux/hooks'
 import { useDispatch } from 'react-redux'
 import { setNutritionResult } from '../redux/states/nutritionSlice'
+import { BASE_URL } from '@env'
 
 export default function Calories() {
   const navigation = useNavigation()
@@ -18,8 +19,6 @@ export default function Calories() {
   const nutritionResult = useAppSelector((state) => state.nutrition.nutritionResult)
   const [inputBorderColor, setInputBorderColor] = React.useState('#ccc')
   const [servingSize, setServingSize] = React.useState('100g')
-
-  const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
 
   const searchMeals = async () => {
     try {

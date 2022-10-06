@@ -8,13 +8,13 @@ import { useAppSelector } from '../redux/hooks'
 import { useDispatch } from 'react-redux'
 import { setWorkoutName, setWorkouts, setExerciseTarget } from '../redux/states/workoutSlice'
 import { Btn } from '../Components/Button'
+import { BASE_URL } from '@env'
 
 export default function Workouts() {
   const navigation = useNavigation<any>()
   const dispatch = useDispatch()
   const userVal = useAppSelector((state) => state.user.userVal)
   const workouts = useAppSelector((state) => state.workout.workouts)
-  const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
 
   const targetBodyPart = [
     { name: 'chest', img: require(`../assets/imgs/chest.png`) },

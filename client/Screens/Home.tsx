@@ -6,44 +6,43 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { LineChart } from 'react-native-chart-kit'
 import { Dimensions } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
-import * as TaskManager from 'expo-task-manager'
-import { useEffect } from 'react'
 import BackgroundJob from 'react-native-background-actions'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
+import { BASE_URL } from '@env'
 
-const sleep = (time: any) => new Promise<void>((resolve) => setTimeout(() => resolve(), time));
+const sleep = (time: any) => new Promise<void>((resolve) => setTimeout(() => resolve(), time))
 
 BackgroundJob.on('expiration', () => {
-  console.log('iOS: I am being closed!');
-});
+  console.log('iOS: I am being closed!')
+})
 
 const taskRandom = async (taskData: any) => {
   await new Promise(async (resolve) => {
-    const { delay } = taskData;
+    const { delay } = taskData
     console.log(delay, taskData)
     console.log(BackgroundJob.isRunning(), delay)
     for (let i = 0; BackgroundJob.isRunning(); i++) {
-      console.log('Runned -> ', i);
-      await BackgroundJob.updateNotification({ taskDesc: 'Runned -> ' + i });
-      await sleep(delay);
+      console.log('Runned -> ', i)
+      await BackgroundJob.updateNotification({ taskDesc: 'Runned -> ' + i })
+      await sleep(delay)
     }
-  });
-};
+  })
+}
 
 const options = {
   taskName: 'Demo',
   taskTitle: 'LiveFit Running',
   taskDesc: 'Demo',
   taskIcon: {
-      name: 'ic_launcher',
-      type: 'mipmap',
+    name: 'ic_launcher',
+    type: 'mipmap',
   },
   color: '#ff00ff',
   parameters: {
-      delay: 1000,
+    delay: 1000,
   },
-  actions: '["Exit"]'
-};
+  actions: '["Exit"]',
+}
 
 const screenWidth = Dimensions.get('window').width - 50
 
@@ -56,24 +55,23 @@ type navigationList = {
 }
 
 export default function Home() {
-  const usingHermes = typeof HermesInternal === 'object' && HermesInternal !== null;
-
-  let playing = BackgroundJob.isRunning();
+  const usingHermes = typeof HermesInternal === 'object' && HermesInternal !== null
+  let playing = BackgroundJob.isRunning()
   const toggleBackground = async () => {
-    playing = !playing;
+    playing = !playing
     if (playing) {
       try {
-        console.log('Trying to start background service');
-        await BackgroundJob.start(taskRandom, options);
-        console.log('Successful start!');
+        console.log('Trying to start background service')
+        await BackgroundJob.start(taskRandom, options)
+        console.log('Successful start!')
       } catch (e) {
-        console.log('Error', e);
+        console.log('Error', e)
       }
     } else {
-      console.log('Stop background service');
-      await BackgroundJob.stop();
+      console.log('Stop background service')
+      await BackgroundJob.stop()
     }
-  };
+  }
   const navigation = useNavigation<NavigationProp<navigationList>>()
   const data = {
     labels: ['SAT', 'SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI'],

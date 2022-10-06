@@ -11,6 +11,7 @@ import { EXERCISE_UPDATE_QUERY } from '../Queries/EXERCISE_UPDATE_QUERY'
 import { GET_EXERCISE_QUERY } from '../Queries/GET_EXERCISE_QUERY'
 import { EXERCISE_DELETE_QUERY } from '../Queries/EXERCISE_DELETE_QUERY'
 import { AnimatedCircularProgress } from 'react-native-circular-progress'
+import { BASE_URL } from '@env'
 
 export default function UserExercises() {
   const dispatch = useDispatch()
@@ -28,7 +29,6 @@ export default function UserExercises() {
   const [setItemId, setSetItemId] = React.useState('')
   const repsInputRef = React.useRef<any>(null)
 
-  const BASE_URL = 'https://livefitv2.herokuapp.com/graphql'
   React.useEffect(() => {
     const getUserExercises = async () => {
       const res = await axios.post(BASE_URL, {
