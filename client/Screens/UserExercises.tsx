@@ -1,5 +1,16 @@
 import * as React from 'react'
-import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, Pressable, Alert, ActivityIndicator } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+  Pressable,
+  Alert,
+  ActivityIndicator,
+  Linking,
+} from 'react-native'
 import Header from '../Components/Header'
 import { useAppSelector } from '../redux/hooks'
 import { useDispatch } from 'react-redux'
@@ -35,7 +46,7 @@ export default function UserExercises() {
     const { delay } = taskData
     for (let i = 0; BackgroundJob.isRunning(); i++) {
       setTimer(i)
-      await BackgroundJob.updateNotification({ taskDesc: 'Timer -> ' + i })
+      await BackgroundJob.updateNotification({ taskDesc: '' + i })
       await new Promise<void>((resolve) => setTimeout(() => resolve(), delay))
     }
   }
@@ -155,7 +166,8 @@ export default function UserExercises() {
       name: 'ic_launcher',
       type: 'mipmap',
     },
-    color: '#ff00ff',
+    color: '#fff',
+    linkingURI: 'livefit',
     parameters: {
       delay: 1000,
     },
@@ -208,8 +220,6 @@ export default function UserExercises() {
                         padding: 8,
                         borderRadius: 8,
                       }}>
-                      {/* {console.log("TOTAL SET", UserExercises.reduce((prev, i) => prev + i.sets.length, 0))} */}
-                      {/* {console.log("TOTAL SELECTED", selectedList.find(a => a._id))} */}
                       <TouchableOpacity
                         onPress={() => {
                           if (exerciseId === set.id) return dispatch(setExerciseId(''))
