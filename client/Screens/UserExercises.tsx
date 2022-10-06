@@ -92,14 +92,11 @@ export default function UserExercises() {
       },
     })
     if (res.status !== 200) throw new Error('Something went wrong')
-    // console.log(res.data.data)
     setIsSetAdded(!isSetAdded)
-    // repsInputRef.current.focus()
   }
 
   const updateSet = async (reps: string, weight: string) => {
     try {
-      // console.log('REPS', reps, 'WEIGHT', weight)
       const res = await axios.post(BASE_URL, {
         query: EXERCISE_UPDATE_QUERY,
         variables: {
@@ -111,7 +108,6 @@ export default function UserExercises() {
         },
       })
       if (res.status !== 200) return Alert.alert('❌ Uhh!', 'ℹ️ Something Went Wrong')
-      // console.log(res.data.data)
       setIsSetAdded(!isSetAdded)
     } catch (err) {
       console.log(err)
@@ -128,7 +124,6 @@ export default function UserExercises() {
         },
       })
       if (res.status !== 200) return
-      // console.log(res.data.data)
       setIsSetAdded(!isSetAdded)
     } catch (err) {
       console.log(err)
@@ -174,7 +169,6 @@ export default function UserExercises() {
     playing = !playing
     if (playing) {
       try {
-        console.log('Trying to start background service')
         await BackgroundJob.start(workoutTimer, options)
         console.log('Successful start!')
       } catch (e) {
