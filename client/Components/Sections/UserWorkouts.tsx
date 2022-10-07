@@ -74,8 +74,7 @@ export const UserWorkouts = () => {
                   navigation.navigate('UserExercises')
                 }}>
                 <LinearGradient
-                  colors={['#C58BF222', '#EEA4CE28']}
-                  
+                  colors={['#C58BF200', '#EEA4CE00']}
                   style={{
                     marginHorizontal: 25,
                     marginVertical: 8,
@@ -83,6 +82,8 @@ export const UserWorkouts = () => {
                     flexDirection: 'row',
                     alignItems: 'center',
                     height: 60,
+                    borderColor: "#C58BF255",
+                    borderWidth: 1.5
                   }}>
                   <View
                     style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -101,7 +102,7 @@ export const UserWorkouts = () => {
                     />
                     {/* </View> */}
                     <Text
-                      style={[styles.tileTitle, { textAlign: 'left', color: '#555', marginHorizontal: 10 }]}>
+                      style={[styles.tileTitle, { textAlign: 'left', color: '#777', marginHorizontal: 10 }]}>
                       {workoutName.replace('_', ' ').toString()}
                     </Text>
                     <Text style={styles.viewMore}>View More</Text>
@@ -143,7 +144,7 @@ const styles = StyleSheet.create({
   },
   tileTitle: {
     fontFamily: 'Poppins_Bold',
-    color: '#555',
+    color: '#777',
     textTransform: 'capitalize',
     fontSize: 14,
     width: 155,
@@ -155,11 +156,11 @@ const styles = StyleSheet.create({
   },
   viewMore: {
     fontFamily: 'Poppins_Bold',
-    color: '#999',
-    backgroundColor: '#fff',
-    padding: 6,
+    color: '#777',
+    backgroundColor: '#eee',
+    padding: 7,
     borderRadius: 10,
-    fontSize: 12,
+    fontSize: 11,
     marginLeft: 20,
   },
   input: {

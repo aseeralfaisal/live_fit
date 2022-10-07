@@ -314,12 +314,12 @@ export default function UserExercises() {
                                     }}>
                                     <TouchableOpacity
                                       style={{ alignItems: 'center' }}
-                                      onPress={() => {
-                                        console.log(
-                                          selectedList.some((a: { _id: string }) => a._id === item._id)
-                                        )
-                                        console.log(set.sets.length)
-                                      }}
+                                      // onPress={() => {
+                                      //   console.log(
+                                      //     selectedList.some((a: { _id: string }) => a._id === item._id)
+                                      //   )
+                                      //   console.log(set.sets.length)
+                                      // }}
                                       onLongPress={() => deleteSet(item._id)}>
                                       <TextInput
                                         textAlign='center'
