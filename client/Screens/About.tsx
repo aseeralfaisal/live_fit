@@ -18,6 +18,7 @@ import MapView from 'react-native-maps'
 import { Btn } from '../Components/Button'
 import { useDispatch } from 'react-redux'
 import { setIsAuthenticated } from '../redux/states/authenticatedSlice'
+import MainButton from '../Components/MainButton'
 // import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 // import * as icons from '@fortawesome/free-solid-svg-icons'
 
@@ -33,12 +34,12 @@ export default function About() {
         backgroundColor: '#ffffff',
       }}>
       <Header />
-      <TouchableOpacity style={{ flexDirection: 'row', justifyContent: 'center' }} onPress={() => {
-        dispatch(setIsAuthenticated(false))
-      }}>
-        <Btn title='Log off' />
-      </TouchableOpacity>
+      <MainButton
+          title='Log off'
+          onPress={() => {
+            dispatch(setIsAuthenticated(false))
+          }}
+        />
     </View>
   )
 }
-const styles = StyleSheet.create({})
