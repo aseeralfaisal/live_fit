@@ -98,8 +98,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  infoValue: { color: '#92A3FD', fontFamily: 'Poppins_Bold', fontSize: 16 },
-  infoTitle: { fontFamily: 'Poppins', fontSize: 14, color: '#777' },
+  infoValue: { color: '#92A3FD', fontFamily: 'Poppins_Bold', fontSize: 18 },
+  infoTitle: { fontFamily: 'Poppins', fontSize: 16, color: '#777' },
   bodyInfoParent: {
     flexDirection: 'row',
     justifyContent: 'space-evenly',

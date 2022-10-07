@@ -46,7 +46,7 @@ export const UserWorkouts = () => {
       getWorkoutList()
       isMounted = false
     }
-  }, [workouts])
+  })
 
   return (
     <>
