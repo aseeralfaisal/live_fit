@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React from 'react'
+import * as React from 'react'
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useAppSelector } from '../../redux/hooks'
 import { BASE_URL } from '@env'
@@ -22,25 +22,25 @@ export const UserWorkouts = () => {
           workoutName
         }
       }`
+
+  const getWorkoutList = React.useCallback(async () => {
+    const fetchData = await axios.post(BASE_URL, {
+      query: GET_USER_WORKOUTS,
+      variables: {
+        userName: userVal,
+      },
+    })
+    const { getUserWorkouts } = fetchData.data.data
+    return getUserWorkouts
+  }, [])
   React.useEffect(() => {
     let isMounted = true
-    const getWorkoutList = async () => {
-      const fetchData = await axios.post(BASE_URL, {
-        query: GET_USER_WORKOUTS,
-        variables: {
-          userName: userVal,
-        },
-      })
-      const { getUserWorkouts } = fetchData.data.data
-      return getUserWorkouts
-    }
-    getWorkoutList()
-      .then((data) => {
-        if (isMounted) {
-          setWorkoutListLoader(false)
-          dispatch(setWorkouts(data))
-        }
-      })
+    getWorkoutList().then((data) => {
+      if (isMounted) {
+        setWorkoutListLoader(false)
+        dispatch(setWorkouts(data))
+      }
+    })
     return () => {
       isMounted = false
     }
@@ -64,7 +64,7 @@ export const UserWorkouts = () => {
           marginTop: 14,
         }}>
         <FlatList
-          data={!workoutListLoader && workouts}
+          data={workouts}
           renderItem={({ item }) => {
             const { workoutName }: any = item
             return (
@@ -74,7 +74,8 @@ export const UserWorkouts = () => {
                   navigation.navigate('UserExercises')
                 }}>
                 <LinearGradient
-                  colors={['#eee', '#eeefff']}
+                  colors={['#C58BF222', '#EEA4CE28']}
+                  
                   style={{
                     marginHorizontal: 25,
                     marginVertical: 8,
