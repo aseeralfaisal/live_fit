@@ -56,7 +56,7 @@ export default function TabScreen() {
             ),
           }}
         />
-        <Tab.Screen
+        {/* <Tab.Screen
           name='MapBox'
           component={MapBox}
           options={{
@@ -78,9 +78,9 @@ export default function TabScreen() {
               />
             ),
           }}
-        />
+        /> */}
 
-        <Tab.Screen
+        {/* <Tab.Screen
           name='Calories'
           component={Home}
           options={{
@@ -101,8 +101,8 @@ export default function TabScreen() {
               </TouchableOpacity>
             ),
           }}
-        />
-        <Tab.Screen
+        /> */}
+        {/* <Tab.Screen
           name='FoodScan'
           component={FoodScan}
           options={{
@@ -124,7 +124,7 @@ export default function TabScreen() {
               />
             ),
           }}
-        />
+        /> */}
         <Tab.Screen
           name='About'
           component={About}

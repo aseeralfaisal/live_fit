@@ -52,6 +52,7 @@ export default function UserExercises() {
   }
 
   React.useEffect(() => {
+    let functionLoad = true
     const getUserExercises = async () => {
       const res = await axios.post(BASE_URL, {
         query: GET_EXERCISE_QUERY,
@@ -61,11 +62,16 @@ export default function UserExercises() {
         },
       })
       const { getUserWorkout } = res.data.data
-      getUserWorkout.forEach(({ exercises }: any) => dispatch(setUserExercises(exercises)))
+      getUserWorkout.map(({ exercises }: any) => dispatch(setUserExercises(exercises)))
     }
-    getUserExercises().then(() => setListLoader(false))
+    if (functionLoad) {
+      getUserExercises().then(() => {
+        setListLoader(false)
+      })
+    }
     return () => {
       getUserExercises()
+      functionLoad = false
     }
   }, [isSetAdded])
 
