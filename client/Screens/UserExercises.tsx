@@ -24,6 +24,7 @@ import { EXERCISE_DELETE_QUERY } from '../Queries/EXERCISE_DELETE_QUERY'
 import { AnimatedCircularProgress } from 'react-native-circular-progress'
 import BackgroundJob from 'react-native-background-actions'
 import { BASE_URL } from '@env'
+import MainButton from '../Components/MainButton'
 
 export default function UserExercises() {
   const dispatch = useDispatch()
@@ -410,9 +411,10 @@ export default function UserExercises() {
             </View>
           )}
         </View>
-        <TouchableOpacity style={styles.saveWorkoutBtn} onPress={() => startWorkout()}>
-          <Text style={styles.saveWorkoutBtnText}>{startExercise ? 'Finish Workout' : 'Start Workout'}</Text>
-        </TouchableOpacity>
+        <MainButton
+          title={startExercise ? 'Finish Workout' : 'Start Workout'}
+          onPress={startWorkout}
+        />
       </View>
     </>
   )
@@ -424,21 +426,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins_Bold',
     color: '#555',
     fontSize: 20,
-  },
-  saveWorkoutBtn: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    backgroundColor: '#92A3FD',
-    marginHorizontal: 28,
-    height: 50,
-    borderRadius: 20,
-    marginVertical: 8,
-  },
-  saveWorkoutBtnText: {
-    color: '#fff',
-    fontFamily: 'Poppins_Bold',
-    textAlignVertical: 'center',
-    fontSize: 14,
   },
   titleTxt: {
     fontFamily: 'Poppins_Bold',

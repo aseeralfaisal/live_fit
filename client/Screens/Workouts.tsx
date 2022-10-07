@@ -9,6 +9,7 @@ import { useDispatch } from 'react-redux'
 import { setWorkoutName, setWorkouts, setExerciseTarget } from '../redux/states/workoutSlice'
 import { Btn } from '../Components/Button'
 import { BASE_URL } from '@env'
+import MainButton from '../Components/MainButton'
 
 export default function Workouts() {
   const navigation = useNavigation<any>()
@@ -100,34 +101,18 @@ export default function Workouts() {
             keyExtractor={(item, idx) => idx.toString()}
           />
         </View>
-        <TouchableOpacity
-          style={styles.saveWorkoutBtn}
+        <MainButton
+          title='Create a workout'
           onPress={() => {
             navigation.navigate('ChooseExercises')
-          }}>
-          <Text style={styles.saveWorkoutBtnText}>Create a workout</Text>
-        </TouchableOpacity>
+          }}
+        />
       </View>
     </>
   )
 }
 
 const styles = StyleSheet.create({
-  saveWorkoutBtn: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    backgroundColor: '#92A3FD',
-    marginHorizontal: 30,
-    height: 50,
-    borderRadius: 20,
-    marginBottom: 20,
-  },
-  saveWorkoutBtnText: {
-    color: '#fff',
-    fontFamily: 'Poppins_Bold',
-    textAlignVertical: 'center',
-    fontSize: 14,
-  },
   txt: {
     marginHorizontal: 30,
     fontFamily: 'Poppins_Bold',
