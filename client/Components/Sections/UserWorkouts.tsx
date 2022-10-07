@@ -34,19 +34,17 @@ export const UserWorkouts = () => {
       const { getUserWorkouts } = fetchData.data.data
       return getUserWorkouts
     }
-    if (isMounted) {
-      getWorkoutList()
-        .then((response) => {
+    getWorkoutList()
+      .then((data) => {
+        if (isMounted) {
           setWorkoutListLoader(false)
-          dispatch(setWorkouts(response))
-        })
-        .catch((err) => console.log(err))
-    }
+          dispatch(setWorkouts(data))
+        }
+      })
     return () => {
-      getWorkoutList()
       isMounted = false
     }
-  })
+  }, [workouts])
 
   return (
     <>
@@ -134,8 +132,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'Poppins_Bold',
-    color: 'rgb(80,80,80)',
-    fontSize: 20,
+    color: '#777',
+    fontSize: 18,
   },
   titleAction: {
     fontFamily: 'Poppins_Bold',
