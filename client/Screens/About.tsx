@@ -35,7 +35,7 @@ export default function About() {
       }}>
       <Header />
       <MainButton
-          title='Log off'
+          title='Sign out'
           onPress={() => {
             dispatch(setIsAuthenticated(false))
           }}
