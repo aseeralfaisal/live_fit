@@ -7,7 +7,6 @@ import axios from 'axios'
 import { useAppSelector } from '../redux/hooks'
 import { useDispatch } from 'react-redux'
 import { setWorkoutName, setWorkouts, setExerciseTarget } from '../redux/states/workoutSlice'
-import { Btn } from '../Components/Button'
 import { BASE_URL } from '@env'
 import MainButton from '../Components/MainButton'
 
