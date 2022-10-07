@@ -1,14 +1,12 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, Platform } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, Platform, FlatList } from 'react-native'
 import Header from '../Components/Header'
 import { AnimatedCircularProgress } from 'react-native-circular-progress'
 import { useNavigation, NavigationProp, useRoute } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
-import { LineChart } from 'react-native-chart-kit'
-import { Dimensions } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
-
-const screenWidth = Dimensions.get('window').width - 50
+import React from 'react'
+import { UserWorkouts } from '../Components/Sections/UserWorkouts'
 
 type navigationList = {
   FoodScan: undefined
@@ -22,28 +20,6 @@ export default function Home() {
   const navigation = useNavigation<NavigationProp<navigationList>>()
   const usingHermes = typeof HermesInternal === 'object' && HermesInternal !== null
 
-  const data = {
-    labels: ['SAT', 'SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI'],
-    datasets: [
-      {
-        data: [1800, 1450, 1150, 1705, 1780, 1980],
-        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
-        strokeWidth: 4, // optional
-      },
-    ],
-    // legend: ['Over eaten'],
-  }
-  const chartConfig = {
-    backgroundGradientFrom: '#1E2923',
-    backgroundGradientFromOpacity: 0,
-    backgroundGradientTo: '#08130D',
-    backgroundGradientToOpacity: 0.0,
-    color: () => '#555',
-    strokeWidth: 2, // optional, default 3
-    barPercentage: 0.5,
-    useShadowColorFromDataset: false,
-  }
-
   return (
     <View
       style={{
@@ -52,10 +28,10 @@ export default function Home() {
       }}>
       <Header />
       {!usingHermes ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
+        <View style={styles.engine}>
+          <Text style={styles.footer}>Engine: Hermes</Text>
+        </View>
+      )}
       <TouchableOpacity activeOpacity={0.5} onPress={() => navigation.navigate('BMI')}>
         <LinearGradient colors={['#92A3FD', '#9DCEFF']} style={styles.gradientBar}>
           <View
@@ -122,8 +98,10 @@ export default function Home() {
       <TouchableOpacity
         activeOpacity={0.5}
         style={{ marginTop: 20 }}
-        onPress={() => navigation.navigate('Workouts')}>
-        <LinearGradient colors={['#C58BF255', '#EEA4CE33']} style={[styles.gradientBar, { height: 100 }]}>
+        onPress={() => navigation.navigate('ChooseExercises')}>
+        <LinearGradient
+          colors={['#C58BF255', '#EEA4CE33']}
+          style={[styles.gradientBar, { height: 100, marginBottom: 20 }]}>
           <Image
             source={require('../assets/icons/home_workout.png')}
             style={{ resizeMode: 'contain', width: 70, marginHorizontal: 10 }}
@@ -138,9 +116,7 @@ export default function Home() {
           />
         </LinearGradient>
       </TouchableOpacity>
-      <View style={{ marginLeft: 20, marginTop: 40 }}>
-        <LineChart data={data} width={screenWidth} height={250} chartConfig={chartConfig} />
-      </View>
+      <UserWorkouts />
       <StatusBar style='dark' />
     </View>
   )
@@ -154,6 +130,22 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     marginVertical: 5,
     fontFamily: 'Poppins',
+  },
+  txt: {
+    marginHorizontal: 30,
+    fontFamily: 'Poppins_Bold',
+    color: 'rgb(80,80,80)',
+    fontSize: 20,
+    marginTop: 30,
+  },
+  tileTitle: {
+    fontFamily: 'Poppins_Bold',
+    color: '#555',
+    textTransform: 'capitalize',
+    fontSize: 14,
+    width: 155,
+    borderRadius: 10,
+    textAlign: 'center',
   },
   gradientBar: {
     padding: 15,

@@ -13,6 +13,19 @@ import TabScreen from './TabScreen'
 
 export default function StackScreen() {
   const Stack = createStackNavigator<any>()
+
+  const config = {
+    animation: 'spring',
+    config: {
+      stiffness: 1000,
+      damping: 500,
+      mass: 1.5,
+      overshootClamping: true,
+      restDisplacementThreshold: 0.01,
+      restSpeedThreshold: 0.01,
+    },
+  }
+
   return (
     <NavigationContainer>
       <View style={{ flex: 1, backgroundColor: 'rgba(80,80,80,0.3)' }}>
@@ -23,7 +36,11 @@ export default function StackScreen() {
           <Stack.Screen name='UserExercises' children={() => <UserExercises />} />
           <Stack.Screen name='Cals' children={() => <Calories />} />
           <Stack.Screen name='Map' children={() => <Map />} />
-          <Stack.Screen name='Workouts' children={() => <Workouts />} />
+          <Stack.Screen
+            name='Workouts'
+            options={{ presentation: 'modal', transitionSpec: { open: config, close: config } }}
+            children={() => <Workouts />}
+          />
           <Stack.Screen name='BMI' children={() => <BMI />} />
           <Stack.Screen name='FoodScan' children={() => <FoodScan />} />
         </Stack.Navigator>

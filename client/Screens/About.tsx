@@ -6,12 +6,37 @@ import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
 import { setIsAuthenticated } from '../redux/states/authenticatedSlice'
 import MainButton from '../Components/MainButton'
+import { LineChart } from 'react-native-chart-kit'
+import { Dimensions } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'
 
 export default function About() {
   let colorScheme = useColorScheme()
   const navigation = useNavigation()
   const dispatch = useDispatch()
+
+  const screenWidth = Dimensions.get('window').width - 50
+  const data = {
+    labels: ['SAT', 'SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI'],
+    datasets: [
+      {
+        data: [1800, 1450, 1150, 1705, 1780, 1980],
+        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
+        strokeWidth: 4, // optional
+      },
+    ],
+    // legend: ['Over eaten'],
+  }
+  const chartConfig = {
+    backgroundGradientFrom: '#1E2923',
+    backgroundGradientFromOpacity: 0,
+    backgroundGradientTo: '#08130D',
+    backgroundGradientToOpacity: 0.0,
+    color: () => '#555',
+    strokeWidth: 2, // optional, default 3
+    barPercentage: 0.5,
+    useShadowColorFromDataset: false,
+  }
 
   interface propTypes {
     infoTitle: string
@@ -50,6 +75,9 @@ export default function About() {
         <BodyInfo infoTitle='Height' value='180' />
         <BodyInfo infoTitle='Weight' value='65' />
         <BodyInfo infoTitle='Age' value='22' />
+      </View>
+      <View style={{ marginLeft: 20, marginBottom: 20 }}>
+        <LineChart data={data} width={screenWidth} height={250} chartConfig={chartConfig} />
       </View>
       <MainButton
         title='Sign out'
