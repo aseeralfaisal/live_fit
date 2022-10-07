@@ -74,7 +74,7 @@ export const UserWorkouts = () => {
                   navigation.navigate('UserExercises')
                 }}>
                 <LinearGradient
-                  colors={['#C58BF233', '#92A3FD33']}
+                  colors={['#eeeeee', '#eeefff']}
                   style={{
                     marginHorizontal: 25,
                     marginVertical: 8,
