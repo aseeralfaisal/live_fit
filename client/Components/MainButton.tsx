@@ -5,11 +5,14 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 interface propTypes {
   title: string
   onPress: Function
+  horizontalMargin: number
 }
-const MainButton = ({ title, onPress }: propTypes) => {
+const MainButton = ({ title, onPress, horizontalMargin }: propTypes) => {
   const navigation = useNavigation()
   return (
-    <TouchableOpacity style={styles.Btn} onPress={() => onPress()}>
+    <TouchableOpacity
+      style={[styles.Btn, { marginHorizontal: horizontalMargin && horizontalMargin }]}
+      onPress={() => onPress()}>
       <Text style={styles.BtnText}>{title}</Text>
     </TouchableOpacity>
   )

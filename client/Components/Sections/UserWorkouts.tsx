@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
   viewMore: {
     fontFamily: 'Poppins_Bold',
     color: '#777',
-    backgroundColor: '#FFF',
+    backgroundColor: '#fff',
     padding: 6,
     borderRadius: 10,
     borderWidth: 1,
