@@ -179,8 +179,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10
   },
   nutrientTextTitle: {
-    color: '#555',
-    fontFamily: 'Poppins',
+    color: '#777',
+    fontFamily: 'Poppins_Bold',
     fontSize: 16,
     textTransform: 'capitalize',
   },
