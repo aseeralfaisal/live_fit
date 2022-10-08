@@ -80,7 +80,7 @@ export default function About() {
         <LineChart data={data} width={screenWidth} height={250} chartConfig={chartConfig} />
       </View>
       <MainButton
-        horizontalMargin={null}
+        horizontalMargin={"default"}
         title='Sign out'
         onPress={() => {
           dispatch(setIsAuthenticated(false))

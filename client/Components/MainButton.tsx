@@ -5,7 +5,7 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 interface propTypes {
   title: string
   onPress: Function | null
-  horizontalMargin: number | null
+  horizontalMargin: number | "default"
 }
 const MainButton = ({ title, onPress, horizontalMargin }: propTypes) => {
   const navigation = useNavigation()
