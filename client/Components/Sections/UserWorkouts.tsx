@@ -74,7 +74,7 @@ export const UserWorkouts = () => {
                   navigation.navigate('UserExercises')
                 }}>
                 <LinearGradient
-                  colors={['#C58BF200', '#EEA4CE00']}
+                  colors={['#C58BF211', '#EEA4CE11']}
                   style={{
                     marginHorizontal: 25,
                     marginVertical: 8,
@@ -82,8 +82,8 @@ export const UserWorkouts = () => {
                     flexDirection: 'row',
                     alignItems: 'center',
                     height: 60,
-                    borderColor: "#C58BF255",
-                    borderWidth: 1.5
+                    borderColor: "#C58BF277",
+                    borderWidth: 1
                   }}>
                   <View
                     style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -157,10 +157,12 @@ const styles = StyleSheet.create({
   viewMore: {
     fontFamily: 'Poppins_Bold',
     color: '#777',
-    backgroundColor: '#eee',
-    padding: 7,
+    backgroundColor: '#FFF',
+    padding: 6,
     borderRadius: 10,
-    fontSize: 11,
+    borderWidth: 1,
+    borderColor: "#eee",
+    fontSize: 12,
     marginLeft: 20,
   },
   input: {
