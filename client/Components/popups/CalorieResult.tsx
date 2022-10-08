@@ -6,35 +6,32 @@ import MainButton from '../MainButton'
 interface propTypes {
   foodSeachVal: string
   resultPopup: boolean
-  setResultPopup: boolean
+  setResultPopup: any
   resultLoader: boolean
 }
 export const CalorieResult = ({ foodSeachVal, resultPopup, setResultPopup, resultLoader }: propTypes) => {
   const nutritionResult = useAppSelector((state) => state.nutrition.nutritionResult)
 
   return (
-    <Modal transparent animationType='fade' visible={resultPopup}>
+    <Modal
+      transparent
+      animationType='fade'
+      visible={resultPopup}
+      onRequestClose={() => setResultPopup(false)}>
       <Pressable style={styles.backdrop} onPress={() => setResultPopup(false)}>
-        <View style={{ marginTop: '40%' }}>
+        <View style={{ marginTop: '10%' }}>
           {foodSeachVal !== '' && nutritionResult.length === 0 && (
             <View style={styles.searchResultParent}>
               <Text style={[styles.nutrientTextTitle, { textAlign: 'center' }]}>No items found!</Text>
             </View>
           )}
-          {/* {nutritionResult.length === 0 && (
-            <View style={styles.searchResultParent}>
-              <Text style={[styles.nutrientText, { textAlign: 'center' }]}>Search for a food item!</Text>
-            </View>
-          )} */}
           {!resultLoader ? (
             <FlatList
-              data={!resultLoader && nutritionResult}
+              data={nutritionResult}
               renderItem={({ item, index }: { item: any; index: number }) => {
                 return (
                   <View style={styles.searchResultParent}>
-                    <Text style={[styles.nutrientText, { fontSize: 20, textTransform: 'capitalize' }]}>
-                      {item.name}
-                    </Text>
+                    <Text style={styles.foodName}>{item.name}</Text>
                     <View style={styles.nutrientParent}>
                       <Text style={styles.nutrientTextTitle}>Total Calories: </Text>
                       <Text style={styles.nutrientText}>
@@ -97,29 +94,37 @@ export const CalorieResult = ({ foodSeachVal, resultPopup, setResultPopup, resul
 }
 
 const styles = StyleSheet.create({
+  foodName: {
+    fontSize: 30,
+    textTransform: 'capitalize',
+    fontFamily: 'Poppins',
+    letterSpacing: 5,
+    color: '#92A3FD',
+  },
   backdrop: {
-    backgroundColor: '#00000033',
+    backgroundColor: '#fff',
     height: '100%',
   },
   searchResultParent: {
     backgroundColor: '#fff',
     padding: 22,
-    marginHorizontal: 40,
+    marginHorizontal: 30,
     borderRadius: 12,
     // height: 320
   },
   nutrientParent: {
     flexDirection: 'row',
+    marginVertical: 5,
   },
   nutrientTextTitle: {
     color: '#555',
     fontFamily: 'Poppins',
-    fontSize: 14,
+    fontSize: 18,
     textTransform: 'capitalize',
   },
   nutrientText: {
     color: '#555',
     fontFamily: 'Poppins',
-    fontSize: 14,
+    fontSize: 18,
   },
 })
