@@ -32,7 +32,7 @@ export const CalorieResult = ({ foodSeachVal, resultPopup, setResultPopup, resul
     Icon: Function
   }
 
-  const TotalCalories = ({ calories }) => {
+  const TotalCalories = ({ calories }: any) => {
     return (
       <View
         style={{
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#eee',
     borderRadius: 10,
     paddingVertical: 5,
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
   nutrientTextTitle: {
     color: '#777',

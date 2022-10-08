@@ -4,15 +4,15 @@ import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 
 interface propTypes {
   title: string
-  onPress: Function
-  horizontalMargin: number
+  onPress: Function | null
+  horizontalMargin: number | null
 }
 const MainButton = ({ title, onPress, horizontalMargin }: propTypes) => {
   const navigation = useNavigation()
   return (
     <TouchableOpacity
-      style={[styles.Btn, { marginHorizontal: horizontalMargin && horizontalMargin }]}
-      onPress={() => onPress()}>
+      style={[styles.Btn, { marginHorizontal: horizontalMargin ? horizontalMargin : 30 }]}
+      onPress={() => onPress !== null ? onPress() : null}>
       <Text style={styles.BtnText}>{title}</Text>
     </TouchableOpacity>
   )
@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     backgroundColor: '#92A3FD',
-    marginHorizontal: 30,
     height: 50,
     borderRadius: 20,
     marginBottom: 20,
