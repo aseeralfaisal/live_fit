@@ -1,6 +1,9 @@
 const { gql } = require('apollo-server-express')
 
 const typeDefs = gql`
+  type Query {
+    test: String
+  }
   type User {
     user: String!
     pass: String!
@@ -18,9 +21,6 @@ const typeDefs = gql`
     name: String!
     target: String!
     sets: [setRepsWeight]
-  }
-  type Query {
-    getUser: [User!]
   }
   input WorkoutInput {
     equipment: String!
@@ -54,7 +54,26 @@ const typeDefs = gql`
     protein_g: Float
     carbohydrates_total_g: Float
   }
+  type SpecificMeal {
+    food: String
+    calories: Int
+    carbs: Int
+    protein: Int
+    fats: Int
+  }
+  input SpecificMealInput {
+    food: String
+    calories: Int
+    carbs: Int
+    protein: Int
+    fats: Int
+  }
+  type Meal {
+    date: String
+    meal: [SpecificMeal]
+  }
   type Mutation {
+    setMeals(meal: [SpecificMealInput], type: String): [SpecificMeal]
     addUser(name: String!, pass: String!): User!
     loginUser(name: String!, pass: String!): User!
     getExercise(target: String!): [Exercise!]

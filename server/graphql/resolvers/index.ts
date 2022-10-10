@@ -3,6 +3,7 @@ const { ApolloError } = require('apollo-server-express')
 const saltRounds = process.env.SALT_ROUNDS as unknown as number
 const exercises = require('../../Data/exercises.json')
 const User = require('../../models/user')
+const Meal = require('../../models/meal')
 const Workouts = require('../../models/workouts')
 const axios = require('axios')
 
@@ -13,7 +14,7 @@ interface argsType {
 
 const resolvers = {
   Query: {
-    getUser: () => User.find(),
+    test: () => 'hello',
   },
   Mutation: {
     async addUser(_: any, args: argsType) {
@@ -194,6 +195,41 @@ const resolvers = {
         return res.data.items
       } catch (err) {
         console.log(err)
+      }
+    },
+    async setMeals(_: any, { meal, type }) {
+      try {
+        const date = new Date().toISOString().split('T')[0]
+        const mealFound = await Meal.findOne({ date: date.toString() })
+        const mealType = { breakfast: 'breakfast', lunch: 'lunch', snack: 'snack', dinner: 'dinner' }
+        if (mealFound) {
+          meal.forEach(async (item) => {
+            switch (type) {
+              case mealType.breakfast:
+                mealFound.breakfast.push(item)
+              case mealType.lunch:
+                mealFound.lunch.push(item)
+              case mealType.snack:
+                mealFound.snack.push(item)
+              case mealType.dinner:
+                mealFound.dinner.push(item)
+              default:
+                return null
+            }
+          })
+          const res = await mealFound.save()
+          console.log(res.snack)
+          return res.snack
+        }
+        const Meals = new Meal({
+          breakfast: meal,
+          date,
+        })
+        const res = await Meals.save()
+        console.log(res.snack)
+        return res.snack
+      } catch (error) {
+        console.log(error)
       }
     },
   },

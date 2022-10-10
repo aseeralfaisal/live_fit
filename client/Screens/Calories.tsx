@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { FlatList, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import Header from '../Components/Header'
-import SearchRectangle from '../assets/icons/search_rectangle.svg'
 import axios from 'axios'
 import { GET_CALORIES } from '../Queries/GET_CALORIES'
 import { Picker } from '@react-native-picker/picker'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { useAppSelector } from '../redux/hooks'
 import { useDispatch } from 'react-redux'
 import { setNutritionResult } from '../redux/states/nutritionSlice'
 import { BASE_URL } from '@env'
 import { CalorieResult } from '../Components/popups/CalorieResult'
+import BreakfastSVG from '../assets/breakfast.svg'
+import LunchSVG from '../assets/lunch.svg'
 
 export default function Calories() {
   const navigation = useNavigation()
@@ -37,6 +37,8 @@ export default function Calories() {
       console.log(err)
     }
   }
+
+  const mealsData = [<BreakfastSVG />, <LunchSVG />]
 
   return (
     <>
@@ -80,6 +82,19 @@ export default function Calories() {
             </TouchableOpacity>
           </View>
         </View>
+        <FlatList
+          data={mealsData}
+          keyExtractor={(_, idx) => idx.toString()}
+          renderItem={({ item }) => {
+            return(
+            <TouchableOpacity>
+            {item}
+            </TouchableOpacity>
+            )
+          }}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        />
         <CalorieResult
           resultLoader={resultLoader}
           resultPopup={resultPopup}

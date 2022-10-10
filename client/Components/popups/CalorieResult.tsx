@@ -1,14 +1,5 @@
 import React from 'react'
-import {
-  ActivityIndicator,
-  FlatList,
-  Modal,
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native'
+import { ActivityIndicator, FlatList, Modal, Pressable, StyleSheet, Text, View } from 'react-native'
 import { useAppSelector } from '../../redux/hooks'
 import MainButton from '../MainButton'
 import CalsSVG from '../../assets/icons/cals.svg'
