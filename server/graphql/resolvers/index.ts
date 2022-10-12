@@ -11,10 +11,45 @@ interface argsType {
   name: string
   pass: string
 }
+interface mealsType {
+  carbs: number
+  protein: number
+  fats: number
+  calories: number
+}
 
+const getTotal = async (macro: string) => {
+  let sum = 0
+  const getSum = (meal: object[]) =>
+    meal.forEach(({ carbs, protein, fats, calories }: mealsType) => {
+      switch (macro) {
+        case 'carbs':
+          sum += carbs
+        case 'protein':
+          sum += protein
+        case 'fats':
+          sum += fats
+        default:
+          sum += calories
+      }
+    })
+  const date = new Date().toISOString().split('T')[0].toString()
+  const mealFound = await Meal.findOne({ date })
+  if (mealFound) {
+    const { breakfast, snack, lunch, dinner } = mealFound
+    getSum(breakfast)
+    getSum(snack)
+    getSum(lunch)
+    getSum(dinner)
+  }
+  return sum.toString()
+}
 const resolvers = {
   Query: {
-    test: () => 'hello',
+    carbsTotal: async () => await getTotal('carbs'),
+    proteinTotal: async () => await getTotal('protein'),
+    fatsTotal: async () => await getTotal('fats'),
+    caloriesTotal: async () => await getTotal('calories'),
   },
   Mutation: {
     async addUser(_: any, args: argsType) {
@@ -197,39 +232,62 @@ const resolvers = {
         console.log(err)
       }
     },
-    async setMeals(_: any, { meal, type }) {
+    async setMeals(_: any, { meal, type }: { meal: object[]; type: string }) {
       try {
+        const mealType = { breakfast: 'breakfast', lunch: 'lunch', snack: 'snack', dinner: 'dinner' }
         const date = new Date().toISOString().split('T')[0]
         const mealFound = await Meal.findOne({ date: date.toString() })
-        const mealType = { breakfast: 'breakfast', lunch: 'lunch', snack: 'snack', dinner: 'dinner' }
+        let mealFoundType: object[]
         if (mealFound) {
-          meal.forEach(async (item) => {
-            switch (type) {
-              case mealType.breakfast:
-                mealFound.breakfast.push(item)
-              case mealType.lunch:
-                mealFound.lunch.push(item)
-              case mealType.snack:
-                mealFound.snack.push(item)
-              case mealType.dinner:
-                mealFound.dinner.push(item)
-              default:
-                return null
+          meal.forEach((item: object[]) => {
+            if (type === mealType.breakfast) {
+              mealFoundType = mealFound.breakfast
+            } else if (type === mealType.lunch) {
+              mealFoundType = mealFound.lunch
+            } else if (type === mealType.snack) {
+              mealFoundType = mealFound.snack
+            } else if (type === mealType.dinner) {
+              mealFoundType = mealFound.dinner
             }
+            mealFoundType.push(item)
           })
-          const res = await mealFound.save()
-          console.log(res.snack)
-          return res.snack
+          await mealFound.save()
+          return mealFoundType
         }
+        const setMealHelper = (mealType: string) => (type === mealType ? meal : [])
         const Meals = new Meal({
-          breakfast: meal,
+          breakfast: setMealHelper(mealType.breakfast),
+          lunch: setMealHelper(mealType.lunch),
+          snack: setMealHelper(mealType.snack),
+          dinner: setMealHelper(mealType.dinner),
           date,
         })
-        const res = await Meals.save()
-        console.log(res.snack)
-        return res.snack
+        await Meals.save()
+        return mealFoundType
       } catch (error) {
         console.log(error)
+      }
+    },
+    async getCaloriesCount(_: any, { type }) {
+      const mealType = { breakfast: 'breakfast', lunch: 'lunch', snack: 'snack', dinner: 'dinner' }
+      const date = new Date().toISOString().split('T')[0]
+      const mealFound = await Meal.findOne({ date: date.toString() })
+      let mealObj: any
+      let sum = 0
+      if (mealFound) {
+        if (type === mealType.breakfast) {
+          mealObj = mealFound.breakfast
+        } else if (type === mealType.snack) {
+          mealObj = mealFound.snack
+        } else if (type === mealType.lunch) {
+          mealObj = mealFound.lunch
+        } else {
+          mealObj = mealFound.dinner
+        }
+        mealObj.forEach(({ calories }) => {
+          sum += calories
+        })
+        return sum.toString()
       }
     },
   },

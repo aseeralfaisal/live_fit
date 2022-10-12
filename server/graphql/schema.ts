@@ -3,6 +3,10 @@ const { gql } = require('apollo-server-express')
 const typeDefs = gql`
   type Query {
     test: String
+    carbsTotal: String
+    proteinTotal: String
+    fatsTotal: String
+    caloriesTotal: String
   }
   type User {
     user: String!
@@ -74,6 +78,7 @@ const typeDefs = gql`
   }
   type Mutation {
     setMeals(meal: [SpecificMealInput], type: String): [SpecificMeal]
+    getCaloriesCount(type: String): String
     addUser(name: String!, pass: String!): User!
     loginUser(name: String!, pass: String!): User!
     getExercise(target: String!): [Exercise!]
