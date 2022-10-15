@@ -7,7 +7,12 @@ const typeDefs = gql`
     proteinTotal: String
     fatsTotal: String
     caloriesTotal: String
+    sevenDaysIntake: [sevenDaysIntake]
   }
+  type sevenDaysIntake {
+    date: String
+    calories: Int
+  } 
   type User {
     user: String!
     pass: String!

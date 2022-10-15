@@ -4,7 +4,7 @@ const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core')
 const express = require('express')
 const http = require('http')
 const cors = require('cors')
-const resolvers = require('./graphql/resolvers/index')
+const resolvers = require('./graphql/index')
 const typeDefs = require('./graphql/schema')
 const mongoose = require('mongoose')
 

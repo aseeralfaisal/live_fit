@@ -1,11 +1,12 @@
 const bcrypt = require('bcrypt')
 const { ApolloError } = require('apollo-server-express')
 const saltRounds = process.env.SALT_ROUNDS as unknown as number
-const exercises = require('../../Data/exercises.json')
-const User = require('../../models/user')
-const Meal = require('../../models/meal')
-const Workouts = require('../../models/workouts')
+const exercises = require('../Data/exercises.json')
+const User = require('../models/user')
+const Meal = require('../models/meal')
+const Workouts = require('../models/workouts')
 const axios = require('axios')
+const { startOfDay, endOfDay, formatDistance, subDays } = require('date-fns')
 
 interface argsType {
   name: string
@@ -50,6 +51,11 @@ const resolvers = {
     proteinTotal: async () => await getTotal('protein'),
     fatsTotal: async () => await getTotal('fats'),
     caloriesTotal: async () => await getTotal('calories'),
+    sevenDaysIntake: async () => {
+      const filter = startOfDay(subDays(new Date(), 6))
+      const filtered = await Meal.find().where('createdAt').gt(filter)
+      return filtered
+    },
   },
   Mutation: {
     async addUser(_: any, args: argsType) {
@@ -235,8 +241,14 @@ const resolvers = {
     async setMeals(_: any, { meal, type }: { meal: object[]; type: string }) {
       try {
         const mealType = { breakfast: 'breakfast', lunch: 'lunch', snack: 'snack', dinner: 'dinner' }
-        const date = new Date().toISOString().split('T')[0]
-        const mealFound = await Meal.findOne({ date: date.toString() })
+        const todaysDateString = new Date().toISOString().split('T')[0]
+        const setCalories = async () => {
+          const calories = await getTotal('calories')
+          const filter = { date: todaysDateString }
+          const update = { calories: calories }
+          return await Meal.findOneAndUpdate(filter, update)
+        }
+        const mealFound = await Meal.findOne({ date: todaysDateString.toString() })
         let mealFoundType: object[]
         if (mealFound) {
           meal.forEach((item: object[]) => {
@@ -252,6 +264,7 @@ const resolvers = {
             mealFoundType.push(item)
           })
           await mealFound.save()
+          await setCalories()
           return mealFoundType
         }
         const setMealHelper = (mealType: string) => (type === mealType ? meal : [])
@@ -260,9 +273,10 @@ const resolvers = {
           lunch: setMealHelper(mealType.lunch),
           snack: setMealHelper(mealType.snack),
           dinner: setMealHelper(mealType.dinner),
-          date,
+          date: todaysDateString,
         })
         await Meals.save()
+        await setCalories()
         return mealFoundType
       } catch (error) {
         console.log(error)
