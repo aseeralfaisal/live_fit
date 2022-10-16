@@ -13,18 +13,20 @@ const Meal = require('../../models/meal');
 const { startOfDay, subDays } = require('date-fns');
 const getTotal = (macro) => __awaiter(void 0, void 0, void 0, function* () {
     let sum = 0;
-    const getSum = (meal) => meal.forEach(({ carbs, protein, fats, calories }) => {
-        switch (macro) {
-            case 'carbs':
-                sum += carbs;
-            case 'protein':
-                sum += protein;
-            case 'fats':
-                sum += fats;
-            default:
-                sum += calories;
-        }
-    });
+    const getSum = (meal) => {
+        meal.forEach(({ carbs, protein, fats, calories }) => {
+            switch (macro) {
+                case 'carbs':
+                    sum += carbs;
+                case 'protein':
+                    sum += protein;
+                case 'fats':
+                    sum += fats;
+                default:
+                    sum += calories;
+            }
+        });
+    };
     const date = new Date().toISOString().split('T')[0].toString();
     const mealFound = yield Meal.findOne({ date });
     if (mealFound) {
