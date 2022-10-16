@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const exercises = require('../../Data/exercises.json');
+const exercises = require('../../../Data/exercises.json');
 const User = require('../../models/user');
 const { ApolloError } = require('apollo-server-express');
 const Workouts = require('../../models/workouts');

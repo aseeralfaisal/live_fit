@@ -9,7 +9,7 @@ interface mealsType {
 }
 const getTotal = async (macro: string) => {
   let sum = 0
-  const getSum = (meal: object[]) =>
+  const getSum = (meal: object[]) => {
     meal.forEach(({ carbs, protein, fats, calories }: mealsType) => {
       switch (macro) {
         case 'carbs':
@@ -22,6 +22,7 @@ const getTotal = async (macro: string) => {
           sum += calories
       }
     })
+  }
   const date = new Date().toISOString().split('T')[0].toString()
   const mealFound = await Meal.findOne({ date })
   if (mealFound) {
