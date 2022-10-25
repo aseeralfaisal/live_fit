@@ -5,6 +5,7 @@ const workoutMutation = require('./workout/mutation')
 
 const resolvers = {
   Query: {
+    test: () => "hello",
     ...mealsQuery,
   },
   Mutation: {

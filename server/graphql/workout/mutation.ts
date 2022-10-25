@@ -1,4 +1,4 @@
-const exercises = require('../../Data/exercises.json')
+const exercises = require('../../../Data/exercises.json')
 const User = require('../../models/user')
 const { ApolloError } = require('apollo-server-express')
 const Workouts = require('../../models/workouts')

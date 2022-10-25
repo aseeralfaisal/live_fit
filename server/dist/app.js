@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require('dotenv').config();
 const { ApolloServer } = require('apollo-server-express');
 const { ApolloServerPluginDrainHttpServer } = require('apollo-server-core');
+const { InMemoryLRUCache } = require('@apollo/utils.keyvaluecache');
 const express = require('express');
 const http = require('http');
 const cors = require('cors');
@@ -28,7 +29,7 @@ function startApolloServer() {
             typeDefs,
             resolvers,
             csrfPrevention: true,
-            cache: 'bounded',
+            cache: "bounded",
             plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
         });
         const connect = yield mongoose.connect(mongoUri);

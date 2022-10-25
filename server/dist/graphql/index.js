@@ -5,7 +5,7 @@ const mealsMutaion = require('./meals/mutation');
 const userMutation = require('./user/mutation');
 const workoutMutation = require('./workout/mutation');
 const resolvers = {
-    Query: Object.assign({}, mealsQuery),
+    Query: Object.assign({ test: () => "hello" }, mealsQuery),
     Mutation: Object.assign(Object.assign(Object.assign({}, userMutation), workoutMutation), mealsMutaion),
 };
 module.exports = resolvers;

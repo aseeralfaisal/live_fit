@@ -2,7 +2,7 @@ const { gql } = require('apollo-server-express')
 
 const typeDefs = gql`
   type Query {
-    test: String
+    test: String!
     carbsTotal: String
     proteinTotal: String
     fatsTotal: String
