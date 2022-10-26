@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "start": "node ./dist/app.js"
+    "start": "nodemon ./dist/app.js"
   },
   "dependencies": {
     "@apollo/utils.keyvaluecache": "^1.0.1",

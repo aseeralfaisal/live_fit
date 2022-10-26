@@ -32,7 +32,7 @@ export default function Calories() {
   const [servingSize, setServingSize] = React.useState('100g')
   const [resultPopup, setResultPopup] = useState(false)
   const [resultLoader, setResultLoader] = useState(true)
-  const [graphDataValues, setGraphDataValues] = useState([])
+  const [graphDataValues, setGraphDataValues] = useState<number[]>([])
   const [graphDataLoaded, setGraphDataLoaded] = useState(false)
 
   const searchMeals = async () => {
@@ -70,15 +70,14 @@ export default function Calories() {
       .post(BASE_URL, {
         query: SEVEN_DAY_MEALS_QUERY,
       })
-      .then((res) =>
-        res.data.data.sevenDaysIntake.map(({ calories }: { calories: number }) => {
-          // const dataArr: any[] = []
-          // dataArr.push(calories)
-          setGraphDataValues(graphDataValues, ...calories)
-          console.log(graphDataValues)
-          setGraphDataLoaded(true)
+      .then((res) => {
+        let dataArr: number[] = []
+        res.data.data.sevenDaysIntake.map((meal: { calories: number }) => {
+          dataArr.push(meal.calories)
         })
-      )
+        setGraphDataValues(dataArr)
+        setGraphDataLoaded(true)
+      })
   }, [])
   const graphData = {
     labels: ['SAT', 'SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI'],
