@@ -412,6 +412,7 @@ export default function UserExercises() {
           )}
         </View>
         <MainButton
+          horizontalMargin='default'
           title={startExercise ? 'Finish Workout' : 'Start Workout'}
           onPress={startWorkout}
         />

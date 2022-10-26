@@ -22,6 +22,7 @@ export default function Workouts() {
         <UserWorkouts />
         <MainButton
           title='Create a workout'
+          horizontalMargin='default'
           onPress={() => {
             navigation.navigate('ChooseExercises')
           }}
