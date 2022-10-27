@@ -71,7 +71,6 @@ export default function Calories() {
         query: SEVEN_DAY_MEALS_QUERY,
       })
       .then((res) => {
-        console.log(res.data)
         let dataArr: number[] = []
         res.data.data.sevenDaysIntake.map((meal: { calories: number }) => {
           dataArr.push(meal.calories)
