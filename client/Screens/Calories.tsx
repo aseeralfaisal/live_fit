@@ -71,6 +71,7 @@ export default function Calories() {
         query: SEVEN_DAY_MEALS_QUERY,
       })
       .then((res) => {
+        console.log(res.data)
         let dataArr: number[] = []
         res.data.data.sevenDaysIntake.map((meal: { calories: number }) => {
           dataArr.push(meal.calories)
@@ -80,10 +81,9 @@ export default function Calories() {
       })
   }, [])
   const graphData = {
-    labels: ['SAT', 'SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI'],
+    // labels: ['SAT', 'SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI'],
     datasets: [
       {
-        // data: [1800, 1450, 1150, 1705, 1780, 1980],
         data: graphDataValues,
         color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
         strokeWidth: 2, // optional
@@ -129,7 +129,7 @@ export default function Calories() {
         </View>
         <View style={{ marginLeft: 20, marginBottom: 20 }}>
           {graphDataLoaded && (
-            <LineChart data={graphData} width={screenWidth} height={250} chartConfig={chartConfig} />
+            <LineChart bezier data={graphData} width={screenWidth} height={250} chartConfig={chartConfig} />
           )}
         </View>
         <FlatList
