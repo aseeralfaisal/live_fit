@@ -25,6 +25,7 @@ import DinnerSVG from '../assets/icons/dinner.svg'
 import PlusSVG from '../assets/icons/plus.svg'
 import { BarChart, LineChart } from 'react-native-chart-kit'
 import { SEVEN_DAY_MEALS_QUERY } from '../Queries/SEVEN_DAY_MEALS_QUERY'
+import { GET_NUTRION_BY_DATE } from '../Queries/GET_NUTRION_BY_DATE'
 
 export default function Calories() {
   const navigation = useNavigation()
@@ -102,6 +103,14 @@ export default function Calories() {
     ],
     // legend: ['Over eaten'],
   }
+
+  useEffect(() => {
+    axios
+      .post(BASE_URL, { query: GET_NUTRION_BY_DATE, variables: { dateString: '2022-10-24' } })
+      .then((response) => {
+        console.log(response)
+      })
+  }, [])
 
   return (
     <>
