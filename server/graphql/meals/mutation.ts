@@ -1,5 +1,7 @@
 const axios = require('axios')
 const Meal = require('../../models/meal')
+const { isEqual } = require('date-fns')
+
 interface mealsType {
   carbs: number
   protein: number
@@ -111,6 +113,11 @@ const meals = {
       })
       return sum.toString()
     }
+  },
+  async getNutritionByDate(_: any, { date }) {
+    const DATE = new Date(date).toISOString().split('T')[0]
+    const response =  await Meal.findOne({ date: DATE })
+    return response
   },
 }
 module.exports = meals

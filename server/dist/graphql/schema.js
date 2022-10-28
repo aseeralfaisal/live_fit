@@ -80,8 +80,17 @@ const typeDefs = gql `
     date: String
     meal: [SpecificMeal]
   }
+  type MealOne {
+    date: String
+    breakfast: [SpecificMeal]
+    lunch: [SpecificMeal]
+    snack: [SpecificMeal]
+    dinner: [SpecificMeal]
+    calories: Int
+  }
   type Mutation {
     setMeals(meal: [SpecificMealInput], type: String): [SpecificMeal]
+    getNutritionByDate(date: String): MealOne
     getCaloriesCount(type: String): String
     addUser(name: String!, pass: String!): User!
     loginUser(name: String!, pass: String!): User!

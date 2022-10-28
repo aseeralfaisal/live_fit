@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const axios = require('axios');
 const Meal = require('../../models/meal');
+const { isEqual } = require('date-fns');
 const getTotal = (macro) => __awaiter(void 0, void 0, void 0, function* () {
     let sum = 0;
     const getSum = (meal) => meal.forEach(({ carbs, protein, fats, calories }) => {
@@ -127,6 +128,13 @@ const meals = {
                 });
                 return sum.toString();
             }
+        });
+    },
+    getNutritionByDate(_, { date }) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const DATE = new Date(date).toISOString().split('T')[0];
+            const response = yield Meal.findOne({ date: DATE });
+            return response;
         });
     },
 };

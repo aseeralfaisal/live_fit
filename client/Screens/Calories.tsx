@@ -18,9 +18,12 @@ import { useDispatch } from 'react-redux'
 import { setNutritionResult } from '../redux/states/nutritionSlice'
 import { BASE_URL } from '@env'
 import { CalorieResult } from '../Components/popups/CalorieResult'
-import BreakfastSVG from '../assets/breakfast.svg'
-import LunchSVG from '../assets/lunch.svg'
-import { LineChart } from 'react-native-chart-kit'
+import BreakfastSVG from '../assets/icons/breakfast.svg'
+import LunchSVG from '../assets/icons/lunch.svg'
+import SnackSVG from '../assets/icons/snack.svg'
+import DinnerSVG from '../assets/icons/dinner.svg'
+import PlusSVG from '../assets/icons/plus.svg'
+import { BarChart, LineChart } from 'react-native-chart-kit'
 import { SEVEN_DAY_MEALS_QUERY } from '../Queries/SEVEN_DAY_MEALS_QUERY'
 
 export default function Calories() {
@@ -51,7 +54,7 @@ export default function Calories() {
     }
   }
 
-  const screenWidth = Dimensions.get('window').width - 50
+  const screenWidth = Dimensions.get('window').width - 40
   const chartConfig = {
     backgroundGradientFrom: '#1E2923',
     backgroundGradientFromOpacity: 0,
@@ -63,7 +66,16 @@ export default function Calories() {
     useShadowColorFromDataset: false,
   }
 
-  const mealsData = [<BreakfastSVG />, <LunchSVG />]
+  type objectsType = {
+    title: string
+    icon: Object
+  }
+  const mealsData: objectsType[] = [
+    { title: 'Breakfast', icon: <BreakfastSVG /> },
+    { title: 'Lunch', icon: <LunchSVG /> },
+    { title: 'Snack', icon: <SnackSVG /> },
+    { title: 'Dinner', icon: <DinnerSVG /> },
+  ]
 
   useEffect(() => {
     axios
@@ -106,7 +118,7 @@ export default function Calories() {
               onBlur={() => setInputBorderColor('#ccc')}
               value={foodSeachVal}
               onChangeText={(val) => setFoodSeachVal(val)}
-              placeholder='Search...'
+              placeholder='Search Food...'
               onEndEditing={() => searchMeals()}
               style={styles.inputTextField}
             />
@@ -126,20 +138,68 @@ export default function Calories() {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={{ marginLeft: 20, marginBottom: 20 }}>
+        {/* <View style={{ alignItems: 'flex-start' }}>
           {graphDataLoaded && (
-            <LineChart bezier data={graphData} width={screenWidth} height={250} chartConfig={chartConfig} />
+            <LineChart bezier data={graphData} width={screenWidth} height={220} chartConfig={chartConfig} />
           )}
+        </View> */}
+        <View
+          style={{
+            alignItems: 'center',
+            marginHorizontal: 20,
+            backgroundColor: 'rgba(100,100,100,0.03)',
+            borderRadius: 12,
+          }}>
+          <FlatList
+            data={mealsData}
+            keyExtractor={(_, idx) => idx.toString()}
+            renderItem={({ item }) => {
+              return (
+                <View style={{ marginVertical: 10 }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-around',
+                      marginHorizontal: 30,
+                      alignItems: 'center',
+                    }}>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        borderRadius: 10,
+                      }}>
+                      <View style={{ marginHorizontal: 10 }}>{item.icon}</View>
+                      <Text
+                        style={{
+                          fontFamily: 'Poppins_Bold',
+                          fontSize: 14,
+                          color: '#777',
+                          marginRight: 200,
+                          width: 80,
+                        }}>
+                        {item.title}
+                      </Text>
+                    </View>
+                    <PlusSVG />
+                  </View>
+                  {/* <TouchableOpacity
+                    style={{
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      backgroundColor: '#DDDADA99',
+                      borderRadius: 8,
+                      height: 38,
+                      marginVertical: 20,
+                    }}>
+                    <Text style={[styles.titleTxt, { color: '#777' }]}>Add Food</Text>
+                  </TouchableOpacity> */}
+                </View>
+              )
+            }}
+            showsHorizontalScrollIndicator={false}
+          />
         </View>
-        <FlatList
-          data={mealsData}
-          keyExtractor={(_, idx) => idx.toString()}
-          renderItem={({ item }) => {
-            return <TouchableOpacity>{item}</TouchableOpacity>
-          }}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-        />
         <CalorieResult
           resultLoader={resultLoader}
           resultPopup={resultPopup}
@@ -152,6 +212,12 @@ export default function Calories() {
 }
 
 const styles = StyleSheet.create({
+  titleTxt: {
+    fontFamily: 'Poppins_Bold',
+    textTransform: 'capitalize',
+    color: '#777',
+    fontSize: 14,
+  },
   input: {
     height: 48,
     borderRadius: 16,
