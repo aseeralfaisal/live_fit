@@ -7,6 +7,8 @@ import { StatusBar } from 'expo-status-bar'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
 import React from 'react'
 import { UserWorkouts } from '../Components/Sections/UserWorkouts'
+import { BASE_URI } from '../URI'
+// import { BASE_URI } from '@env'
 
 type navigationList = {
   FoodScan: undefined
@@ -19,7 +21,6 @@ type navigationList = {
 export default function Home() {
   const navigation = useNavigation<NavigationProp<navigationList>>()
   const usingHermes = typeof HermesInternal === 'object' && HermesInternal !== null
-
   return (
     <View
       style={{

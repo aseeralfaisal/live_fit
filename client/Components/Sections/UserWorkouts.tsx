@@ -2,7 +2,8 @@ import axios from 'axios'
 import * as React from 'react'
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { useAppSelector } from '../../redux/hooks'
-import { BASE_URL } from '@env'
+// import { BASE_URI } from '@env'
+import { BASE_URI } from '../../URI'
 import { useDispatch } from 'react-redux'
 import { setWorkoutName, setWorkouts } from '../../redux/states/workoutSlice'
 import { LinearGradient } from 'expo-linear-gradient'
@@ -24,7 +25,7 @@ export const UserWorkouts = () => {
       }`
 
   const getWorkoutList = React.useCallback(async () => {
-    const fetchData = await axios.post(BASE_URL, {
+    const fetchData = await axios.post(BASE_URI, {
       query: GET_USER_WORKOUTS,
       variables: {
         userName: userVal,

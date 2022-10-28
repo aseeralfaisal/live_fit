@@ -23,8 +23,10 @@ import { GET_EXERCISE_QUERY } from '../Queries/GET_EXERCISE_QUERY'
 import { EXERCISE_DELETE_QUERY } from '../Queries/EXERCISE_DELETE_QUERY'
 import { AnimatedCircularProgress } from 'react-native-circular-progress'
 import BackgroundJob from 'react-native-background-actions'
-import { BASE_URL } from '@env'
+// import { BASE_URI } from '@env'
 import MainButton from '../Components/MainButton'
+import { ListTitle } from '../Components/ListTitle'
+import { BASE_URI } from '../URI'
 
 export default function UserExercises() {
   const dispatch = useDispatch()
@@ -55,7 +57,7 @@ export default function UserExercises() {
   React.useEffect(() => {
     let functionLoad = true
     const getUserExercises = async () => {
-      const res = await axios.post(BASE_URL, {
+      const res = await axios.post(BASE_URI, {
         query: GET_EXERCISE_QUERY,
         variables: {
           userName: userVal,
@@ -79,7 +81,7 @@ export default function UserExercises() {
   const addSet = async (setName: string, setLength: number) => {
     setWeight('0')
     setReps('0')
-    const res = await axios.post(BASE_URL, {
+    const res = await axios.post(BASE_URI, {
       query: ADD_SET_QUERY,
       variables: {
         setsReps: [
@@ -99,7 +101,7 @@ export default function UserExercises() {
 
   const updateSet = async (reps: string, weight: string) => {
     try {
-      const res = await axios.post(BASE_URL, {
+      const res = await axios.post(BASE_URI, {
         query: EXERCISE_UPDATE_QUERY,
         variables: {
           workoutName: workoutName,
@@ -117,7 +119,7 @@ export default function UserExercises() {
   }
   const deleteSet = async (exerSetId: string) => {
     try {
-      const res = await axios.post(BASE_URL, {
+      const res = await axios.post(BASE_URI, {
         query: EXERCISE_DELETE_QUERY,
         variables: {
           workoutName: workoutName,
@@ -137,33 +139,6 @@ export default function UserExercises() {
   }
   const selectedExerList = (item: exerListTypes) => {
     dispatch(setSelectedList(item))
-  }
-  const SetRepsListTitle = ({ title }: { title: string }) => {
-    return (
-      <View
-        style={{
-          backgroundColor: '#92A3FD',
-          borderRadius: 5,
-          height: 30,
-        }}>
-        <TextInput
-          placeholder={title}
-          editable={false}
-          placeholderTextColor='#fff'
-          style={[
-            styles.setRepsInput,
-            {
-              width: 70,
-              height: 20,
-              marginTop: 8,
-              fontSize: 14,
-              textAlign: 'center',
-              fontFamily: 'Poppins',
-            },
-          ]}
-        />
-      </View>
-    )
   }
   const options = {
     taskName: 'workoutTimer',
@@ -286,10 +261,10 @@ export default function UserExercises() {
                                     justifyContent: 'space-around',
                                     marginVertical: 20,
                                   }}>
-                                  <SetRepsListTitle title='SET' />
-                                  <SetRepsListTitle title='REPS' />
-                                  <SetRepsListTitle title='WEIGHT' />
-                                  <SetRepsListTitle title='STATUS' />
+                                  <ListTitle title='SET' />
+                                  <ListTitle title='REPS' />
+                                  <ListTitle title='WEIGHT' />
+                                  <ListTitle title='STATUS' />
                                 </View>
                               )
                             }}

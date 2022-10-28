@@ -9,7 +9,8 @@ import axios from 'axios'
 import { StatusBar } from 'expo-status-bar'
 import { setIsAuthenticated } from '../redux/states/authenticatedSlice'
 import { useDispatch } from 'react-redux'
-import { BASE_URL } from '@env'
+import { BASE_URI } from '../URI'
+// import { BASE_URI } from '@env'
 
 export const Login = () => {
   const dispatch = useDispatch()
@@ -31,7 +32,7 @@ export const Login = () => {
           user
         }
       }`
-      const fetchData = await axios.post(BASE_URL, {
+      const fetchData = await axios.post(BASE_URI, {
         query: LOGIN_MUTATION,
         variables: {
           name: userVal,

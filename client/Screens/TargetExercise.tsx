@@ -22,7 +22,8 @@ import { CREATE_WORKOUT_QUERY } from '../Queries/CREATE_WORKOUT_QUERY'
 import { GET_TARGET_EXERCISE_QUERY } from '../Queries/GET_TARGET_EXERCISE_QUERY'
 import CreateWorkoutModal from '../Components/popups/CreateWorkoutModal'
 import { useNavigation } from '@react-navigation/native'
-import { BASE_URL } from '@env'
+import { BASE_URI } from '../URI'
+// import { BASE_URI } from '@env'
 
 export default function TargetExercise() {
   const dispatch = useDispatch()
@@ -41,7 +42,7 @@ export default function TargetExercise() {
   React.useEffect(() => {
     let isMounted = true
     const getExerciseList = async () => {
-      const fetchData = await axios.post(BASE_URL, {
+      const fetchData = await axios.post(BASE_URI, {
         query: GET_TARGET_EXERCISE_QUERY,
         variables: {
           target: exerciseTarget,
@@ -91,7 +92,7 @@ export default function TargetExercise() {
         return Alert.alert('🥴 Hold on!', 'Type a workout name first')
       }
       setCreateWorkoutPopup(true)
-      const res = await axios.post(BASE_URL, {
+      const res = await axios.post(BASE_URI, {
         query: CREATE_WORKOUT_QUERY,
         variables: {
           exercises: exerciseArray,
