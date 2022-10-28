@@ -114,9 +114,9 @@ const meals = {
       return sum.toString()
     }
   },
-  async getNutritionByDate(_: any, { date }) {
-    const DATE = new Date(date).toISOString().split('T')[0]
-    const response =  await Meal.findOne({ date: DATE })
+  async getNutritionByDate(_: any, { dateString }) {
+    const date = new Date(dateString).toISOString().split('T')[0]
+    const response = await Meal.findOne({ date })
     return response
   },
 }

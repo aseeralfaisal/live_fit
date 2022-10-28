@@ -130,10 +130,10 @@ const meals = {
             }
         });
     },
-    getNutritionByDate(_, { date }) {
+    getNutritionByDate(_, { dateString }) {
         return __awaiter(this, void 0, void 0, function* () {
-            const DATE = new Date(date).toISOString().split('T')[0];
-            const response = yield Meal.findOne({ date: DATE });
+            const date = new Date(dateString).toISOString().split('T')[0];
+            const response = yield Meal.findOne({ date });
             return response;
         });
     },
