@@ -121,7 +121,7 @@ export default function Calories() {
       })
       .then((res) => setFoodStack(res.data.data.getNutritionByDate))
       .catch((err) => console.warn(err))
-  }, [todaysDate])
+  }, [todaysDate, resultPopup])
 
   return (
     <>
@@ -159,155 +159,154 @@ export default function Calories() {
         </View>
 
         <Header />
-        <View style={{ flex: 1 }}>
-          {/* <View style={{ alignItems: 'flex-start' }}>
+        {/* <View style={{ alignItems: 'flex-start' }}>
           {graphDataLoaded && (
             <LineChart bezier data={graphData} width={screenWidth} height={220} chartConfig={chartConfig} />
           )}
         </View> */}
-          <View
-            style={{
-              alignItems: 'center',
-              marginHorizontal: 20,
-              backgroundColor: 'rgba(100,100,100,0.03)',
-              borderRadius: 12,
-              // flex: 1,
-            }}>
-            {/* <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}> */}
-            <View style={{ margin: 20, marginBottom: 40 }}>
-              <AnimatedCircularProgress
-                size={120}
-                width={15}
-                fillLineCap='square'
-                lineCap='square'
-                fill={50}
-                tintColor='#C58BF2'
-                backgroundColor='#3d5875'
-              />
-              <Text
-                style={{
-                  textAlign: 'center',
-                  marginTop: -95,
-                  color: '#3d5875',
-                  fontFamily: 'Poppins',
-                  fontSize: 50,
-                }}>
-                80
-              </Text>
-            </View>
+        <View
+          style={{
+            alignItems: 'center',
+            marginHorizontal: 20,
+            backgroundColor: 'rgba(100,100,100,0.03)',
+            borderRadius: 12,
+            flex: 1,
+          }}>
+          {/* <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}> */}
+          <View style={{ margin: 20, marginBottom: 40 }}>
+            <AnimatedCircularProgress
+              size={120}
+              width={15}
+              fillLineCap='square'
+              lineCap='square'
+              fill={50}
+              tintColor='#C58BF2'
+              backgroundColor='#3d5875'
+            />
             <Text
               style={{
-                fontSize: 16,
-                marginBottom: 10,
-                marginTop: -20,
+                textAlign: 'center',
+                marginTop: -95,
+                color: '#3d5875',
                 fontFamily: 'Poppins',
-                color: '#555',
+                fontSize: 50,
               }}>
-              Remaining...
+              80
             </Text>
-            <FlatList
-              data={mealsData}
-              keyExtractor={(_, idx) => idx.toString()}
-              renderItem={({ item }) => {
-                let foodStackType
-                if (item.title.toLowerCase() === 'breakfast') {
-                  foodStackType = foodStack?.breakfast
-                } else if (item.title.toLowerCase() === 'lunch') {
-                  foodStackType = foodStack?.lunch
-                } else if (item.title.toLowerCase() === 'snack') {
-                  foodStackType = foodStack?.snack
-                } else {
-                  foodStackType = foodStack?.dinner
-                }
-                return (
-                  <View style={{ marginVertical: 10 }}>
+          </View>
+          <Text
+            style={{
+              fontSize: 16,
+              marginBottom: 10,
+              marginTop: -20,
+              fontFamily: 'Poppins',
+              color: '#555',
+            }}>
+            Remaining...
+          </Text>
+          <FlatList
+            data={mealsData}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(_, idx) => idx.toString()}
+            renderItem={({ item }) => {
+              let foodStackType
+              if (item.title.toLowerCase() === 'breakfast') {
+                foodStackType = foodStack?.breakfast
+              } else if (item.title.toLowerCase() === 'lunch') {
+                foodStackType = foodStack?.lunch
+              } else if (item.title.toLowerCase() === 'snack') {
+                foodStackType = foodStack?.snack
+              } else {
+                foodStackType = foodStack?.dinner
+              }
+              return (
+                <View style={{ marginVertical: 10 }}>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'space-around',
+                      marginHorizontal: 30,
+                      alignItems: 'center',
+                    }}>
                     <View
                       style={{
                         flexDirection: 'row',
-                        justifyContent: 'space-around',
-                        marginHorizontal: 30,
                         alignItems: 'center',
+                        borderRadius: 10,
                       }}>
-                      <View
+                      <View style={{ marginHorizontal: 10 }}>{item.icon}</View>
+                      <Text
                         style={{
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          borderRadius: 10,
+                          fontFamily: 'Poppins_Bold',
+                          fontSize: 14,
+                          color: '#777',
+                          marginRight: 200,
+                          width: 80,
                         }}>
-                        <View style={{ marginHorizontal: 10 }}>{item.icon}</View>
-                        <Text
-                          style={{
-                            fontFamily: 'Poppins_Bold',
-                            fontSize: 14,
-                            color: '#777',
-                            marginRight: 200,
-                            width: 80,
-                          }}>
-                          {item.title}
-                        </Text>
-                      </View>
-                      <TouchableOpacity>
-                        <PlusSVG />
-                      </TouchableOpacity>
+                        {item.title}
+                      </Text>
                     </View>
-                    <View style={{ marginTop: 10 }}>
-                      {foodStackType && foodStackType.length !== 0 && (
-                        <View style={{ margin: 5, flexDirection: 'row' }}>
-                          <View style={{ margin: 5 }}>
-                            <ListTitle title='Food' width={65} />
-                          </View>
-                          <View style={{ margin: 5 }}>
-                            <ListTitle title='Carbs' width={55} />
-                          </View>
-                          <View style={{ margin: 5 }}>
-                            <ListTitle title='Prot' width={55} />
-                          </View>
-                          <View style={{ margin: 5 }}>
-                            <ListTitle title='Fats' width={55} />
-                          </View>
-                          <View style={{ margin: 5 }}>
-                            <ListTitle title='Cals' width={55} />
-                          </View>
-                        </View>
-                      )}
-                      {foodStackType &&
-                        foodStackType.map(
-                          (
-                            el: {
-                              food: string
-                              carbs: number
-                              protein: number
-                              fats: number
-                              calories: number
-                            },
-                            idx: string
-                          ) => {
-                            return (
-                              <View key={idx}>
-                                <View
-                                  style={{
-                                    flexDirection: 'row',
-                                    justifyContent: 'space-evenly',
-                                    marginHorizontal: -10,
-                                    margin: 5,
-                                  }}>
-                                  <Text style={[styles.macroText, { width: 62 }]}>{el.food}</Text>
-                                  <Text style={styles.macroText}>{el.carbs}</Text>
-                                  <Text style={styles.macroText}>{el.protein}</Text>
-                                  <Text style={styles.macroText}>{el.fats}</Text>
-                                  <Text style={[styles.macroText, { marginRight: 5 }]}>{el.calories}</Text>
-                                </View>
-                              </View>
-                            )
-                          }
-                        )}
-                    </View>
+                    <TouchableOpacity>
+                      <PlusSVG />
+                    </TouchableOpacity>
                   </View>
-                )
-              }}
-              showsHorizontalScrollIndicator={false}
-            />
-          </View>
+                  <View style={{ marginTop: 10 }}>
+                    {foodStackType && foodStackType.length !== 0 && (
+                      <View style={{ margin: 5, flexDirection: 'row' }}>
+                        <View style={{ margin: 5 }}>
+                          <ListTitle title='Food' width={65} />
+                        </View>
+                        <View style={{ margin: 5 }}>
+                          <ListTitle title='Carbs' width={55} />
+                        </View>
+                        <View style={{ margin: 5 }}>
+                          <ListTitle title='Prot' width={55} />
+                        </View>
+                        <View style={{ margin: 5 }}>
+                          <ListTitle title='Fats' width={55} />
+                        </View>
+                        <View style={{ margin: 5 }}>
+                          <ListTitle title='Cals' width={55} />
+                        </View>
+                      </View>
+                    )}
+                    {foodStackType &&
+                      foodStackType.map(
+                        (
+                          el: {
+                            food: string
+                            carbs: number
+                            protein: number
+                            fats: number
+                            calories: number
+                          },
+                          idx: string
+                        ) => {
+                          return (
+                            <View key={idx}>
+                              <View
+                                style={{
+                                  flexDirection: 'row',
+                                  justifyContent: 'space-evenly',
+                                  marginHorizontal: -10,
+                                  margin: 5,
+                                }}>
+                                <Text style={[styles.macroText, { width: 62 }]}>{el.food}</Text>
+                                <Text style={styles.macroText}>{el.carbs}</Text>
+                                <Text style={styles.macroText}>{el.protein}</Text>
+                                <Text style={styles.macroText}>{el.fats}</Text>
+                                <Text style={[styles.macroText, { marginRight: 5 }]}>{el.calories}</Text>
+                              </View>
+                            </View>
+                          )
+                        }
+                      )}
+                  </View>
+                </View>
+              )
+            }}
+            showsHorizontalScrollIndicator={false}
+          />
         </View>
         <CalorieResult
           resultLoader={resultLoader}
