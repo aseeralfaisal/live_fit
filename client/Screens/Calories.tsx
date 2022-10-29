@@ -281,7 +281,7 @@ export default function Calories() {
                       <Text
                         style={[
                           styles.macroText,
-                          { fontSize: 16, color: '#777', width: 40, textAlign: 'center' },
+                          { fontSize: 16, color: '#777', width: 45, textAlign: 'center' },
                         ]}>
                         {calorieSum}
                       </Text>
