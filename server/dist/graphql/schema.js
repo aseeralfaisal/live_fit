@@ -64,17 +64,17 @@ const typeDefs = gql `
   }
   type SpecificMeal {
     food: String
-    calories: Int
-    carbs: Int
-    protein: Int
-    fats: Int
+    calories: Float
+    carbs: Float
+    protein: Float
+    fats: Float
   }
   input SpecificMealInput {
     food: String
-    calories: Int
-    carbs: Int
-    protein: Int
-    fats: Int
+    calories: Float
+    carbs: Float
+    protein: Float
+    fats: Float
   }
   type Meal {
     date: String
@@ -86,7 +86,7 @@ const typeDefs = gql `
     lunch: [SpecificMeal]
     snack: [SpecificMeal]
     dinner: [SpecificMeal]
-    calories: Int
+    calories: Float
   }
   type Mutation {
     setMeals(meal: [SpecificMealInput], date: String, type: String): [SpecificMeal]

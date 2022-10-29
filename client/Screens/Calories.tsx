@@ -44,7 +44,8 @@ export default function Calories() {
   const [graphDataLoaded, setGraphDataLoaded] = useState(false)
   const [foodStack, setFoodStack] = useState<any>([])
   const todaysDate = useAppSelector((state) => state.nutrition.todaysDate)
-  const reqFormattedDate = todaysDate && todaysDate.toISOString().split("T")[0].toString() 
+  const formattedDate =
+    todaysDate && `${todaysDate.getFullYear()}-${todaysDate.getMonth() + 1}-${todaysDate.getDate()}`
 
   const searchMeals = async () => {
     try {
@@ -115,7 +116,7 @@ export default function Calories() {
       .post(BASE_URI, {
         query: GET_NUTRION_BY_DATE,
         variables: {
-          dateString: reqFormattedDate,
+          dateString: formattedDate,
         },
       })
       .then((res) => setFoodStack(res.data.data.getNutritionByDate))

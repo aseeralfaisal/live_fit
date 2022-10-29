@@ -7,6 +7,10 @@ import ProteinSVG from '../../assets/icons/protien.svg'
 import FatsSVG from '../../assets/icons/fats.svg'
 import CarbsSVG from '../../assets/icons/carbs.svg'
 import { LinearGradient } from 'expo-linear-gradient'
+import axios from 'axios'
+import { GET_CALORIES } from '../../Queries/GET_CALORIES'
+import { BASE_URI } from '../../URI'
+import { SET_MEALS } from '../../Queries/SET_MEALS'
 
 interface propTypes {
   foodSeachVal: string
@@ -14,14 +18,16 @@ interface propTypes {
   setResultPopup: any
   resultLoader: boolean
 }
+
+interface propTypes {
+  value: string
+  title: string
+  Icon: Function
+}
+
 export const CalorieResult = ({ foodSeachVal, resultPopup, setResultPopup, resultLoader }: propTypes) => {
   const nutritionResult = useAppSelector((state) => state.nutrition.nutritionResult)
-
-  interface propTypes {
-    value: string
-    title: string
-    Icon: Function
-  }
+  const todaysDate = useAppSelector((state) => state.nutrition.todaysDate)
 
   const TotalCalories = ({ calories }: any) => {
     return (
@@ -52,6 +58,35 @@ export const CalorieResult = ({ foodSeachVal, resultPopup, setResultPopup, resul
         </LinearGradient>
       </View>
     )
+  }
+  const reqNutritionResult = nutritionResult.map((item: any) => {
+    return {
+      food: item.name,
+      calories: item.calories,
+      carbs: item.carbohydrates_total_g,
+      protein: item.protein_g,
+      fats: item.fat_total_g,
+    }
+  })
+
+  const addMealData = async () => {
+    try {
+      const formattedDate =
+        todaysDate && `${todaysDate.getFullYear()}-${todaysDate.getMonth() + 1}-${todaysDate.getDate()}`
+      console.log(formattedDate)
+      console.log(reqNutritionResult)
+      const response = await axios.post(BASE_URI, {
+        query: SET_MEALS,
+        variables: {
+          meal: reqNutritionResult,
+          type: 'breakfast',
+          date: formattedDate,
+        },
+      })
+      console.log(response.data)
+    } catch (err) {
+      console.log(err.response.data.errors)
+    }
   }
 
   return (
@@ -123,7 +158,7 @@ export const CalorieResult = ({ foodSeachVal, resultPopup, setResultPopup, resul
             </View>
           )}
           <View style={{ marginTop: 30 }}>
-            <MainButton title='Add' horizontalMargin={38} onPress={null} />
+            <MainButton title='Add' horizontalMargin={38} onPress={addMealData} />
           </View>
         </View>
       </Pressable>
