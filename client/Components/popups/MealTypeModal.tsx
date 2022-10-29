@@ -8,7 +8,7 @@ import DinnerSVG from '../../assets/icons/dinner.svg'
 import { SET_MEALS } from '../../Queries/SET_MEALS'
 import axios from 'axios'
 import { BASE_URI } from '../../URI'
-import { setMealType } from '../../redux/states/nutritionSlice'
+import { useState } from 'react'
 
 type objectsType = {
   title: string
@@ -22,7 +22,7 @@ const MealTypeModal = ({ setMealTypeModal, setResultPopup }: any) => {
   const dispatch = useDispatch()
   const nutritionResult = useAppSelector((state) => state.nutrition.nutritionResult)
   const todaysDate = useAppSelector((state) => state.nutrition.todaysDate)
-  const mealType = useAppSelector((state) => state.nutrition.mealType)
+  const [mealType, setMealType] = useState("")
 
   const mealsData: objectsType[] = [
     { title: 'Breakfast', icon: <BreakfastSVG /> },
@@ -40,28 +40,25 @@ const MealTypeModal = ({ setMealTypeModal, setResultPopup }: any) => {
       fats: item.fat_total_g,
     }
   })
-  const addMealData = async (title: string) => {
+  const addMealData = async ( title: string ) => {
     try {
-      dispatch(setMealType(title))
       const formattedDate =
         todaysDate && `${todaysDate.getFullYear()}-${todaysDate.getMonth() + 1}-${todaysDate.getDate()}`
       const response = await axios.post(BASE_URI, {
         query: SET_MEALS,
         variables: {
           meal: reqNutritionResult,
-          type: mealType.toLowerCase(),
+          type: title.toLowerCase(),
           date: formattedDate,
         },
       })
-      console.log(response.data)
+      if (response.data) {
+        setMealTypeModal(false)
+        setResultPopup(false)
+      }
     } catch (err) {
-      console.log(err.response.data.errors)
+      console.log(err)
     }
-  }
-  const mealTypeSetter = async (title: string) => {
-    await addMealData(title)
-    setMealTypeModal(false)
-    setResultPopup(false)
   }
 
   return (
@@ -80,7 +77,7 @@ const MealTypeModal = ({ setMealTypeModal, setResultPopup }: any) => {
                       return (
                         <TouchableOpacity
                           style={{ margin: 10, alignItems: 'center' }}
-                          onPress={() => mealTypeSetter(item.title)}>
+                          onPress={async () => addMealData(item.title)}>
                           <View style={{ width: 65, height: 65 }}>{item.icon}</View>
                           <Text style={[styles.title, { borderBottomWidth: 0 }]}>{item.title}</Text>
                         </TouchableOpacity>

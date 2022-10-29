@@ -15,7 +15,7 @@ import { GET_CALORIES } from '../Queries/GET_CALORIES'
 import { Picker } from '@react-native-picker/picker'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
-import { setNutritionResult } from '../redux/states/nutritionSlice'
+import { nutritionSlice, setNutritionResult } from '../redux/states/nutritionSlice'
 // import { BASE_URI } from '@env'
 import { CalorieResult } from '../Components/popups/CalorieResult'
 import BreakfastSVG from '../assets/icons/breakfast.svg'
@@ -30,6 +30,7 @@ import { BASE_URI } from '../URI'
 import { AnimatedCircularProgress } from 'react-native-circular-progress'
 import { useAppSelector } from '../redux/hooks'
 import MealTypeModal from '../Components/popups/MealTypeModal'
+import { REMOVE_FOOD_ITEM } from '../Queries/REMOVE_FOOD_ITEM'
 
 export default function Calories() {
   const navigation = useNavigation()
@@ -111,7 +112,8 @@ export default function Calories() {
     ],
     // legend: ['Over eaten'],
   }
-  useEffect(() => {
+
+  const getMacroList = () => {
     axios
       .post(BASE_URI, {
         query: GET_NUTRION_BY_DATE,
@@ -121,7 +123,32 @@ export default function Calories() {
       })
       .then((res) => setFoodStack(res.data.data.getNutritionByDate))
       .catch((err) => console.warn(err))
+  }
+  useEffect(() => {
+    getMacroList()
+    return () => getMacroList()
   }, [todaysDate, resultPopup])
+
+  const removeFoodItem = async (food: string, type: string) => {
+    await axios.post(BASE_URI, {
+      query: REMOVE_FOOD_ITEM,
+      variables: {
+        date: formattedDate,
+        food,
+        type,
+      },
+    })
+    getMacroList()
+  }
+  let breakFastSum = 0
+  let lunchSum = 0
+  let snackSum = 0
+  let dinnerSum = 0
+  foodStack && foodStack?.breakfast?.forEach((el: { calories: number }) => (breakFastSum += el.calories))
+  foodStack && foodStack?.lunch?.forEach((el: { calories: number }) => (lunchSum += el.calories))
+  foodStack && foodStack?.snack?.forEach((el: { calories: number }) => (snackSum += el.calories))
+  foodStack && foodStack?.dinner?.forEach((el: { calories: number }) => (dinnerSum += el.calories))
+  const totalConsumed = (breakFastSum + lunchSum + snackSum + dinnerSum).toFixed(2)
 
   return (
     <>
@@ -175,7 +202,7 @@ export default function Calories() {
           {/* <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}> */}
           <View style={{ margin: 20, marginBottom: 40 }}>
             <AnimatedCircularProgress
-              size={120}
+              size={140}
               width={15}
               fillLineCap='square'
               lineCap='square'
@@ -186,23 +213,23 @@ export default function Calories() {
             <Text
               style={{
                 textAlign: 'center',
-                marginTop: -95,
+                marginTop: -88,
                 color: '#3d5875',
-                fontFamily: 'Poppins',
-                fontSize: 50,
+                fontFamily: 'Poppins_Bold',
+                fontSize: 25,
               }}>
-              80
+              {totalConsumed}
             </Text>
           </View>
           <Text
             style={{
               fontSize: 16,
               marginBottom: 10,
-              marginTop: -20,
+              marginTop: 20,
               fontFamily: 'Poppins',
-              color: '#555',
+              color: '#3d5875',
             }}>
-            Remaining...
+            Total Consumed
           </Text>
           <FlatList
             data={mealsData}
@@ -243,7 +270,7 @@ export default function Calories() {
                           fontFamily: 'Poppins_Bold',
                           fontSize: 14,
                           color: '#777',
-                          marginRight: 200,
+                          marginRight: 180,
                           width: 80,
                         }}>
                         {item.title}
@@ -251,7 +278,13 @@ export default function Calories() {
                     </View>
                     <View style={{ marginRight: 19 }}>
                       {/* <PlusSVG /> */}
-                      <Text style={[styles.titleTxt, { fontSize: 16, color: "#999" }]}>{calorieSum}</Text>
+                      <Text
+                        style={[
+                          styles.macroText,
+                          { fontSize: 16, color: '#777', width: 40, textAlign: 'center' },
+                        ]}>
+                        {calorieSum}
+                      </Text>
                     </View>
                   </View>
                   <View style={{ marginTop: 10 }}>
@@ -287,7 +320,10 @@ export default function Calories() {
                           idx: string
                         ) => {
                           return (
-                            <View key={idx}>
+                            <TouchableOpacity
+                              activeOpacity={0.7}
+                              key={idx}
+                              onLongPress={() => removeFoodItem(el.food, item.title.toLowerCase())}>
                               <View
                                 style={{
                                   flexDirection: 'row',
@@ -301,7 +337,7 @@ export default function Calories() {
                                 <Text style={styles.macroText}>{el.fats}</Text>
                                 <Text style={[styles.macroText, { marginRight: 5 }]}>{el.calories}</Text>
                               </View>
-                            </View>
+                            </TouchableOpacity>
                           )
                         }
                       )}
