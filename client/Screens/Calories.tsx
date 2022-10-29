@@ -23,13 +23,13 @@ import LunchSVG from '../assets/icons/lunch.svg'
 import SnackSVG from '../assets/icons/snack.svg'
 import DinnerSVG from '../assets/icons/dinner.svg'
 import PlusSVG from '../assets/icons/plus.svg'
-import { BarChart, LineChart } from 'react-native-chart-kit'
 import { SEVEN_DAY_MEALS_QUERY } from '../Queries/SEVEN_DAY_MEALS_QUERY'
 import { GET_NUTRION_BY_DATE } from '../Queries/GET_NUTRION_BY_DATE'
 import { ListTitle } from '../Components/ListTitle'
 import { BASE_URI } from '../URI'
 import { AnimatedCircularProgress } from 'react-native-circular-progress'
 import { useAppSelector } from '../redux/hooks'
+import MealTypeModal from '../Components/popups/MealTypeModal'
 
 export default function Calories() {
   const navigation = useNavigation()
@@ -205,8 +205,6 @@ export default function Calories() {
               }}>
               Remaining...
             </Text>
-            {/* </View> */}
-            {/* <DateBoxMain /> */}
             <FlatList
               data={mealsData}
               keyExtractor={(_, idx) => idx.toString()}
@@ -254,9 +252,9 @@ export default function Calories() {
                     </View>
                     <View style={{ marginTop: 10 }}>
                       {foodStackType && foodStackType.length !== 0 && (
-                        <View style={{ marginLeft: 10, margin: 5, flexDirection: 'row' }}>
+                        <View style={{ margin: 5, flexDirection: 'row' }}>
                           <View style={{ margin: 5 }}>
-                            <ListTitle title='Food' width={55} />
+                            <ListTitle title='Food' width={65} />
                           </View>
                           <View style={{ margin: 5 }}>
                             <ListTitle title='Carbs' width={55} />
@@ -290,31 +288,20 @@ export default function Calories() {
                                   style={{
                                     flexDirection: 'row',
                                     justifyContent: 'space-evenly',
-                                    marginHorizontal: -20,
+                                    marginHorizontal: -10,
                                     margin: 5,
                                   }}>
-                                  <Text style={[styles.titleTxt, { width: 60 }]}>{el.food}</Text>
-                                  <Text style={[styles.titleTxt, { marginLeft: -30 }]}>{el.carbs}</Text>
-                                  <Text style={styles.titleTxt}>{el.protein}</Text>
-                                  <Text style={styles.titleTxt}>{el.fats}</Text>
-                                  <Text style={[styles.titleTxt, { marginRight: 5 }]}>{el.calories}</Text>
+                                  <Text style={[styles.macroText, { width: 62 }]}>{el.food}</Text>
+                                  <Text style={styles.macroText}>{el.carbs}</Text>
+                                  <Text style={styles.macroText}>{el.protein}</Text>
+                                  <Text style={styles.macroText}>{el.fats}</Text>
+                                  <Text style={[styles.macroText, { marginRight: 5 }]}>{el.calories}</Text>
                                 </View>
                               </View>
                             )
                           }
                         )}
                     </View>
-                    {/* <TouchableOpacity
-                    style={{
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      backgroundColor: '#DDDADA99',
-                      borderRadius: 8,
-                      height: 38,
-                      marginVertical: 20,
-                    }}>
-                    <Text style={[styles.titleTxt, { color: '#777' }]}>Add Food</Text>
-                  </TouchableOpacity> */}
                   </View>
                 )
               }}
@@ -334,6 +321,14 @@ export default function Calories() {
 }
 
 const styles = StyleSheet.create({
+  macroText: {
+    fontFamily: 'Poppins_Bold',
+    textTransform: 'capitalize',
+    color: '#777',
+    fontSize: 14,
+    textAlign: 'left',
+    width: 40,
+  },
   titleTxt: {
     fontFamily: 'Poppins_Bold',
     textTransform: 'capitalize',
