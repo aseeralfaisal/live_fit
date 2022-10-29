@@ -53,7 +53,7 @@ const meals = {
             }
         });
     },
-    setMeals(_, { meal, type }) {
+    setMeals(_, { meal, date, type }) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const mealType = { breakfast: 'breakfast', lunch: 'lunch', snack: 'snack', dinner: 'dinner' };
@@ -64,7 +64,7 @@ const meals = {
                     const update = { calories: calories };
                     return yield Meal.findOneAndUpdate(filter, update);
                 });
-                const mealFound = yield Meal.findOne({ date: todaysDateString.toString() });
+                const mealFound = yield Meal.findOne({ date });
                 let mealFoundType;
                 if (mealFound) {
                     meal.forEach((item) => {
