@@ -5,7 +5,6 @@ export const nutritionSlice = createSlice({
   initialState: {
     nutritionResult: [],
     todaysDate: new Date(),
-    mealType: '',
   },
   reducers: {
     setNutritionResult: (state, { payload }) => {
@@ -14,9 +13,6 @@ export const nutritionSlice = createSlice({
     setTodaysDate: (state, { payload }) => {
       state.todaysDate = payload
     },
-    setMealType: (state, { payload }) => {
-      state.mealType = payload
-    },
   },
 })
-export const { setNutritionResult, setTodaysDate, setMealType } = nutritionSlice.actions
+export const { setNutritionResult, setTodaysDate } = nutritionSlice.actions
