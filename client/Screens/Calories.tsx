@@ -219,6 +219,9 @@ export default function Calories() {
               } else {
                 foodStackType = foodStack?.dinner
               }
+              let calorieSum = 0
+              foodStackType &&
+                foodStackType.forEach(({ calories }: { calories: number }) => (calorieSum += calories))
               return (
                 <View style={{ marginVertical: 10 }}>
                   <View
@@ -246,9 +249,10 @@ export default function Calories() {
                         {item.title}
                       </Text>
                     </View>
-                    <TouchableOpacity>
-                      <PlusSVG />
-                    </TouchableOpacity>
+                    <View style={{ marginRight: 19 }}>
+                      {/* <PlusSVG /> */}
+                      <Text style={[styles.titleTxt, { fontSize: 16, color: "#999" }]}>{calorieSum}</Text>
+                    </View>
                   </View>
                   <View style={{ marginTop: 10 }}>
                     {foodStackType && foodStackType.length !== 0 && (
