@@ -53,7 +53,7 @@ export default function Calories() {
       const res = await axios.post(BASE_URI, {
         query: GET_CALORIES,
         variables: {
-          query: `${servingSize} ${foodSeachVal}`,
+          query: `${foodSeachVal}`,
         },
       })
       dispatch(setNutritionResult(res.data.data.getFoodCalories))
@@ -141,14 +141,14 @@ export default function Calories() {
               onEndEditing={() => searchMeals()}
               style={styles.inputTextField}
             />
-            <Picker
+            {/* <Picker
               style={{ color: '#999', fontFamily: 'Poppins', marginLeft: -45, width: 50, height: 20 }}
               selectedValue={servingSize}
               onValueChange={(value) => setServingSize(value)}>
               {[10, 20, 30, 40, 50, 60, 70, 80, 90, 100].map((num, index) => {
                 return <Picker.Item key={index} label={`${num} g`} value={`${num}g`} />
               })}
-            </Picker>
+            </Picker> */}
             <TouchableOpacity onPress={() => navigation.navigate('FoodScan')}>
               <Image
                 source={require('../assets/icons/camera.png')}

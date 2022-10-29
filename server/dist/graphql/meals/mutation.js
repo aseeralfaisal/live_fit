@@ -137,6 +137,34 @@ const meals = {
             return response;
         });
     },
+    removeFoodItem(_, { food, date, type }) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const foundMeal = yield Meal.findOne({ date });
+            let foundMealType;
+            switch (type) {
+                case 'breakfast':
+                    foundMealType = foundMeal.breakfast;
+                    break;
+                case 'lunch':
+                    foundMealType = foundMeal.lunch;
+                    break;
+                case 'dinner':
+                    foundMealType = foundMeal.dinner;
+                    break;
+                default:
+                    foundMealType = foundMeal.snack;
+            }
+            if (foundMealType) {
+                foundMealType.forEach((foodItem) => __awaiter(this, void 0, void 0, function* () {
+                    if (foodItem.food === food) {
+                        yield foodItem.remove();
+                    }
+                }));
+                const save = yield foundMeal.save();
+                return save;
+            }
+        });
+    },
 };
 module.exports = meals;
 //# sourceMappingURL=mutation.js.map

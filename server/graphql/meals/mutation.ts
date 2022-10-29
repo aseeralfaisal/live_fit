@@ -119,6 +119,32 @@ const meals = {
     const response = await Meal.findOne({ date })
     return response
   },
+  async removeFoodItem(_: any, { food, date, type }) {
+    const foundMeal = await Meal.findOne({ date })
+    let foundMealType
+    switch (type) {
+      case 'breakfast':
+        foundMealType = foundMeal.breakfast
+        break
+      case 'lunch':
+        foundMealType = foundMeal.lunch
+        break
+      case 'dinner':
+        foundMealType = foundMeal.dinner
+        break
+      default:
+        foundMealType = foundMeal.snack
+    }
+    if (foundMealType) {
+      foundMealType.forEach(async (foodItem) => {
+        if (foodItem.food === food) {
+          await foodItem.remove()
+        }
+      })
+      const save = await foundMeal.save()
+      return save
+    }
+  },
 }
 module.exports = meals
 export {}
