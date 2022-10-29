@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
 import DateBoxSVG from '../assets/icons/date_box.svg'
 
 export const DateBoxMain = () => {
@@ -7,7 +7,7 @@ export const DateBoxMain = () => {
   return (
     <View>
       <DateBoxSVG />
-      <Text style={{ color: '#fff', marginTop: -28, marginLeft: 20, fontFamily: "Poppins" }}>Today</Text>
+      <Text style={{ color: '#fff', marginTop: -28, marginLeft: 30, fontFamily: 'Poppins' }}>Today</Text>
     </View>
   )
 }

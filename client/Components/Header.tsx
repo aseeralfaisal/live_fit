@@ -3,13 +3,22 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 import { StatusBar } from 'expo-status-bar'
 import { useAppSelector } from '../redux/hooks'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import * as dayjs from 'dayjs'
+import { DateBoxMain } from './DateBoxMain'
+import { format, parseISO, subDays, addDays } from 'date-fns'
+import { useDispatch } from 'react-redux'
+import { setTodaysDate } from '../redux/states/nutritionSlice'
 
 export default function Header({ CreateUpdateWorkout, setCreateWorkoutPopup, timer }: any) {
   const route = useRoute()
   const routeName = route.name
   const userVal = useAppSelector((state) => state.user.userVal)
   const navigation = useNavigation()
+  const dispatch = useDispatch()
+  const todaysDate = useAppSelector((state) => state.nutrition.todaysDate)
+  const formattedDate = format(parseISO(todaysDate.toISOString()), 'dd MMM')
+
+  const dateDecrement = () => dispatch(setTodaysDate(subDays(todaysDate, 1)))
+  const dateIncrement = () => dispatch(setTodaysDate(addDays(todaysDate, 1)))
 
   if (routeName === 'TargetExercise') {
     return (
@@ -36,28 +45,34 @@ export default function Header({ CreateUpdateWorkout, setCreateWorkoutPopup, tim
     )
   }
   if (routeName === 'Cals') {
-    // console.log(dayjs(timer).format("hh:mm:ss"))
     return (
       <View
         style={{
           flexDirection: 'row',
           justifyContent: 'space-between',
           alignItems: 'center',
-          paddingTop: 50,
-          paddingHorizontal: 30,
-          backgroundColor: "#fff"
+          marginBottom: 20,
+          paddingHorizontal: 24,
+          backgroundColor: '#fff',
         }}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
+        <TouchableOpacity onPress={dateDecrement}>
           <Image
             source={require('../assets/icons/back_Navs.png')}
             style={{ width: 40, height: 40, borderWidth: 0.5, borderColor: '#ccc', borderRadius: 10 }}
           />
         </TouchableOpacity>
-        <Text style={styles.title}>Meal Planner</Text>
-        <TouchableOpacity>
+        <Text style={styles.title}>{formattedDate}</Text>
+        <TouchableOpacity onPress={dateIncrement}>
           <Image
-            source={require('../assets/icons/detail-Navs.png')}
-            style={{ width: 40, height: 40, borderWidth: 0.5, borderColor: '#ccc', borderRadius: 10 }}
+            source={require('../assets/icons/back_Navs.png')}
+            style={{
+              width: 40,
+              height: 40,
+              borderWidth: 0.5,
+              borderColor: '#ccc',
+              borderRadius: 10,
+              transform: [{ rotate: '180deg' }],
+            }}
           />
         </TouchableOpacity>
       </View>

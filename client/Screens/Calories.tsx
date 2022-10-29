@@ -29,7 +29,7 @@ import { GET_NUTRION_BY_DATE } from '../Queries/GET_NUTRION_BY_DATE'
 import { ListTitle } from '../Components/ListTitle'
 import { BASE_URI } from '../URI'
 import { AnimatedCircularProgress } from 'react-native-circular-progress'
-import { DateBoxMain } from '../Components/DateBoxMain'
+import { useAppSelector } from '../redux/hooks'
 
 export default function Calories() {
   const navigation = useNavigation()
@@ -42,7 +42,9 @@ export default function Calories() {
   const [resultLoader, setResultLoader] = useState(true)
   const [graphDataValues, setGraphDataValues] = useState<number[]>([])
   const [graphDataLoaded, setGraphDataLoaded] = useState(false)
-  const [foodStack, setFoodStack] = useState([])
+  const [foodStack, setFoodStack] = useState<any>([])
+  const todaysDate = useAppSelector((state) => state.nutrition.todaysDate)
+  const reqFormattedDate = todaysDate && todaysDate.toISOString().split("T")[0].toString() 
 
   const searchMeals = async () => {
     try {
@@ -113,22 +115,21 @@ export default function Calories() {
       .post(BASE_URI, {
         query: GET_NUTRION_BY_DATE,
         variables: {
-          dateString: '2022-10-24',
+          dateString: reqFormattedDate,
         },
       })
       .then((res) => setFoodStack(res.data.data.getNutritionByDate))
       .catch((err) => console.warn(err))
-  }, [])
+  }, [todaysDate])
 
   return (
     <>
-      <Header />
       <View
         style={{
           flex: 1,
           backgroundColor: '#fff',
         }}>
-        <View style={{ alignItems: 'center' }}>
+        <View style={{ alignItems: 'center', marginTop: 30 }}>
           <View style={[styles.input, { borderColor: inputBorderColor, flexDirection: 'row' }]}>
             <TextInput
               onFocus={() => setInputBorderColor('#92A3FD')}
@@ -156,6 +157,7 @@ export default function Calories() {
           </View>
         </View>
 
+        <Header />
         <View style={{ flex: 1 }}>
           {/* <View style={{ alignItems: 'flex-start' }}>
           {graphDataLoaded && (
@@ -203,20 +205,20 @@ export default function Calories() {
               Remaining...
             </Text>
             {/* </View> */}
-            <DateBoxMain />
+            {/* <DateBoxMain /> */}
             <FlatList
               data={mealsData}
               keyExtractor={(_, idx) => idx.toString()}
               renderItem={({ item }) => {
                 let foodStackType
                 if (item.title.toLowerCase() === 'breakfast') {
-                  foodStackType = foodStack.breakfast
+                  foodStackType = foodStack?.breakfast
                 } else if (item.title.toLowerCase() === 'lunch') {
-                  foodStackType = foodStack.lunch
+                  foodStackType = foodStack?.lunch
                 } else if (item.title.toLowerCase() === 'snack') {
-                  foodStackType = foodStack.snack
+                  foodStackType = foodStack?.snack
                 } else {
-                  foodStackType = foodStack.dinner
+                  foodStackType = foodStack?.dinner
                 }
                 return (
                   <View style={{ marginVertical: 10 }}>
@@ -245,7 +247,9 @@ export default function Calories() {
                           {item.title}
                         </Text>
                       </View>
-                      <PlusSVG />
+                      <TouchableOpacity>
+                        <PlusSVG />
+                      </TouchableOpacity>
                     </View>
                     <View style={{ marginTop: 10 }}>
                       {foodStackType && foodStackType.length !== 0 && (
@@ -345,11 +349,11 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins',
     marginHorizontal: 20,
     borderWidth: 1,
-    width: 320,
+    width: 340,
     marginVertical: 20,
   },
   inputTextField: {
-    width: 250,
+    width: 270,
     fontSize: 14,
     marginHorizontal: 10,
   },

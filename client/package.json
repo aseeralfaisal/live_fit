@@ -27,6 +27,7 @@
     "babel-plugin-transform-inline-environment-variables": "^0.4.4",
     "clarifai": "^2.9.1",
     "cors": "^2.8.5",
+    "date-fns": "^2.29.3",
     "dayjs": "^1.11.5",
     "dotenv": "^16.0.1",
     "expo": "~44.0.2",
