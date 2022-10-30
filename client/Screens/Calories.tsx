@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   Dimensions,
   FlatList,
@@ -39,7 +39,6 @@ export default function Calories() {
   const [foodSeachVal, setFoodSeachVal] = React.useState('')
   const [inputBorderColor, setInputBorderColor] = React.useState('#ccc')
   const [servingSize, setServingSize] = React.useState('100g')
-  // const [resultPopup, setResultPopup] = useState(false)
   const [graphDataValues, setGraphDataValues] = useState<number[]>([])
   const [graphDataLoaded, setGraphDataLoaded] = useState(false)
   const [foodStack, setFoodStack] = useState<any>([])
@@ -48,6 +47,7 @@ export default function Calories() {
     todaysDate && `${todaysDate.getFullYear()}-${todaysDate.getMonth() + 1}-${todaysDate.getDate()}`
   const resultPopup = useAppSelector((state) => state.nutrition.resultPopup)
   const nutritionResult = useAppSelector((state) => state.nutrition.nutritionResult)
+  const [refreshCaloriePage, setRefreshCaloriePage] = useState(false)
 
   const searchMeals = async () => {
     try {
@@ -113,21 +113,24 @@ export default function Calories() {
     // legend: ['Over eaten'],
   }
 
-  const getMacroList = () => {
-    axios
-      .post(BASE_URI, {
-        query: GET_NUTRION_BY_DATE,
-        variables: {
-          dateString: formattedDate,
-        },
-      })
-      .then((res) => setFoodStack(res.data.data.getNutritionByDate))
-      .catch((err) => console.warn(err))
-  }
   useEffect(() => {
+    let ignore = false
+    const getMacroList = () => {
+      axios
+        .post(BASE_URI, {
+          query: GET_NUTRION_BY_DATE,
+          variables: {
+            dateString: formattedDate,
+          },
+        })
+        .then((res) => setFoodStack(res.data.data.getNutritionByDate))
+        .catch((err) => console.warn(err))
+    }
     getMacroList()
-    return () => getMacroList()
-  }, [todaysDate, resultPopup])
+    return () => {
+      ignore = true
+    }
+  }, [todaysDate, refreshCaloriePage])
 
   const removeFoodItem = async (food: string, type: string) => {
     await axios.post(BASE_URI, {
@@ -138,7 +141,7 @@ export default function Calories() {
         type,
       },
     })
-    getMacroList()
+    setRefreshCaloriePage(!refreshCaloriePage)
   }
   let breakFastSum = 0
   let lunchSum = 0
