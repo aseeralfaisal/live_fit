@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux'
 import { setWorkoutName, setWorkouts } from '../../redux/states/workoutSlice'
 import { LinearGradient } from 'expo-linear-gradient'
 import { useNavigation, useRoute } from '@react-navigation/native'
+import { GradiantRoundBox } from '../GradiantRoundBox'
 
 export const UserWorkouts = () => {
   const navigation = useNavigation<any>()
@@ -153,7 +154,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 0,
     borderColor: "#eee",
-    fontSize: 12,
+    fontSize: 14,
     marginLeft: 20,
   },
   input: {
