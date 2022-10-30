@@ -9,6 +9,7 @@ import { SET_MEALS } from '../../Queries/SET_MEALS'
 import axios from 'axios'
 import { BASE_URI } from '../../URI'
 import { useState } from 'react'
+import { setResultPopup } from '../../redux/states/nutritionSlice'
 
 type objectsType = {
   title: string
@@ -18,11 +19,11 @@ const Wrapper = ({ elements }: any) => {
   return <View style={{ top: '70%', height: '100%', backgroundColor: '#fff' }}>{elements}</View>
 }
 
-const MealTypeModal = ({ setMealTypeModal, setResultPopup }: any) => {
+const MealTypeModal = ({ setMealTypeModal }: any) => {
   const dispatch = useDispatch()
   const nutritionResult = useAppSelector((state) => state.nutrition.nutritionResult)
   const todaysDate = useAppSelector((state) => state.nutrition.todaysDate)
-  const [mealType, setMealType] = useState("")
+  const [mealType, setMealType] = useState('')
 
   const mealsData: objectsType[] = [
     { title: 'Breakfast', icon: <BreakfastSVG /> },
@@ -40,7 +41,7 @@ const MealTypeModal = ({ setMealTypeModal, setResultPopup }: any) => {
       fats: item.fat_total_g,
     }
   })
-  const addMealData = async ( title: string ) => {
+  const addMealData = async (title: string) => {
     try {
       const formattedDate =
         todaysDate && `${todaysDate.getFullYear()}-${todaysDate.getMonth() + 1}-${todaysDate.getDate()}`
@@ -54,7 +55,7 @@ const MealTypeModal = ({ setMealTypeModal, setResultPopup }: any) => {
       })
       if (response.data) {
         setMealTypeModal(false)
-        setResultPopup(false)
+        dispatch(setResultPopup(false))
       }
     } catch (err) {
       console.log(err)
@@ -86,9 +87,6 @@ const MealTypeModal = ({ setMealTypeModal, setResultPopup }: any) => {
                     keyExtractor={(_, index) => index.toString()}
                   />
                 </View>
-                {/* <TouchableOpacity style={styles.saveWorkoutBtn} onPress={() => saveFunction()}>
-                  <Text style={styles.saveWorkoutBtnText}>Save Workout</Text>
-                </TouchableOpacity> */}
               </>
             }
           />

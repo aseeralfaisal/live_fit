@@ -1,19 +1,33 @@
 import { StatusBar } from 'expo-status-bar'
 import React from 'react'
 import * as MediaLibrary from 'expo-media-library'
-import { StyleSheet, Text, View, TouchableOpacity, Image, FlatList, Button } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  FlatList,
+  Button,
+  Pressable,
+  Dimensions,
+} from 'react-native'
 import { Camera } from 'expo-camera'
 import { useState, useEffect, createRef } from 'react'
 import * as Clarifai from 'clarifai'
 import * as ImageManipulator from 'expo-image-manipulator'
 import axios from 'axios'
 import * as Permissions from 'expo-permissions'
-import { TapGestureHandler } from 'react-native-gesture-handler'
+import { State, TapGestureHandler } from 'react-native-gesture-handler'
 import { useNavigation } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
-import { setNutritionResult } from '../redux/states/nutritionSlice'
+import { setNutritionResult, setResultPopup } from '../redux/states/nutritionSlice'
 // import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 // import * as icons from '@fortawesome/free-solid-svg-icons'
+import 'react-native-gesture-handler'
+import { GradiantRoundBox } from '../Components/GradiantRoundBox'
+import CalsSVG from '../assets/icons/cals.svg'
+import { useAppSelector } from '../redux/hooks'
 
 export default function FoodScan() {
   const dispatch = useDispatch()
@@ -35,6 +49,7 @@ export default function FoodScan() {
   const [sugar, setSugar] = useState('')
   const [camView, setCamView] = useState(true)
   const [iconSize, setIconSize] = useState(30)
+  const nutritionResult = useAppSelector((state) => state.nutrition.nutritionResult)
 
   useEffect(() => {
     ;(async () => {
@@ -126,43 +141,58 @@ export default function FoodScan() {
     await clarifaiDetectObjectsAsync(manipResponse.base64)
   }
 
+  const tapEvent = (event: { nativeEvent: { state: any } }) => {
+    if (event.nativeEvent.state === State.ACTIVE) {
+      takeSnap()
+    }
+  }
+
+  const showCalInfo = () => {
+    dispatch(
+      setNutritionResult([
+        {
+          name: foodName,
+          calories: calories,
+          serving_size_g: servingSize,
+          carbohydrates_total_g: carbs,
+          protein_g: protein,
+          fat_saturated_g: saturatedFat,
+          fat_total_g: fatTotal,
+          sodium_mg: sodium,
+          potassium_mg: pottasium,
+          cholesterol_mg: cholestrol,
+          sugar_g: sugar,
+        },
+      ])
+    )
+    navigation.navigate('Cals')
+    dispatch(setResultPopup(true))
+  }
+
   return (
     <View style={styles.container}>
       {camView ? (
-        <Camera style={{ width: '100%', height: '99.9%' }} autoFocus type={type} ref={cameraRef} ratio='16:8'>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.snapBtn} onPress={() => takeSnap()}>
-              <Text style={styles.nuDataTxt}>Get Nutrion Data</Text>
-            </TouchableOpacity>
-          </View>
+        <Camera
+          style={{ width: '100%', height: '100%', top: '0%' }}
+          autoFocus
+          type={type}
+          ref={cameraRef}
+          ratio='16:8'>
+          <TouchableOpacity style={styles.infoContainer} onPress={takeSnap}>
+            <GradiantRoundBox title={'Tap for nutritional info'} />
+          </TouchableOpacity>
           {pic && (
-            <TouchableOpacity
-              style={styles.nuInfosBtn}
-              onPress={() => {
-                dispatch(
-                  setNutritionResult([
-                    {
-                      name: foodName,
-                      calories: calories,
-                      serving_size_g: servingSize,
-                      carbohydrates_total_g: carbs,
-                      protein_g: protein,
-                      fat_saturated_g: saturatedFat,
-                      fat_total_g: fatTotal,
-                      sodium_mg: sodium,
-                      potassium_mg: pottasium,
-                      cholesterol_mg: cholestrol,
-                      sugar_g: sugar,
-                    },
-                  ])
-                )
-                navigation.navigate('Cals')
-              }}>
+            <TouchableOpacity style={styles.nuInfosBtn} onPress={showCalInfo}>
               <Text style={styles.preTxt}>{predictions}</Text>
               {calories !== '' ? (
-                <Text style={styles.calTxt}>
-                  {calories} cals per {servingSize} gm
-                </Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'flex-start' }}>
+                  <View style={{ marginHorizontal: 5 }}>
+                    <CalsSVG />
+                  </View>
+                  <Text style={styles.calTxt}>
+                    {calories} Calories per {servingSize} gm
+                  </Text>
+                </View>
               ) : (
                 <Text style={styles.calTxt}>Getting Info....</Text>
               )}
@@ -171,48 +201,37 @@ export default function FoodScan() {
         </Camera>
       ) : (
         <View style={{ margin: 55, alignItems: 'flex-start' }}>
-          {/* <Text style={[styles.nuDataTxt, { fontSize: 24, width: 290 }]}>All the Nutrients</Text> */}
           <Text style={[styles.nuDataTxt, { fontSize: 32, margin: 14, textTransform: 'capitalize' }]}>
             {predictions}
           </Text>
           <View style={styles.nuTextParent}>
-            {/* <FontAwesomeIcon icon={icons.faAnglesRight} size={iconSize} style={{ margin: 10 }} /> */}
             <Text style={styles.nutrientDataTxt}>Serving Size: {servingSize} g</Text>
           </View>
           <View style={styles.nuTextParent}>
-            {/* <FontAwesomeIcon icon={icons.faAnglesRight} size={iconSize} style={{ margin: 10 }} /> */}
             <Text style={styles.nutrientDataTxt}>Calories: {calories} cals</Text>
           </View>
           <View style={styles.nuTextParent}>
-            {/* <FontAwesomeIcon icon={icons.faAnglesRight} size={iconSize} style={{ margin: 10 }} /> */}
             <Text style={styles.nutrientDataTxt}>Carbohydrates: {carbs} gm</Text>
           </View>
           <View style={styles.nuTextParent}>
-            {/* <FontAwesomeIcon icon={icons.faAnglesRight} size={iconSize} style={{ margin: 10 }} /> */}
             <Text style={styles.nutrientDataTxt}>Protein: {protein} gm</Text>
           </View>
           <View style={styles.nuTextParent}>
-            {/* <FontAwesomeIcon icon={icons.faAnglesRight} size={iconSize} style={{ margin: 10 }} /> */}
             <Text style={styles.nutrientDataTxt}>Saturated Fat: {saturatedFat} gm</Text>
           </View>
           <View style={styles.nuTextParent}>
-            {/* <FontAwesomeIcon icon={icons.faAnglesRight} size={iconSize} style={{ margin: 10 }} /> */}
             <Text style={styles.nutrientDataTxt}>Total Fat:{fatTotal} gm</Text>
           </View>
           <View style={styles.nuTextParent}>
-            {/* <FontAwesomeIcon icon={icons.faAnglesRight} size={iconSize} style={{ margin: 10 }} /> */}
             <Text style={styles.nutrientDataTxt}>Sodium: {sodium} mg</Text>
           </View>
           <View style={styles.nuTextParent}>
-            {/* <FontAwesomeIcon icon={icons.faAnglesRight} size={iconSize} style={{ margin: 10 }} /> */}
             <Text style={styles.nutrientDataTxt}>Pottasium: {pottasium} mg</Text>
           </View>
           <View style={styles.nuTextParent}>
-            {/* <FontAwesomeIcon icon={icons.faAnglesRight} size={iconSize} style={{ margin: 10 }} /> */}
             <Text style={styles.nutrientDataTxt}>Cholestrol: {cholestrol} mg</Text>
           </View>
           <View style={styles.nuTextParent}>
-            {/* <FontAwesomeIcon icon={icons.faAnglesRight} size={iconSize} style={{ margin: 10 }} /> */}
             <Text style={styles.nutrientDataTxt}>Sugar: {sugar} gm</Text>
           </View>
           <TouchableOpacity
@@ -251,10 +270,10 @@ const styles = StyleSheet.create({
   nuInfosBtn: {
     width: '100%',
     height: 100,
-    top: -200,
+    top: Dimensions.get('screen').height - 1100,
     justifyContent: 'center',
     alignSelf: 'center',
-    backgroundColor: '#eee',
+    backgroundColor: '#92A3FDAA',
   },
   preTxt: {
     color: '#111',
@@ -293,13 +312,14 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderColor: '#fff',
   },
-  buttonContainer: {
+  infoContainer: {
     flex: 1,
     flexDirection: 'row',
     margin: 20,
     display: 'flex',
     justifyContent: 'center',
-    marginTop: -20,
+    marginTop: Dimensions.get('screen').height - 200,
+    opacity: 0.8,
   },
   button: {
     flex: 0.1,

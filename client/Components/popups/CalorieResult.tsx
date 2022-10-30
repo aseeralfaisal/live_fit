@@ -23,12 +23,13 @@ import { GET_CALORIES } from '../../Queries/GET_CALORIES'
 import { BASE_URI } from '../../URI'
 import { SET_MEALS } from '../../Queries/SET_MEALS'
 import MealTypeModal from './MealTypeModal'
+import { setResultPopup } from '../../redux/states/nutritionSlice'
+import { useDispatch } from 'react-redux'
 
 interface calorieResultpropTypes {
   foodSeachVal: string
   resultPopup: boolean
   setResultPopup: any
-  resultLoader: boolean
 }
 
 interface propTypes {
@@ -37,7 +38,9 @@ interface propTypes {
   Icon: Function
 }
 
-export const CalorieResult = ({ foodSeachVal, resultPopup, setResultPopup, resultLoader }: calorieResultpropTypes) => {
+export const CalorieResult = ({ foodSeachVal }: calorieResultpropTypes) => {
+  const dispatch = useDispatch()
+  const resultPopup = useAppSelector((state) => state.nutrition.resultPopup)
   const nutritionResult = useAppSelector((state) => state.nutrition.nutritionResult)
   const [mealTypeModal, setMealTypeModal] = React.useState(false)
 
@@ -80,15 +83,15 @@ export const CalorieResult = ({ foodSeachVal, resultPopup, setResultPopup, resul
       transparent
       animationType='fade'
       visible={resultPopup}
-      onRequestClose={() => setResultPopup(false)}>
-      <View style={styles.backdrop} onPress={() => setResultPopup(false)}>
+      onRequestClose={() => dispatch(setResultPopup(false))}>
+      <TouchableOpacity style={styles.backdrop} onPress={() => dispatch(setResultPopup(false))}>
         <View style={{ marginTop: '0%' }}>
-          {foodSeachVal !== '' && nutritionResult.length === 0 && resultLoader && (
+          {foodSeachVal !== '' && nutritionResult.length === 0 && (
             <View style={styles.searchResultParent}>
               <Text style={[styles.nutrientTextTitle, { textAlign: 'center' }]}>No items found!</Text>
             </View>
           )}
-          {!resultLoader ? (
+          {nutritionResult ? (
             <View>
               <FlatList
                 data={nutritionResult}
@@ -144,15 +147,17 @@ export const CalorieResult = ({ foodSeachVal, resultPopup, setResultPopup, resul
                 keyExtractor={(_, idx) => idx.toString()}
               />
               <MainButton title='Add food item' horizontalMargin={38} onPress={openCloseMealTypeModal} />
-              {mealTypeModal && <MealTypeModal setMealTypeModal={setMealTypeModal} setResultPopup={setResultPopup} />}
+              {mealTypeModal && (
+                <MealTypeModal setMealTypeModal={setMealTypeModal} setResultPopup={setResultPopup} />
+              )}
             </View>
           ) : (
-            <View>
-              <ActivityIndicator color={'#92A3FD'} size={'large'} />
-            </View>
+          <View>
+            <ActivityIndicator color={'#92A3FD'} size={'large'} />
+          </View>
           )}
         </View>
-      </View>
+      </TouchableOpacity>
     </Modal>
   )
 }

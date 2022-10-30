@@ -15,7 +15,7 @@ import { GET_CALORIES } from '../Queries/GET_CALORIES'
 import { Picker } from '@react-native-picker/picker'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { useDispatch } from 'react-redux'
-import { nutritionSlice, setNutritionResult } from '../redux/states/nutritionSlice'
+import { nutritionSlice, setNutritionResult, setResultPopup } from '../redux/states/nutritionSlice'
 // import { BASE_URI } from '@env'
 import { CalorieResult } from '../Components/popups/CalorieResult'
 import BreakfastSVG from '../assets/icons/breakfast.svg'
@@ -39,18 +39,19 @@ export default function Calories() {
   const [foodSeachVal, setFoodSeachVal] = React.useState('')
   const [inputBorderColor, setInputBorderColor] = React.useState('#ccc')
   const [servingSize, setServingSize] = React.useState('100g')
-  const [resultPopup, setResultPopup] = useState(false)
-  const [resultLoader, setResultLoader] = useState(true)
+  // const [resultPopup, setResultPopup] = useState(false)
   const [graphDataValues, setGraphDataValues] = useState<number[]>([])
   const [graphDataLoaded, setGraphDataLoaded] = useState(false)
   const [foodStack, setFoodStack] = useState<any>([])
   const todaysDate = useAppSelector((state) => state.nutrition.todaysDate)
   const formattedDate =
     todaysDate && `${todaysDate.getFullYear()}-${todaysDate.getMonth() + 1}-${todaysDate.getDate()}`
+  const resultPopup = useAppSelector((state) => state.nutrition.resultPopup)
+  const nutritionResult = useAppSelector((state) => state.nutrition.nutritionResult)
 
   const searchMeals = async () => {
     try {
-      setResultPopup(true)
+      dispatch(setResultPopup(true))
       const res = await axios.post(BASE_URI, {
         query: GET_CALORIES,
         variables: {
@@ -58,13 +59,12 @@ export default function Calories() {
         },
       })
       dispatch(setNutritionResult(res.data.data.getFoodCalories))
-      setResultLoader(false)
+      console.log(nutritionResult)
     } catch (err) {
       console.log(err)
     }
   }
 
-  const screenWidth = Dimensions.get('window').width - 40
   const chartConfig = {
     backgroundGradientFrom: '#1E2923',
     backgroundGradientFromOpacity: 0,
@@ -349,7 +349,6 @@ export default function Calories() {
           />
         </View>
         <CalorieResult
-          resultLoader={resultLoader}
           resultPopup={resultPopup}
           setResultPopup={setResultPopup}
           foodSeachVal={foodSeachVal}
