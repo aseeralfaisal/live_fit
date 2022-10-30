@@ -78,7 +78,7 @@ export default function About() {
         colors={['#C58BF211', '#EEA4CE11']}
         style={{
           marginHorizontal: 28,
-          marginVertical: 8,
+          marginVertical: 7,
           borderRadius: 20,
           flexDirection: 'row',
           alignItems: 'center',
@@ -108,7 +108,7 @@ export default function About() {
           <BigThreeLifts infoTitle='Deadlift' value='180' />
         </View>
         {graphDataLoaded && (
-          <View style={{ marginLeft: Dimensions.get('window').width - 360, marginBottom: 0 }}>
+          <View style={{ marginLeft: Dimensions.get('window').width - 360, marginBottom: -10, marginTop: -20 }}>
             <LineChart
               bezier
               data={graphData}
@@ -117,13 +117,16 @@ export default function About() {
               chartConfig={chartConfig}
               radius={32}
             />
+            <Text style={[styles.infoTitle, { alignSelf: 'center', marginBottom: 14, marginTop: -14, color: "#aaa" }]}>
+              A week of calorie intake
+            </Text>
           </View>
         )}
         <AboutListTile title='Calorie Goal' value={200} />
         <AboutListTile title='Height' value={170} />
         <AboutListTile title='Weight' value={70} />
-        <AboutListTile title='BodyFat' value={15+"%"} />
-        <View style={{ marginTop: 10 }}>
+        <AboutListTile title='BodyFat' value={15 + '%'} />
+        <View style={{ marginTop: 7 }}>
           <MainButton
             horizontalMargin='default'
             title='Sign out'
