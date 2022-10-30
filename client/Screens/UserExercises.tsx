@@ -261,10 +261,10 @@ export default function UserExercises() {
                                     justifyContent: 'space-around',
                                     marginVertical: 20,
                                   }}>
-                                  <ListTitle title='SET' />
-                                  <ListTitle title='REPS' />
-                                  <ListTitle title='WEIGHT' />
-                                  <ListTitle title='STATUS' />
+                                  <ListTitle width="default" title='SET' />
+                                  <ListTitle width="default"title='REPS' />
+                                  <ListTitle width="default" title='WEIGHT' />
+                                  <ListTitle width="default" title='STATUS' />
                                 </View>
                               )
                             }}
