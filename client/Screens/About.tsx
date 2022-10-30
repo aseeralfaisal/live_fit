@@ -28,13 +28,11 @@ export default function About() {
       })
       .then((res) => {
         let dataArr: number[] = []
-        console.log(res.data.data)
         res.data.data.sevenDaysIntake.map((meal: { calories: number }) => {
           dataArr.push(meal.calories)
         })
         setGraphDataValues(dataArr)
         setGraphDataLoaded(true)
-        console.log(dataArr)
       })
   }, [])
   const graphData = {
@@ -109,9 +107,18 @@ export default function About() {
           <BigThreeLifts infoTitle='Bench' value='110' />
           <BigThreeLifts infoTitle='Deadlift' value='180' />
         </View>
-        {graphDataLoaded && <View style={{ marginLeft: Dimensions.get('window').width - 360, marginBottom: 0 }}>
-          <LineChart bezier data={graphData} width={screenWidth} height={200} chartConfig={chartConfig} radius={32} />
-        </View>}
+        {graphDataLoaded && (
+          <View style={{ marginLeft: Dimensions.get('window').width - 360, marginBottom: 0 }}>
+            <LineChart
+              bezier
+              data={graphData}
+              width={screenWidth}
+              height={200}
+              chartConfig={chartConfig}
+              radius={32}
+            />
+          </View>
+        )}
         <AboutListTile title='Calorie Goal' value={200} />
         <AboutListTile title='Gender' value={'Male'} />
         <AboutListTile title='Height' value={170} />
