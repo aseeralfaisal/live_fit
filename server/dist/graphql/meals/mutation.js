@@ -108,22 +108,22 @@ const meals = {
             const mealType = { breakfast: 'breakfast', lunch: 'lunch', snack: 'snack', dinner: 'dinner' };
             const date = new Date().toISOString().split('T')[0];
             const mealFound = yield Meal.findOne({ date: date.toString() });
-            let mealObj;
+            let foundMealObj;
             let sum = 0;
             if (mealFound) {
                 if (type === mealType.breakfast) {
-                    mealObj = mealFound.breakfast;
+                    foundMealObj = mealFound.breakfast;
                 }
                 else if (type === mealType.snack) {
-                    mealObj = mealFound.snack;
+                    foundMealObj = mealFound.snack;
                 }
                 else if (type === mealType.lunch) {
-                    mealObj = mealFound.lunch;
+                    foundMealObj = mealFound.lunch;
                 }
                 else {
-                    mealObj = mealFound.dinner;
+                    foundMealObj = mealFound.dinner;
                 }
-                mealObj.forEach(({ calories }) => {
+                foundMealObj.forEach(({ calories }) => {
                     sum += calories;
                 });
                 return sum.toString();
@@ -140,28 +140,34 @@ const meals = {
     removeFoodItem(_, { food, date, type }) {
         return __awaiter(this, void 0, void 0, function* () {
             const foundMeal = yield Meal.findOne({ date });
-            let foundMealType;
+            let foundMealObj;
             switch (type) {
                 case 'breakfast':
-                    foundMealType = foundMeal.breakfast;
+                    foundMealObj = foundMeal.breakfast;
                     break;
                 case 'lunch':
-                    foundMealType = foundMeal.lunch;
+                    foundMealObj = foundMeal.lunch;
                     break;
                 case 'dinner':
-                    foundMealType = foundMeal.dinner;
+                    foundMealObj = foundMeal.dinner;
                     break;
                 default:
-                    foundMealType = foundMeal.snack;
+                    foundMealObj = foundMeal.snack;
             }
-            if (foundMealType) {
-                foundMealType.forEach((foodItem) => __awaiter(this, void 0, void 0, function* () {
+            if (foundMealObj) {
+                const remove = yield foundMealObj.forEach((foodItem) => __awaiter(this, void 0, void 0, function* () {
                     if (foodItem.food === food) {
                         yield foodItem.remove();
                     }
                 }));
                 const save = yield foundMeal.save();
-                return save;
+                if (save) {
+                    const calories = yield getTotal('calories');
+                    console.log(calories);
+                    yield foundMeal.updateOne({ calories: calories });
+                    const save = yield foundMeal.save();
+                    return save;
+                }
             }
         });
     },

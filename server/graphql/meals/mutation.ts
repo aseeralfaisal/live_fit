@@ -96,19 +96,19 @@ const meals = {
     const mealType = { breakfast: 'breakfast', lunch: 'lunch', snack: 'snack', dinner: 'dinner' }
     const date = new Date().toISOString().split('T')[0]
     const mealFound = await Meal.findOne({ date: date.toString() })
-    let mealObj: any
+    let foundMealObj: any
     let sum = 0
     if (mealFound) {
       if (type === mealType.breakfast) {
-        mealObj = mealFound.breakfast
+        foundMealObj = mealFound.breakfast
       } else if (type === mealType.snack) {
-        mealObj = mealFound.snack
+        foundMealObj = mealFound.snack
       } else if (type === mealType.lunch) {
-        mealObj = mealFound.lunch
+        foundMealObj = mealFound.lunch
       } else {
-        mealObj = mealFound.dinner
+        foundMealObj = mealFound.dinner
       }
-      mealObj.forEach(({ calories }) => {
+      foundMealObj.forEach(({ calories }) => {
         sum += calories
       })
       return sum.toString()
@@ -121,28 +121,32 @@ const meals = {
   },
   async removeFoodItem(_: any, { food, date, type }) {
     const foundMeal = await Meal.findOne({ date })
-    let foundMealType
+    let foundMealObj
     switch (type) {
       case 'breakfast':
-        foundMealType = foundMeal.breakfast
+        foundMealObj = foundMeal.breakfast
         break
       case 'lunch':
-        foundMealType = foundMeal.lunch
+        foundMealObj = foundMeal.lunch
         break
       case 'dinner':
-        foundMealType = foundMeal.dinner
+        foundMealObj = foundMeal.dinner
         break
       default:
-        foundMealType = foundMeal.snack
+        foundMealObj = foundMeal.snack
     }
-    if (foundMealType) {
-      foundMealType.forEach(async (foodItem) => {
+    if (foundMealObj) {
+      const remove = await foundMealObj.forEach(async (foodItem) => {
         if (foodItem.food === food) {
           await foodItem.remove()
         }
       })
       const save = await foundMeal.save()
-      return save
+      if (save) {
+        const calories = await getTotal('calories')
+        await foundMeal.updateOne({ calories: calories })
+        return await foundMeal.save()
+      }
     }
   },
 }

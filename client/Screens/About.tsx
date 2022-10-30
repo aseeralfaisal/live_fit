@@ -120,9 +120,9 @@ export default function About() {
           </View>
         )}
         <AboutListTile title='Calorie Goal' value={200} />
-        <AboutListTile title='Gender' value={'Male'} />
         <AboutListTile title='Height' value={170} />
         <AboutListTile title='Weight' value={70} />
+        <AboutListTile title='BodyFat' value={15+"%"} />
         <View style={{ marginTop: 10 }}>
           <MainButton
             horizontalMargin='default'
