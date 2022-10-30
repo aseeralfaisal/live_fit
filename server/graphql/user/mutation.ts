@@ -7,6 +7,7 @@ interface argsType {
   name: string
   pass: string
 }
+
 const user = {
   async addUser(_: any, args: argsType) {
     const { name, pass } = args
@@ -39,6 +40,12 @@ const user = {
     } else {
       return new ApolloError("User doesn't exist")
     }
+  },
+  async changeCalorieGoal(_: any, { calorieGoal, userName }) {
+    const options = { upsert: true, new: true, setDefaultsOnInsert: true }
+    const res = await User.findOneAndUpdate({ user: userName }, { calorieGoal }, options)
+    const save = res.save()
+    return save
   },
 }
 module.exports = user

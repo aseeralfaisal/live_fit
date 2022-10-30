@@ -10,6 +10,7 @@ import axios from 'axios'
 import { BASE_URI } from '../../URI'
 import { useState } from 'react'
 import { setResultPopup } from '../../redux/states/nutritionSlice'
+import { useRoute } from '@react-navigation/native'
 
 type objectsType = {
   title: string
@@ -44,14 +45,14 @@ const MealTypeModal = ({ setMealTypeModal }: any) => {
   })
   const addMealData = async (title: string) => {
     try {
-      const formattedDate =`${todaysDate.getFullYear()}-${todaysDate.getMonth() + 1}-${todaysDate.getDate()}`
+      const formattedDate = `${todaysDate.getFullYear()}-${todaysDate.getMonth() + 1}-${todaysDate.getDate()}`
       const response = await axios.post(BASE_URI, {
         query: SET_MEALS,
         variables: {
           meal: reqNutritionResult,
           type: title.toLowerCase(),
           date: formattedDate,
-          userName
+          userName,
         },
       })
       if (response.data) {

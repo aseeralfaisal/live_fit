@@ -53,6 +53,14 @@ const user = {
             }
         });
     },
+    changeCalorieGoal(_, { calorieGoal, userName }) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const options = { upsert: true, new: true, setDefaultsOnInsert: true };
+            const res = yield User.findOneAndUpdate({ user: userName }, { calorieGoal }, options);
+            const save = res.save();
+            return save;
+        });
+    },
 };
 module.exports = user;
 //# sourceMappingURL=mutation.js.map

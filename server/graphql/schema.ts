@@ -101,6 +101,7 @@ const typeDefs = gql`
     setMeals(meal: [SpecificMealInput], date: String, type: String, userName: String): [SpecificMeal]
     removeFoodItem(food: String, date: String, type: String): MealOne
     getNutritionByDate(dateString: String, userName: String): MealOne
+    changeCalorieGoal(calorieGoal: String, userName: String): MealOne
     getCaloriesCount(type: String): String
     addUser(name: String!, pass: String!): User!
     loginUser(name: String!, pass: String!): User!

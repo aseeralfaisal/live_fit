@@ -12,6 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { BASE_URI } from '../URI'
 import { SEVEN_DAY_MEALS_QUERY } from '../Queries/SEVEN_DAY_MEALS_QUERY'
 import axios from 'axios'
+import InfoChangePopup from '../Components/popups/InfoChangePopup'
 
 export default function About() {
   let colorScheme = useColorScheme()
@@ -19,6 +20,7 @@ export default function About() {
   const dispatch = useDispatch()
   const [graphDataValues, setGraphDataValues] = React.useState<number[]>([])
   const [graphDataLoaded, setGraphDataLoaded] = React.useState(false)
+  const [CreateUpdateWorkout, setCreateWorkoutPopup] = React.useState(false)
 
   const screenWidth = Dimensions.get('window').width - 80
   React.useEffect(() => {
@@ -108,7 +110,8 @@ export default function About() {
           <BigThreeLifts infoTitle='Deadlift' value='180' />
         </View>
         {graphDataLoaded && (
-          <View style={{ marginLeft: Dimensions.get('window').width - 360, marginBottom: -10, marginTop: -20 }}>
+          <View
+            style={{ marginLeft: Dimensions.get('window').width - 360, marginBottom: -10, marginTop: -20 }}>
             <LineChart
               bezier
               data={graphData}
@@ -117,12 +120,18 @@ export default function About() {
               chartConfig={chartConfig}
               radius={32}
             />
-            <Text style={[styles.infoTitle, { alignSelf: 'center', marginBottom: 14, marginTop: -14, color: "#aaa" }]}>
+            <Text
+              style={[
+                styles.infoTitle,
+                { alignSelf: 'center', marginBottom: 14, marginTop: -14, color: '#aaa' },
+              ]}>
               A week of calorie intake
             </Text>
           </View>
         )}
-        <AboutListTile title='Calorie Goal' value={200} />
+        <TouchableOpacity onPress={() => setCreateWorkoutPopup(true)}>
+          <AboutListTile title='Calorie Goal' value={200} />
+        </TouchableOpacity>
         <AboutListTile title='Height' value={170} />
         <AboutListTile title='Weight' value={70} />
         <AboutListTile title='BodyFat' value={15 + '%'} />
@@ -135,6 +144,7 @@ export default function About() {
             }}
           />
         </View>
+        <InfoChangePopup />
       </View>
     </View>
   )

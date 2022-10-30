@@ -1,3 +1,4 @@
+import { useRoute } from '@react-navigation/native'
 import { Modal, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../../redux/hooks'
@@ -7,14 +8,24 @@ const Wrapper = ({ elements }: any) => {
   return <View style={{ top: '70%', height: '100%', backgroundColor: '#fff' }}>{elements}</View>
 }
 
-const CreateWorkoutModal = ({ CreateUpdateWorkout, setCreateWorkoutPopup }: any) => {
+const InfoChangePopup = ({ CreateUpdateWorkout, setCreateWorkoutPopup }: any) => {
   const workoutNameUserInput = useAppSelector((state) => state.workout.workoutNameUserInput)
   const dispatch = useDispatch()
+  const route = useRoute()
+  const routeName = route.name
 
   const saveFunction = () => {
     CreateUpdateWorkout()
     dispatch(setWorkoutNameUserInput(''))
     setCreateWorkoutPopup(false)
+  }
+
+  const SaveButton = ({ title, func }: { title: string; func: Function }) => {
+    return (
+      <TouchableOpacity style={styles.saveWorkoutBtn} onPress={() => func()}>
+        <Text style={styles.saveWorkoutBtnText}>{title}</Text>
+      </TouchableOpacity>
+    )
   }
 
   return (
@@ -24,19 +35,23 @@ const CreateWorkoutModal = ({ CreateUpdateWorkout, setCreateWorkoutPopup }: any)
           <Wrapper
             elements={
               <>
-                <Text style={styles.title}>Your Workout Name</Text>
+                <Text style={styles.title}>
+                  {routeName === 'About' ? 'Change Info' : 'Your Workout Name'}
+                </Text>
                 <View style={{ marginVertical: 25 }}>
                   <TextInput
-                    placeholder='Workout Name...'
-                    placeholderTextColor="#bbb"
+                    placeholder={routeName === 'About' ? 'Change info here...' : 'Workout Name...'}
+                    placeholderTextColor='#bbb'
                     value={workoutNameUserInput}
                     onChangeText={(txt) => dispatch(setWorkoutNameUserInput(txt))}
                     style={styles.workoutNameInput}
                   />
                 </View>
-                <TouchableOpacity style={styles.saveWorkoutBtn} onPress={() => saveFunction()}>
-                  <Text style={styles.saveWorkoutBtnText}>Save Workout</Text>
-                </TouchableOpacity>
+                {routeName === 'About' ? (
+                  <SaveButton title='Save Info' func={null} />
+                ) : (
+                  <SaveButton title='Save Workout' func={saveFunction} />
+                )}
               </>
             }
           />
@@ -46,7 +61,7 @@ const CreateWorkoutModal = ({ CreateUpdateWorkout, setCreateWorkoutPopup }: any)
   )
 }
 
-export default CreateWorkoutModal
+export default InfoChangePopup
 
 const styles = StyleSheet.create({
   backdrop: {

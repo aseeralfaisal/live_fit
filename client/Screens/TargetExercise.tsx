@@ -20,7 +20,7 @@ import { useDispatch } from 'react-redux'
 import { SpecificExerciseView } from '../Components/popups/SpecificExerciseView'
 import { CREATE_WORKOUT_QUERY } from '../Queries/CREATE_WORKOUT_QUERY'
 import { GET_TARGET_EXERCISE_QUERY } from '../Queries/GET_TARGET_EXERCISE_QUERY'
-import CreateWorkoutModal from '../Components/popups/CreateWorkoutModal'
+import InfoChangePopup from '../Components/popups/InfoChangePopup'
 import { useNavigation } from '@react-navigation/native'
 import { BASE_URI } from '../URI'
 // import { BASE_URI } from '@env'
@@ -117,7 +117,7 @@ export default function TargetExercise() {
         <Header CreateUpdateWorkout={CreateUpdateWorkout} setCreateWorkoutPopup={setCreateWorkoutPopup} />
         {createWorkoutPopup ? (
           <>
-            <CreateWorkoutModal
+            <InfoChangePopup
               CreateUpdateWorkout={CreateUpdateWorkout}
               createWorkoutPopup={createWorkoutPopup}
               setCreateWorkoutPopup={setCreateWorkoutPopup}
