@@ -43,8 +43,7 @@ const MealTypeModal = ({ setMealTypeModal }: any) => {
   })
   const addMealData = async (title: string) => {
     try {
-      const formattedDate =
-        todaysDate && `${todaysDate.getFullYear()}-${todaysDate.getMonth() + 1}-${todaysDate.getDate()}`
+      const formattedDate =`${todaysDate.getFullYear()}-${todaysDate.getMonth() + 1}-${todaysDate.getDate()}`
       const response = await axios.post(BASE_URI, {
         query: SET_MEALS,
         variables: {

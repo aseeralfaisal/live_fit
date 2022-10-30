@@ -57,12 +57,9 @@ const meals = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const mealType = { breakfast: 'breakfast', lunch: 'lunch', snack: 'snack', dinner: 'dinner' };
-                const todaysDateString = new Date().toISOString().split('T')[0];
                 const setCalories = () => __awaiter(this, void 0, void 0, function* () {
                     const calories = yield getTotal('calories');
-                    const filter = { date: todaysDateString };
-                    const update = { calories: calories };
-                    return yield Meal.findOneAndUpdate(filter, update);
+                    return yield Meal.findOneAndUpdate({ date }, { calories });
                 });
                 const mealFound = yield Meal.findOne({ date });
                 let mealFoundType;
@@ -92,7 +89,7 @@ const meals = {
                     lunch: setMealHelper(mealType.lunch),
                     snack: setMealHelper(mealType.snack),
                     dinner: setMealHelper(mealType.dinner),
-                    date: todaysDateString,
+                    date,
                 });
                 yield Meals.save();
                 yield setCalories();
@@ -163,10 +160,8 @@ const meals = {
                 const save = yield foundMeal.save();
                 if (save) {
                     const calories = yield getTotal('calories');
-                    console.log(calories);
                     yield foundMeal.updateOne({ calories: calories });
-                    const save = yield foundMeal.save();
-                    return save;
+                    return yield foundMeal.save();
                 }
             }
         });

@@ -19,7 +19,6 @@ export default function Header({ CreateUpdateWorkout, setCreateWorkoutPopup, tim
 
   const dateDecrement = () => dispatch(setTodaysDate(subDays(todaysDate, 1)))
   const dateIncrement = () => dispatch(setTodaysDate(addDays(todaysDate, 1)))
-
   if (routeName === 'TargetExercise') {
     return (
       <>

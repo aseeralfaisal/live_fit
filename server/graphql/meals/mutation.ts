@@ -51,12 +51,9 @@ const meals = {
   async setMeals(_: any, { meal, date, type }: { meal: object[]; date: String; type: string }) {
     try {
       const mealType = { breakfast: 'breakfast', lunch: 'lunch', snack: 'snack', dinner: 'dinner' }
-      const todaysDateString = new Date().toISOString().split('T')[0]
       const setCalories = async () => {
         const calories = await getTotal('calories')
-        const filter = { date: todaysDateString }
-        const update = { calories: calories }
-        return await Meal.findOneAndUpdate(filter, update)
+        return await Meal.findOneAndUpdate({date}, {calories})
       }
       const mealFound = await Meal.findOne({ date })
       let mealFoundType: object[]
@@ -83,7 +80,7 @@ const meals = {
         lunch: setMealHelper(mealType.lunch),
         snack: setMealHelper(mealType.snack),
         dinner: setMealHelper(mealType.dinner),
-        date: todaysDateString,
+        date,
       })
       await Meals.save()
       await setCalories()

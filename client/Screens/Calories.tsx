@@ -57,7 +57,6 @@ export default function Calories() {
         },
       })
       dispatch(setNutritionResult(res.data.data.getFoodCalories))
-      console.log(nutritionResult)
     } catch (err) {
       console.log(err)
     }
