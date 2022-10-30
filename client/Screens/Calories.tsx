@@ -45,6 +45,7 @@ export default function Calories() {
     todaysDate && `${todaysDate.getFullYear()}-${todaysDate.getMonth() + 1}-${todaysDate.getDate()}`
   const resultPopup = useAppSelector((state) => state.nutrition.resultPopup)
   const nutritionResult = useAppSelector((state) => state.nutrition.nutritionResult)
+  const userName = useAppSelector((state) => state.user.userVal)
   const [refreshCaloriePage, setRefreshCaloriePage] = useState(false)
 
   const searchMeals = async () => {
@@ -86,15 +87,20 @@ export default function Calories() {
 
   useEffect(() => {
     let ignore = false
+    console.log(userName, formattedDate)
     const getMacroList = () => {
       axios
         .post(BASE_URI, {
           query: GET_NUTRION_BY_DATE,
           variables: {
+            userName: userName,
             dateString: formattedDate,
           },
         })
-        .then((res) => setFoodStack(res.data.data.getNutritionByDate))
+        .then((res) => {
+          console.log(res.data)
+          setFoodStack(res.data.data.getNutritionByDate)
+        })
         .catch((err) => console.warn(err))
     }
     getMacroList()

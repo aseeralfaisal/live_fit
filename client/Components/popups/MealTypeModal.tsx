@@ -22,6 +22,7 @@ const Wrapper = ({ elements }: any) => {
 const MealTypeModal = ({ setMealTypeModal }: any) => {
   const dispatch = useDispatch()
   const nutritionResult = useAppSelector((state) => state.nutrition.nutritionResult)
+  const userName = useAppSelector((state) => state.user.userVal)
   const todaysDate = useAppSelector((state) => state.nutrition.todaysDate)
   const [mealType, setMealType] = useState('')
 
@@ -50,6 +51,7 @@ const MealTypeModal = ({ setMealTypeModal }: any) => {
           meal: reqNutritionResult,
           type: title.toLowerCase(),
           date: formattedDate,
+          userName
         },
       })
       if (response.data) {

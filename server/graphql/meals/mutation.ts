@@ -48,14 +48,17 @@ const meals = {
       console.log(err)
     }
   },
-  async setMeals(_: any, { meal, date, type }: { meal: object[]; date: String; type: string }) {
+  async setMeals(
+    _: any,
+    { meal, date, type, userName }: { meal: object[]; date: String; type: string; userName: string }
+  ) {
     try {
       const mealType = { breakfast: 'breakfast', lunch: 'lunch', snack: 'snack', dinner: 'dinner' }
       const setCalories = async () => {
         const calories = await getTotal('calories')
-        return await Meal.findOneAndUpdate({date}, {calories})
+        return await Meal.findOneAndUpdate({ date }, { calories })
       }
-      const mealFound = await Meal.findOne({ date })
+      const mealFound = await Meal.findOne({ date, userName })
       let mealFoundType: object[]
       if (mealFound) {
         meal.forEach((item: object[]) => {
@@ -81,6 +84,7 @@ const meals = {
         snack: setMealHelper(mealType.snack),
         dinner: setMealHelper(mealType.dinner),
         date,
+        userName,
       })
       await Meals.save()
       await setCalories()
@@ -111,9 +115,11 @@ const meals = {
       return sum.toString()
     }
   },
-  async getNutritionByDate(_: any, { dateString }) {
+  async getNutritionByDate(_: any, { dateString, userName }) {
     const date = new Date(dateString).toISOString().split('T')[0]
-    const response = await Meal.findOne({ date })
+    console.log(dateString, userName)
+    const response = await Meal.findOne({ date: date, userName: userName })
+    console.log(response)
     return response
   },
   async removeFoodItem(_: any, { food, date, type }) {

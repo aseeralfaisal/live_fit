@@ -12,6 +12,7 @@ const SpecificMeal = new Schema({
 const Meal = new Schema({
     date: String,
     calories: Number,
+    userName: String,
     breakfast: [SpecificMeal],
     lunch: [SpecificMeal],
     snack: [SpecificMeal],

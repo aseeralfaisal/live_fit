@@ -1,5 +1,5 @@
-export const GET_NUTRION_BY_DATE = `mutation GetNutritionByDate($dateString: String) {
-    getNutritionByDate(dateString: $dateString) {
+export const GET_NUTRION_BY_DATE = `mutation GetNutritionByDate($dateString: String, $userName: String) {
+    getNutritionByDate(dateString: $dateString, userName: $userName) {
       date
       breakfast {
         food

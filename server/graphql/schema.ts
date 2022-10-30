@@ -12,10 +12,17 @@ const typeDefs = gql`
   type sevenDaysIntake {
     date: String
     calories: Float
-  } 
+  }
   type User {
     user: String!
     pass: String!
+    calorieGoal: Float
+    squat: Float
+    bench: Float
+    deadlift: Float
+    height: Float
+    weight: Float
+    bodyFat: Float
   }
   type setRepsWeight {
     set: Int
@@ -84,15 +91,16 @@ const typeDefs = gql`
   type MealOne {
     date: String
     breakfast: [SpecificMeal]
+    userName: String
     lunch: [SpecificMeal]
     snack: [SpecificMeal]
     dinner: [SpecificMeal]
     calories: Float
   }
   type Mutation {
-    setMeals(meal: [SpecificMealInput], date: String, type: String): [SpecificMeal]
+    setMeals(meal: [SpecificMealInput], date: String, type: String, userName: String): [SpecificMeal]
     removeFoodItem(food: String, date: String, type: String): MealOne
-    getNutritionByDate(dateString: String): MealOne
+    getNutritionByDate(dateString: String, userName: String): MealOne
     getCaloriesCount(type: String): String
     addUser(name: String!, pass: String!): User!
     loginUser(name: String!, pass: String!): User!
