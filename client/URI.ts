@@ -1,1 +1,1 @@
-export const BASE_URI = "http://192.168.100.3:4000/graphql"
+export const BASE_URI = "http://192.168.100.5:4000/graphql"

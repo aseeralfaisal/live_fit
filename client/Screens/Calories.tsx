@@ -39,8 +39,6 @@ export default function Calories() {
   const [foodSeachVal, setFoodSeachVal] = React.useState('')
   const [inputBorderColor, setInputBorderColor] = React.useState('#ccc')
   const [servingSize, setServingSize] = React.useState('100g')
-  const [graphDataValues, setGraphDataValues] = useState<number[]>([])
-  const [graphDataLoaded, setGraphDataLoaded] = useState(false)
   const [foodStack, setFoodStack] = useState<any>([])
   const todaysDate = useAppSelector((state) => state.nutrition.todaysDate)
   const formattedDate =
@@ -88,32 +86,6 @@ export default function Calories() {
   ]
 
   useEffect(() => {
-    axios
-      .post(BASE_URI, {
-        query: SEVEN_DAY_MEALS_QUERY,
-      })
-      .then((res) => {
-        let dataArr: number[] = []
-        res.data.data.sevenDaysIntake.map((meal: { calories: number }) => {
-          dataArr.push(meal.calories)
-        })
-        setGraphDataValues(dataArr)
-        setGraphDataLoaded(true)
-      })
-  }, [])
-  const graphData = {
-    // labels: ['SAT', 'SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI'],
-    datasets: [
-      {
-        data: graphDataValues,
-        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
-        strokeWidth: 2, // optional
-      },
-    ],
-    // legend: ['Over eaten'],
-  }
-
-  useEffect(() => {
     let ignore = false
     const getMacroList = () => {
       axios
@@ -130,7 +102,7 @@ export default function Calories() {
     return () => {
       ignore = true
     }
-  }, [todaysDate, refreshCaloriePage])
+  }, [todaysDate, resultPopup, refreshCaloriePage])
 
   const removeFoodItem = async (food: string, type: string) => {
     await axios.post(BASE_URI, {

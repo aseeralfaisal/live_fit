@@ -10,7 +10,7 @@ const typeDefs = gql `
   }
   type sevenDaysIntake {
     date: String
-    calories: Int
+    calories: Float
   } 
   type User {
     user: String!

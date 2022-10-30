@@ -88,20 +88,10 @@ export const UserWorkouts = () => {
                   }}>
                   <View
                     style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                    {/* <View
-                      style={{
-                        marginLeft: 10,
-                        height: 60,
-                        width: 60,
-                        borderRadius: 100,
-                        overflow: 'hidden',
-                        alignItems: 'center',
-                      }}> */}
                     <Image
                       source={require('../../assets/icons/exer_dark.png')}
                       style={styles.userWorkoutIcon}
                     />
-                    {/* </View> */}
                     <Text
                       style={[styles.tileTitle, { textAlign: 'left', color: '#777', marginHorizontal: 10 }]}>
                       {workoutName.replace('_', ' ').toString()}
