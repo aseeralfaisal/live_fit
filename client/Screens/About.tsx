@@ -13,16 +13,31 @@ import { BASE_URI } from '../URI'
 import { SEVEN_DAY_MEALS_QUERY } from '../Queries/SEVEN_DAY_MEALS_QUERY'
 import axios from 'axios'
 import InfoChangePopup from '../Components/popups/InfoChangePopup'
+import { GET_USER_INFO } from '../Queries/GET_USER_INFO'
+import { useAppSelector } from '../redux/hooks'
+import { changePopupTitle } from '../redux/states/userSlice'
 
+interface userInfoTypes {
+  calorieGoal: number
+  height: number
+  weight: number
+  bodyFat: number
+  squat: number
+  bench: number
+  deadlift: number
+}
 export default function About() {
   let colorScheme = useColorScheme()
   const navigation = useNavigation()
   const dispatch = useDispatch()
+  const userName = useAppSelector((state) => state.user.userVal)
   const [graphDataValues, setGraphDataValues] = React.useState<number[]>([])
   const [graphDataLoaded, setGraphDataLoaded] = React.useState(false)
-  const [CreateUpdateWorkout, setCreateWorkoutPopup] = React.useState(false)
-
+  const [popup, setPopup] = React.useState(false)
+  const [infoType, setInfoType] = React.useState('')
+  const [userInfo, setUserInfo] = React.useState<userInfoTypes | null>(null)
   const screenWidth = Dimensions.get('window').width - 80
+
   React.useEffect(() => {
     axios
       .post(BASE_URI, {
@@ -61,11 +76,17 @@ export default function About() {
 
   interface propTypes {
     infoTitle: string
-    value: string
+    value: number | undefined
+    type: string
   }
-  const BigThreeLifts = ({ infoTitle, value }: propTypes) => {
+  const BigThreeLifts = ({ infoTitle, value, type }: propTypes) => {
     return (
-      <TouchableOpacity activeOpacity={0.6}>
+      <TouchableOpacity
+        activeOpacity={0.6}
+        onPress={() => {
+          dispatch(changePopupTitle(type))
+          pressEvent(type)
+        }}>
         <LinearGradient colors={['#eeeeee', '#eeefff']} style={styles.box}>
           <Text style={styles.infoValue}>{value} kg</Text>
           <Text style={styles.infoTitle}>{infoTitle}</Text>
@@ -79,22 +100,49 @@ export default function About() {
       <LinearGradient
         colors={['#C58BF211', '#EEA4CE11']}
         style={{
-          marginHorizontal: 28,
           marginVertical: 7,
           borderRadius: 20,
           flexDirection: 'row',
           alignItems: 'center',
+          justifyContent: 'center',
           height: 50,
           borderColor: '#C58BF233',
           borderWidth: 1,
         }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: '85%',
+          }}>
           <Text style={styles.titleStyle}>{title}</Text>
           <Text style={styles.valueStyle}>{value}</Text>
         </View>
       </LinearGradient>
     )
   }
+
+  const pressEvent = (type: string) => {
+    setInfoType(type)
+    setPopup(true)
+  }
+  const getUserInfos = async () => {
+    const res = await axios.post(BASE_URI, {
+      query: GET_USER_INFO,
+      variables: {
+        user: userName,
+      },
+    })
+    setUserInfo(res.data.data.getUserInfo)
+  }
+  React.useEffect(() => {
+    let ignore = false
+    getUserInfos()
+    return () => {
+      ignore = true
+    }
+  }, [])
 
   return (
     <View
@@ -105,9 +153,9 @@ export default function About() {
       <Header />
       <View style={{ flex: 1 }}>
         <View style={styles.bodyInfoParent}>
-          <BigThreeLifts infoTitle='Squat' value='165' />
-          <BigThreeLifts infoTitle='Bench' value='110' />
-          <BigThreeLifts infoTitle='Deadlift' value='180' />
+          <BigThreeLifts infoTitle='Squat' value={userInfo?.squat} type='squat' />
+          <BigThreeLifts infoTitle='Bench' value={userInfo?.bench} type='bench' />
+          <BigThreeLifts infoTitle='Deadlift' value={userInfo?.deadlift} type='deadlift' />
         </View>
         {graphDataLoaded && (
           <View
@@ -129,12 +177,20 @@ export default function About() {
             </Text>
           </View>
         )}
-        <TouchableOpacity onPress={() => setCreateWorkoutPopup(true)}>
-          <AboutListTile title='Calorie Goal' value={200} />
-        </TouchableOpacity>
-        <AboutListTile title='Height' value={170} />
-        <AboutListTile title='Weight' value={70} />
-        <AboutListTile title='BodyFat' value={15 + '%'} />
+        <View style={{ alignItems: 'center' }}>
+          <TouchableOpacity onPress={() => pressEvent('calorieGoal')}>
+            <AboutListTile title='Calorie Goal' value={userInfo ? userInfo.calorieGoal + ' cal' : ''} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => pressEvent('height')}>
+            <AboutListTile title='Height' value={userInfo?.height ? userInfo?.height + ' cm' : ''} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => pressEvent('weight')}>
+            <AboutListTile title='Weight' value={userInfo?.weight ? userInfo.weight + ' kg' : ''} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => pressEvent('bodyFat')}>
+            <AboutListTile title='BodyFat' value={userInfo?.bodyFat ? userInfo.bodyFat + ' %' : ''} />
+          </TouchableOpacity>
+        </View>
         <View style={{ marginTop: 7 }}>
           <MainButton
             horizontalMargin='default'
@@ -144,7 +200,7 @@ export default function About() {
             }}
           />
         </View>
-        <InfoChangePopup />
+        {popup && <InfoChangePopup popup={popup} setPopup={setPopup} type={infoType} />}
       </View>
     </View>
   )
@@ -165,16 +221,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 0,
     fontSize: 14,
-    marginLeft: 70,
   },
   titleStyle: {
     fontFamily: 'Poppins_Bold',
     textTransform: 'capitalize',
-    width: 200,
     borderRadius: 10,
     textAlign: 'left',
     color: '#777',
-    marginHorizontal: 10,
     fontSize: 14,
   },
   infoValue: { color: '#92A3FD', fontFamily: 'Poppins_Bold', fontSize: 18 },

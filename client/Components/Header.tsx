@@ -8,7 +8,7 @@ import { format, parseISO, subDays, addDays } from 'date-fns'
 import { useDispatch } from 'react-redux'
 import { setTodaysDate } from '../redux/states/nutritionSlice'
 
-export default function Header({ CreateUpdateWorkout, setCreateWorkoutPopup, timer }: any) {
+export default function Header({ CreateUpdateWorkout, setPopup, timer }: any) {
   const route = useRoute()
   const routeName = route.name
   const userVal = useAppSelector((state) => state.user.userVal)
@@ -35,7 +35,7 @@ export default function Header({ CreateUpdateWorkout, setCreateWorkoutPopup, tim
             <Text style={styles.actionTitles}>Discard</Text>
           </TouchableOpacity>
           <Text style={styles.title}>Add Exercise</Text>
-          <TouchableOpacity activeOpacity={0.2} onPress={() => setCreateWorkoutPopup(true)}>
+          <TouchableOpacity activeOpacity={0.2} onPress={() => setPopup(true)}>
             <Text style={styles.actionTitles}>Create</Text>
           </TouchableOpacity>
         </View>

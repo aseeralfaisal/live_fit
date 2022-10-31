@@ -5,6 +5,7 @@ export const userSlice = createSlice({
   initialState: {
     userVal: '',
     pass: '',
+    popupTitle: '',
   },
   reducers: {
     changeUserVal: (state, action) => {
@@ -13,7 +14,10 @@ export const userSlice = createSlice({
     changePassVal: (state, action) => {
       state.pass = action.payload
     },
+    changePopupTitle: (state, action) => {
+      state.popupTitle = action.payload
+    },
   },
 })
 
-export const { changeUserVal, changePassVal } = userSlice.actions
+export const { changeUserVal, changePassVal, changePopupTitle } = userSlice.actions

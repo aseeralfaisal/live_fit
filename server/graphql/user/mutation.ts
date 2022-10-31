@@ -80,6 +80,11 @@ const user = {
     const save = res.save()
     return save
   },
+  async getUserInfo(_: any, { user }) {
+    const response = await User.findOne({ user })
+    console.log(response)
+    return response
+  },
 }
 module.exports = user
 export {}

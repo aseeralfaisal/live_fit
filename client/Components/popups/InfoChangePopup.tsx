@@ -1,23 +1,38 @@
+import * as React from 'react'
 import { useRoute } from '@react-navigation/native'
 import { Modal, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../../redux/hooks'
 import { setWorkoutNameUserInput } from '../../redux/states/workoutSlice'
+import axios from 'axios'
+import { CHANGE_INFO } from '../../Queries/CAHNGE_INFO'
+import { changePopupTitle } from '../../redux/states/userSlice'
 
 const Wrapper = ({ elements }: any) => {
   return <View style={{ top: '70%', height: '100%', backgroundColor: '#fff' }}>{elements}</View>
 }
 
-const InfoChangePopup = ({ CreateUpdateWorkout, setCreateWorkoutPopup }: any) => {
-  const workoutNameUserInput = useAppSelector((state) => state.workout.workoutNameUserInput)
+const InfoChangePopup = ({ popup, setPopup, CreateUpdateWorkout, type }: any) => {
+  const inputValue = useAppSelector((state) => state.workout.workoutNameUserInput)
+  const userName = useAppSelector((state) => state.user.userVal)
   const dispatch = useDispatch()
+  const popupTitle = useAppSelector((state) => state.user.popupTitle)
   const route = useRoute()
   const routeName = route.name
 
   const saveFunction = () => {
     CreateUpdateWorkout()
     dispatch(setWorkoutNameUserInput(''))
-    setCreateWorkoutPopup(false)
+    setPopup(false)
+  }
+  const changeInfo = async () => {
+    await axios.post(CHANGE_INFO, {
+      type,
+      userName,
+      value: inputValue,
+    })
+    dispatch(setWorkoutNameUserInput(''))
+    setPopup(false)
   }
 
   const SaveButton = ({ title, func }: { title: string; func: Function }) => {
@@ -27,28 +42,45 @@ const InfoChangePopup = ({ CreateUpdateWorkout, setCreateWorkoutPopup }: any) =>
       </TouchableOpacity>
     )
   }
+  React.useEffect(() => {
+    let aboutTitle = ''
+    if (type === 'calorieGoal') {
+      aboutTitle = `Calorie Goal`
+    } else if (type === 'height') {
+      aboutTitle = `Height`
+    } else if (type === 'weight') {
+      aboutTitle = `Weight`
+    } else if (type === 'bodyFat') {
+      aboutTitle = `Body Fat`
+    } else if (type === 'squat') {
+      aboutTitle === `Squat PR`
+    } else if (type === 'bench') {
+      aboutTitle === `Bench PR`
+    } else {
+      aboutTitle = `Deadlift PR`
+    }
+    dispatch(changePopupTitle(aboutTitle))
+  }, [])
 
   return (
     <>
       <Modal transparent animationType='slide'>
-        <Pressable style={styles.backdrop} onPress={() => setCreateWorkoutPopup(false)}>
+        <Pressable style={styles.backdrop} onPress={() => setPopup(false)}>
           <Wrapper
             elements={
               <>
-                <Text style={styles.title}>
-                  {routeName === 'About' ? 'Change Info' : 'Your Workout Name'}
-                </Text>
+                <Text style={styles.title}>{routeName === 'About' ? popupTitle : 'Your Workout Name'}</Text>
                 <View style={{ marginVertical: 25 }}>
                   <TextInput
-                    placeholder={routeName === 'About' ? 'Change info here...' : 'Workout Name...'}
+                    placeholder={routeName === 'About' ? `Change ${popupTitle}...` : 'Workout Name...'}
                     placeholderTextColor='#bbb'
-                    value={workoutNameUserInput}
+                    value={inputValue}
                     onChangeText={(txt) => dispatch(setWorkoutNameUserInput(txt))}
                     style={styles.workoutNameInput}
                   />
                 </View>
                 {routeName === 'About' ? (
-                  <SaveButton title='Save Info' func={null} />
+                  <SaveButton title='Save Info' func={changeInfo} />
                 ) : (
                   <SaveButton title='Save Workout' func={saveFunction} />
                 )}

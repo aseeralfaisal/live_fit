@@ -15,7 +15,6 @@ const typeDefs = gql`
   }
   type User {
     user: String!
-    pass: String!
     calorieGoal: Float
     squat: Float
     bench: Float
@@ -102,6 +101,7 @@ const typeDefs = gql`
     removeFoodItem(food: String, date: String, type: String): MealOne
     getNutritionByDate(dateString: String, userName: String): MealOne
     changeInfo(type: String, userName: String, value: Float): MealOne
+    getUserInfo(user: String): User
     getCaloriesCount(type: String): String
     addUser(name: String!, pass: String!): User!
     loginUser(name: String!, pass: String!): User!

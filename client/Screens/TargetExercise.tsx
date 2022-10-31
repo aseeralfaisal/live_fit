@@ -35,7 +35,7 @@ export default function TargetExercise() {
   const window = Dimensions.get('window')
   const userVal = useAppSelector((state) => state.user.userVal)
   const specificExercises = useAppSelector((state) => state.workout.specificExercises)
-  const [createWorkoutPopup, setCreateWorkoutPopup] = React.useState(false)
+  const [popup, setPopup] = React.useState(false)
   const [listLoader, setListLoader] = React.useState(true)
 
   const navigation = useNavigation()
@@ -91,7 +91,7 @@ export default function TargetExercise() {
       if (workoutNameUserInput === '') {
         return Alert.alert('🥴 Hold on!', 'Type a workout name first')
       }
-      setCreateWorkoutPopup(true)
+      setPopup(true)
       const res = await axios.post(BASE_URI, {
         query: CREATE_WORKOUT_QUERY,
         variables: {
@@ -114,13 +114,13 @@ export default function TargetExercise() {
           flex: 1,
           backgroundColor: '#fff',
         }}>
-        <Header CreateUpdateWorkout={CreateUpdateWorkout} setCreateWorkoutPopup={setCreateWorkoutPopup} />
-        {createWorkoutPopup ? (
+        <Header CreateUpdateWorkout={CreateUpdateWorkout} setPopup={setPopup} />
+        {popup ? (
           <>
             <InfoChangePopup
               CreateUpdateWorkout={CreateUpdateWorkout}
-              createWorkoutPopup={createWorkoutPopup}
-              setCreateWorkoutPopup={setCreateWorkoutPopup}
+              popup={popup}
+              setPopup={setPopup}
             />
           </>
         ) : null}
