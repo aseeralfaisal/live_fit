@@ -97,7 +97,6 @@ const user = {
     getUserInfo(_, { user }) {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield User.findOne({ user });
-            console.log(response);
             return response;
         });
     },

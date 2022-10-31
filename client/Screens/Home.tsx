@@ -5,9 +5,16 @@ import { useNavigation, NavigationProp, useRoute } from '@react-navigation/nativ
 import { LinearGradient } from 'expo-linear-gradient'
 import { StatusBar } from 'expo-status-bar'
 import { Colors } from 'react-native/Libraries/NewAppScreen'
-import React from 'react'
+import * as React from 'react'
 import { UserWorkouts } from '../Components/Sections/UserWorkouts'
 import { BASE_URI } from '../URI'
+import { useDispatch } from 'react-redux'
+import { useAppSelector } from '../redux/hooks'
+import axios from 'axios'
+import { GET_USER_INFO } from '../Queries/GET_USER_INFO'
+import { changeBmi } from '../redux/states/bmiSLice'
+import { bmiColors } from '../Reusables/bmiColors'
+import { fillColor } from '../Reusables/fillColor'
 // import { BASE_URI } from '@env'
 
 type navigationList = {
@@ -19,8 +26,37 @@ type navigationList = {
 }
 
 export default function Home() {
+  const dispatch = useDispatch()
+  const bmi = useAppSelector((state) => state.bmi.bmi)
+  const userName = useAppSelector((state) => state.user.userVal)
   const navigation = useNavigation<NavigationProp<navigationList>>()
+  const [fillCircle, setfillCircle] = React.useState(0)
+  const userInfo = useAppSelector((state) => state.user.userInfo)
   const usingHermes = typeof HermesInternal === 'object' && HermesInternal !== null
+
+  const getUserInfos = async () => {
+    const res = await axios.post(BASE_URI, {
+      query: GET_USER_INFO,
+      variables: {
+        user: userName,
+      },
+    })
+    return res.data.data.getUserInfo
+  }
+  React.useEffect(() => {
+    let ignore = false;
+    (async () => {
+      const userData = await getUserInfos()
+      const bmiVal = (userData.weight / Math.pow(userData.height, 2)).toFixed(2)
+      const fill = (+bmiVal / 25) * 100
+      setfillCircle(fill)
+      dispatch(changeBmi(+bmiVal.toString()))
+    })()
+    return () => {
+      ignore = true
+    }
+  }, [bmi, userInfo])
+
   return (
     <View
       style={{
@@ -44,19 +80,20 @@ export default function Home() {
             <View style={{ alignItems: 'center' }}>
               <AnimatedCircularProgress
                 size={80}
-                width={14}
-                fill={40}
-                tintColor='#eeefff'
+                width={10}
+                fill={fillCircle}
+                tintColor={fillColor()}
                 backgroundColor='#3d5875'
               />
               <Text
                 style={{
                   position: 'absolute',
-                  marginTop: 25,
+                  marginTop: 27,
                   color: '#fff',
-                  fontSize: 20,
+                  fontFamily: 'Poppins_Bold',
+                  fontSize: 16,
                 }}>
-                20
+                {bmi}
               </Text>
             </View>
             <View style={{ marginHorizontal: 10 }}>

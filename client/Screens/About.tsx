@@ -15,7 +15,7 @@ import axios from 'axios'
 import InfoChangePopup from '../Components/popups/InfoChangePopup'
 import { GET_USER_INFO } from '../Queries/GET_USER_INFO'
 import { useAppSelector } from '../redux/hooks'
-import { changePopupTitle } from '../redux/states/userSlice'
+import { changePopupTitle, setUserInfo } from '../redux/states/userSlice'
 
 interface userInfoTypes {
   calorieGoal: number
@@ -31,12 +31,13 @@ export default function About() {
   const navigation = useNavigation()
   const dispatch = useDispatch()
   const userName = useAppSelector((state) => state.user.userVal)
+  const userInfo = useAppSelector((state) => state.user.userInfo)
   const [graphDataValues, setGraphDataValues] = React.useState<number[]>([])
   const [graphDataLoaded, setGraphDataLoaded] = React.useState(false)
   const [popup, setPopup] = React.useState(false)
   const [infoType, setInfoType] = React.useState('')
-  const [userInfo, setUserInfo] = React.useState<userInfoTypes | null>(null)
   const screenWidth = Dimensions.get('window').width - 80
+  const popupTitle = useAppSelector((state) => state.user.popupTitle)
 
   React.useEffect(() => {
     axios
@@ -79,14 +80,22 @@ export default function About() {
     value: number | undefined
     type: string
   }
+  const pressEvent = (type: string) => {
+    setInfoType(type)
+    let aboutTitle = ''
+    if (type === 'calorieGoal') {
+      aboutTitle = `Calorie Goal`
+    } else if(type === "bodyFat"){
+      aboutTitle = "Set Body Fat"
+    } else {
+      aboutTitle = type
+    }
+    dispatch(changePopupTitle(aboutTitle))
+    setPopup(true)
+  }
   const BigThreeLifts = ({ infoTitle, value, type }: propTypes) => {
     return (
-      <TouchableOpacity
-        activeOpacity={0.6}
-        onPress={() => {
-          dispatch(changePopupTitle(type))
-          pressEvent(type)
-        }}>
+      <TouchableOpacity activeOpacity={0.6} onPress={() => pressEvent(type)}>
         <LinearGradient colors={['#eeeeee', '#eeefff']} style={styles.box}>
           <Text style={styles.infoValue}>{value} kg</Text>
           <Text style={styles.infoTitle}>{infoTitle}</Text>
@@ -123,10 +132,6 @@ export default function About() {
     )
   }
 
-  const pressEvent = (type: string) => {
-    setInfoType(type)
-    setPopup(true)
-  }
   const getUserInfos = async () => {
     const res = await axios.post(BASE_URI, {
       query: GET_USER_INFO,
@@ -134,7 +139,7 @@ export default function About() {
         user: userName,
       },
     })
-    setUserInfo(res.data.data.getUserInfo)
+    dispatch(setUserInfo(res.data.data.getUserInfo))
   }
   React.useEffect(() => {
     let ignore = false
@@ -142,7 +147,7 @@ export default function About() {
     return () => {
       ignore = true
     }
-  }, [])
+  }, [userInfo])
 
   return (
     <View
@@ -182,7 +187,7 @@ export default function About() {
             <AboutListTile title='Calorie Goal' value={userInfo ? userInfo.calorieGoal + ' cal' : ''} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => pressEvent('height')}>
-            <AboutListTile title='Height' value={userInfo?.height ? userInfo?.height + ' cm' : ''} />
+            <AboutListTile title='Height' value={userInfo?.height ? userInfo?.height + ' m' : ''} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => pressEvent('weight')}>
             <AboutListTile title='Weight' value={userInfo?.weight ? userInfo.weight + ' kg' : ''} />
@@ -200,7 +205,7 @@ export default function About() {
             }}
           />
         </View>
-        {popup && <InfoChangePopup popup={popup} setPopup={setPopup} type={infoType} />}
+        <InfoChangePopup popup={popup} setPopup={setPopup} type={infoType} />
       </View>
     </View>
   )

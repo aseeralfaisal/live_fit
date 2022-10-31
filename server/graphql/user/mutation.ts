@@ -82,7 +82,6 @@ const user = {
   },
   async getUserInfo(_: any, { user }) {
     const response = await User.findOne({ user })
-    console.log(response)
     return response
   },
 }

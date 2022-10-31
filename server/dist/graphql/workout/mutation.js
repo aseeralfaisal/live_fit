@@ -49,7 +49,6 @@ const workout = {
                             workoutFound.exercises.push(exercise);
                         });
                         const found = yield workoutFound.save();
-                        console.log(found);
                         const result = yield Workouts.find({ userName });
                         return result;
                     }

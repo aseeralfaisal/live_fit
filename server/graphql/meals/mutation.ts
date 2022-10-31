@@ -117,9 +117,7 @@ const meals = {
   },
   async getNutritionByDate(_: any, { dateString, userName }) {
     const date = new Date(dateString).toISOString().split('T')[0]
-    console.log(dateString, userName)
     const response = await Meal.findOne({ date: date, userName: userName })
-    console.log(response)
     return response
   },
   async removeFoodItem(_: any, { food, date, type }) {

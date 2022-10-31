@@ -35,7 +35,6 @@ const workout = {
             workoutFound.exercises.push(exercise)
           })
           const found = await workoutFound.save()
-          console.log(found)
           const result = await Workouts.find({ userName })
           return result
         } else {

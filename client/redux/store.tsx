@@ -6,6 +6,7 @@ import { persistReducer, persistStore } from 'redux-persist'
 import thunk from 'redux-thunk'
 import { nutritionSlice, setNutritionResult } from './states/nutritionSlice'
 import { authenticatedSlice } from './states/authenticatedSlice'
+import { bmiSlice } from './states/bmiSLice'
 
 const persistConfig = {
   key: 'root',
@@ -17,6 +18,7 @@ const reducer = combineReducers<any>({
   workout: workoutSlice.reducer,
   nutrition: nutritionSlice.reducer,
   auth: authenticatedSlice.reducer,
+  bmi: bmiSlice.reducer
 })
 const persistedReducer = persistReducer(persistConfig, reducer)
 

@@ -87,7 +87,6 @@ export default function Calories() {
 
   useEffect(() => {
     let ignore = false
-    console.log(userName, formattedDate)
     const getMacroList = () => {
       axios
         .post(BASE_URI, {
@@ -98,7 +97,6 @@ export default function Calories() {
           },
         })
         .then((res) => {
-          console.log(res.data)
           setFoodStack(res.data.data.getNutritionByDate)
         })
         .catch((err) => console.warn(err))

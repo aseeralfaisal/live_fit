@@ -7,6 +7,7 @@ import { setWorkoutNameUserInput } from '../../redux/states/workoutSlice'
 import axios from 'axios'
 import { CHANGE_INFO } from '../../Queries/CAHNGE_INFO'
 import { changePopupTitle } from '../../redux/states/userSlice'
+import { BASE_URI } from '../../URI'
 
 const Wrapper = ({ elements }: any) => {
   return <View style={{ top: '70%', height: '100%', backgroundColor: '#fff' }}>{elements}</View>
@@ -25,14 +26,22 @@ const InfoChangePopup = ({ popup, setPopup, CreateUpdateWorkout, type }: any) =>
     dispatch(setWorkoutNameUserInput(''))
     setPopup(false)
   }
+
   const changeInfo = async () => {
-    await axios.post(CHANGE_INFO, {
-      type,
-      userName,
-      value: inputValue,
-    })
-    dispatch(setWorkoutNameUserInput(''))
-    setPopup(false)
+    try {
+      setPopup(false)
+      await axios.post(BASE_URI, {
+        query: CHANGE_INFO,
+        variables: {
+          type,
+          userName,
+          value: parseFloat(inputValue),
+        },
+      })
+      dispatch(setWorkoutNameUserInput(''))
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   const SaveButton = ({ title, func }: { title: string; func: Function }) => {
@@ -42,36 +51,22 @@ const InfoChangePopup = ({ popup, setPopup, CreateUpdateWorkout, type }: any) =>
       </TouchableOpacity>
     )
   }
-  React.useEffect(() => {
-    let aboutTitle = ''
-    if (type === 'calorieGoal') {
-      aboutTitle = `Calorie Goal`
-    } else if (type === 'height') {
-      aboutTitle = `Height`
-    } else if (type === 'weight') {
-      aboutTitle = `Weight`
-    } else if (type === 'bodyFat') {
-      aboutTitle = `Body Fat`
-    } else if (type === 'squat') {
-      aboutTitle === `Squat PR`
-    } else if (type === 'bench') {
-      aboutTitle === `Bench PR`
-    } else {
-      aboutTitle = `Deadlift PR`
-    }
-    dispatch(changePopupTitle(aboutTitle))
-  }, [])
-
   return (
     <>
-      <Modal transparent animationType='slide'>
-        <Pressable style={styles.backdrop} onPress={() => setPopup(false)}>
+      <Modal transparent animationType='slide' visible={popup}>
+        <Pressable
+          style={styles.backdrop}
+          onPress={() => {
+            dispatch(setWorkoutNameUserInput(''))
+            setPopup(false)
+          }}>
           <Wrapper
             elements={
               <>
                 <Text style={styles.title}>{routeName === 'About' ? popupTitle : 'Your Workout Name'}</Text>
                 <View style={{ marginVertical: 25 }}>
                   <TextInput
+                    keyboardType='numeric'
                     placeholder={routeName === 'About' ? `Change ${popupTitle}...` : 'Workout Name...'}
                     placeholderTextColor='#bbb'
                     value={inputValue}
@@ -122,6 +117,7 @@ const styles = StyleSheet.create({
     height: 50,
     borderBottomWidth: 1,
     borderColor: '#ccc',
+    textTransform: 'capitalize',
   },
   workoutNameInput: {
     textAlign: 'center',
