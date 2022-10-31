@@ -53,10 +53,43 @@ const user = {
             }
         });
     },
-    changeCalorieGoal(_, { calorieGoal, userName }) {
+    changeInfo(_, { type, userName, value }) {
         return __awaiter(this, void 0, void 0, function* () {
+            const infoTypes = {
+                calorieGoal: 'calorieGoal',
+                squat: 'squat',
+                bench: 'bench',
+                deadlift: 'deadlift',
+                height: 'height',
+                weight: 'weight',
+                bodyFat: 'bodyFat',
+            };
+            let filter;
+            switch (type) {
+                case infoTypes.calorieGoal:
+                    filter = { calorieGoal: value };
+                    break;
+                case infoTypes.squat:
+                    filter = { squat: value };
+                    break;
+                case infoTypes.bench:
+                    filter = { bench: value };
+                    break;
+                case infoTypes.deadlift:
+                    filter = { deadlift: value };
+                    break;
+                case infoTypes.height:
+                    filter = { height: value };
+                    break;
+                case infoTypes.weight:
+                    filter = { weight: value };
+                    break;
+                case infoTypes.bodyFat:
+                    filter = { bodyFat: value };
+                    break;
+            }
             const options = { upsert: true, new: true, setDefaultsOnInsert: true };
-            const res = yield User.findOneAndUpdate({ user: userName }, { calorieGoal }, options);
+            const res = yield User.findOneAndUpdate({ user: userName }, filter, options);
             const save = res.save();
             return save;
         });
