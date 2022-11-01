@@ -16,7 +16,12 @@ import { useAppSelector } from '../redux/hooks'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
 import { FlatList, TextInput } from 'react-native-gesture-handler'
-import { setUserExercises, setSelectedList, setExerciseId } from '../redux/states/workoutSlice'
+import {
+  setUserExercises,
+  setSelectedList,
+  setExerciseId,
+  changeSelectedList,
+} from '../redux/states/workoutSlice'
 import { ADD_SET_QUERY } from '../Queries/ADD_SET_QUERY'
 import { EXERCISE_UPDATE_QUERY } from '../Queries/EXERCISE_UPDATE_QUERY'
 import { GET_EXERCISE_QUERY } from '../Queries/GET_EXERCISE_QUERY'
@@ -54,19 +59,19 @@ export default function UserExercises() {
     }
   }
 
+  const getUserExercises = async () => {
+    const res = await axios.post(BASE_URI, {
+      query: GET_EXERCISE_QUERY,
+      variables: {
+        userName: userVal,
+        workoutName: workoutName,
+      },
+    })
+    const { getUserWorkout } = res.data.data
+    getUserWorkout.map(({ exercises }: any) => dispatch(setUserExercises(exercises)))
+  }
   React.useEffect(() => {
     let functionLoad = true
-    const getUserExercises = async () => {
-      const res = await axios.post(BASE_URI, {
-        query: GET_EXERCISE_QUERY,
-        variables: {
-          userName: userVal,
-          workoutName: workoutName,
-        },
-      })
-      const { getUserWorkout } = res.data.data
-      getUserWorkout.map(({ exercises }: any) => dispatch(setUserExercises(exercises)))
-    }
     if (functionLoad) {
       getUserExercises().then(() => {
         setListLoader(false)
@@ -99,7 +104,7 @@ export default function UserExercises() {
     setIsSetAdded(!isSetAdded)
   }
 
-  const updateSet = async (reps: string, weight: string) => {
+  const updateSet = async (reps: string, weight: string, item: object) => {
     try {
       const res = await axios.post(BASE_URI, {
         query: EXERCISE_UPDATE_QUERY,
@@ -113,10 +118,14 @@ export default function UserExercises() {
       })
       if (res.status !== 200) return Alert.alert('❌ Uhh!', 'ℹ️ Something Went Wrong')
       setIsSetAdded(!isSetAdded)
+      const filtered = selectedList.filter(({ _id }: { _id: string }) => _id !== item._id)
+      dispatch(changeSelectedList(filtered))
+      // dispatch(setSelectedList(item))
     } catch (err) {
       console.log(err)
     }
   }
+  console.log(selectedList)
   const deleteSet = async (exerSetId: string) => {
     try {
       const res = await axios.post(BASE_URI, {
@@ -137,7 +146,7 @@ export default function UserExercises() {
     item: object
     _id: string
   }
-  const selectedExerList = (item: exerListTypes) => {
+  const selectedExerciseList = (item: exerListTypes) => {
     dispatch(setSelectedList(item))
   }
   const options = {
@@ -167,10 +176,11 @@ export default function UserExercises() {
         console.log('Error', e)
       }
     } else {
-      console.log('Stop background service')
       await BackgroundJob.stop()
+      console.log('Stop background service')
     }
   }
+
   return (
     <>
       <View
@@ -261,10 +271,10 @@ export default function UserExercises() {
                                     justifyContent: 'space-around',
                                     marginVertical: 20,
                                   }}>
-                                  <ListTitle width="default" title='SET' />
-                                  <ListTitle width="default"title='REPS' />
-                                  <ListTitle width="default" title='WEIGHT' />
-                                  <ListTitle width="default" title='STATUS' />
+                                  <ListTitle width='default' title='SET' />
+                                  <ListTitle width='default' title='REPS' />
+                                  <ListTitle width='default' title='WEIGHT' />
+                                  <ListTitle width='default' title='STATUS' />
                                 </View>
                               )
                             }}
@@ -314,7 +324,7 @@ export default function UserExercises() {
                                         onEndEditing={async (ev) => {
                                           setSetItemId(item._id)
                                           setReps(ev.nativeEvent.text)
-                                          await updateSet(ev.nativeEvent.text, item.weight)
+                                          await updateSet(ev.nativeEvent.text, item.weight, item)
                                         }}
                                         placeholderTextColor='#777'
                                         style={[styles.setRepsInput, { marginLeft: 20 }]}
@@ -327,7 +337,7 @@ export default function UserExercises() {
                                         onFocus={() => setSetItemId(item._id)}
                                         onEndEditing={async (ev) => {
                                           setReps(ev.nativeEvent.text)
-                                          await updateSet(item.reps, ev.nativeEvent.text)
+                                          await updateSet(item.reps, ev.nativeEvent.text, item)
                                         }}
                                         placeholderTextColor='#777'
                                         style={styles.setRepsInput}
@@ -335,7 +345,7 @@ export default function UserExercises() {
                                     </View>
                                     <Pressable
                                       style={{ alignItems: 'center' }}
-                                      onPress={() => selectedExerList(item)}>
+                                      onPress={() => selectedExerciseList(item)}>
                                       <View style={{ width: 36, height: 25 }}>
                                         <Image
                                           source={

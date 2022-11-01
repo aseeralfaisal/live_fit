@@ -6,12 +6,12 @@ import { persistReducer, persistStore } from 'redux-persist'
 import thunk from 'redux-thunk'
 import { nutritionSlice, setNutritionResult } from './states/nutritionSlice'
 import { authenticatedSlice } from './states/authenticatedSlice'
-import { bmiSlice } from './states/bmiSLice'
+import { bmiSlice } from './states/bmiSlice'
 
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['workout', 'auth', 'user'],
+  whitelist: ['auth', 'user'],
 }
 const reducer = combineReducers<any>({
   user: userSlice.reducer,

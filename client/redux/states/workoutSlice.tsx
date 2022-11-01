@@ -43,6 +43,9 @@ export const workoutSlice = createSlice({
         state.selectedList = [...state.selectedList, payload]
       }
     },
+    changeSelectedList: (state: any, action) => {
+      state.selectedList = action.payload
+    },
   },
 })
 export const {
@@ -54,4 +57,5 @@ export const {
   setWorkoutNameUserInput,
   setSelectedList,
   setExerciseId,
+  changeSelectedList
 } = workoutSlice.actions

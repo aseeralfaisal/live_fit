@@ -24,7 +24,7 @@ import { CHANGE_INFO } from '../Queries/CAHNGE_INFO'
 import { GET_USER_INFO } from '../Queries/GET_USER_INFO'
 import { useAppSelector } from '../redux/hooks'
 import { useDispatch } from 'react-redux'
-import { changeBmi } from '../redux/states/bmiSLice'
+import { changeBmi } from '../redux/states/bmiSlice'
 import { fillColor } from '../Reusables/fillColor'
 
 export default function BMI() {
