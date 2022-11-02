@@ -174,18 +174,6 @@ export default function TargetExercise() {
                               alignItems: 'center',
                             }}>
                             <View>
-                              {/* {selected(item) && (
-                              <View
-                                style={{
-                                  backgroundColor: '#92A3FD',
-                                  marginLeft: -20,
-                                  marginRight: 16,
-                                  width: 4,
-                                  height: '100%',
-                                  position: 'absolute',
-                                  borderRadius: 20,
-                                }}></View>
-                            )} */}
                               <View
                                 style={{
                                   flexDirection: 'row',

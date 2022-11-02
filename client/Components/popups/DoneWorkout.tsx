@@ -2,6 +2,7 @@ import { FlatList, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } 
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../../redux/hooks'
 import DoneWorkoutSVG from '../../assets/doneWorkout.svg'
+import { TextInput } from 'react-native-gesture-handler'
 
 type objectsType = {
   title: string
@@ -13,9 +14,36 @@ const Wrapper = ({ elements }: any) => {
 
 const DoneWorkout = ({ setDoneWorkoutPopup, doneWorkoutPopup }: any) => {
   const dispatch = useDispatch()
-  const nutritionResult = useAppSelector((state) => state.nutrition.nutritionResult)
-  const userName = useAppSelector((state) => state.user.userVal)
-  const todaysDate = useAppSelector((state) => state.nutrition.todaysDate)
+  const UserExercises = useAppSelector((state) => state.workout.UserExercises)
+
+  const ListTitle = ({ title, title2, width }: any) => {
+    const textStyle = {
+      width: width !== 'default' ? width : 80,
+      height: 20,
+      marginTop: 5,
+      fontSize: 14,
+      textAlign: 'center',
+      fontFamily: 'Poppins',
+      color: '#fff',
+    }
+    return (
+      <View
+        style={{
+          backgroundColor: '#92A3FD',
+          borderRadius: 5,
+          height: 30,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          paddingHorizontal: 12,
+        }}>
+        <Text style={textStyle}>{title}</Text>
+        <Text style={textStyle}>{title2}</Text>
+        {/* <TextInput placeholder={title} editable={false} placeholderTextColor='#fff' style={textStyle} />
+        <TextInput placeholder={title2} editable={false} placeholderTextColor='#fff' style={textStyle} /> */}
+      </View>
+    )
+  }
 
   return (
     <>
@@ -27,6 +55,40 @@ const DoneWorkout = ({ setDoneWorkoutPopup, doneWorkoutPopup }: any) => {
                 <Text style={styles.title}>Finished Workout</Text>
                 <View style={{ marginVertical: 25, alignItems: 'center' }}>
                   <DoneWorkoutSVG />
+                  <Text style={[styles.titleTxt, { marginVertical: 16 }]}>Good job</Text>
+                  <View>
+                    <View style={{ marginVertical: 16 }}>
+                      <ListTitle title='Exercises' title2='Sets' />
+                    </View>
+                    <FlatList
+                      data={UserExercises}
+                      renderItem={({ item }) => {
+                        return (
+                          <>
+                            {item.sets.length !== 0 && (
+                              <View
+                                style={{
+                                  flexDirection: 'row',
+                                  justifyContent: 'space-between',
+                                  marginHorizontal: 10,
+                                }}>
+                                <View>
+                                  <Text style={[styles.titleTxt, { color: '#555' }]}>
+                                    {item.name.split(' ')[0]} {item.name.split(' ')[1]}{' '}
+                                    {item.name.split(' ')[2]}
+                                  </Text>
+                                  <Text style={[styles.titleTxt, { fontSize: 12, color: '#999' }]}>
+                                    Target: {item.target}
+                                  </Text>
+                                </View>
+                                <Text style={[styles.titleTxt, { marginLeft: 140 }]}>{item.sets.length}</Text>
+                              </View>
+                            )}
+                          </>
+                        )
+                      }}
+                    />
+                  </View>
                 </View>
               </>
             }
@@ -66,6 +128,12 @@ const styles = StyleSheet.create({
     height: 50,
     borderBottomWidth: 1,
     borderColor: '#ccc',
+  },
+  titleTxt: {
+    fontFamily: 'Poppins_Bold',
+    textTransform: 'capitalize',
+    color: '#777',
+    fontSize: 14,
   },
   workoutNameInput: {
     textAlign: 'center',

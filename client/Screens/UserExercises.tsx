@@ -186,7 +186,8 @@ export default function UserExercises() {
     }
   }
 
-  console.log(UserExercises)
+  console.log(UserExercises.name, UserExercises.sets)
+
   return (
     <>
       <View
@@ -237,16 +238,16 @@ export default function UserExercises() {
                           }}>
                           <View
                             style={{
-                              width: 65,
-                              height: 65,
+                              width: 70,
+                              height: 70,
                               borderRadius: 100,
                               overflow: 'hidden',
                             }}>
                             <Image
                               source={{ uri: set.gifUrl }}
                               style={{
-                                width: 65,
-                                height: 65,
+                                width: 70,
+                                height: 70,
                                 borderWidth: 0,
                                 borderRadius: 100,
                               }}
@@ -254,7 +255,7 @@ export default function UserExercises() {
                           </View>
                           <View style={{ position: 'absolute' }}>
                             <AnimatedCircularProgress
-                              size={65}
+                              size={70}
                               width={2}
                               fill={100}
                               tintColor='#92A3FD33'
@@ -265,8 +266,12 @@ export default function UserExercises() {
                             <Text style={[styles.titleTxt, { color: '#555' }]}>
                               {set.name.split(' ')[0]} {set.name.split(' ')[1]} {set.name.split(' ')[2]}
                             </Text>
-                            <Text style={[styles.titleTxt, { fontSize: 12, color: "#999" }]}>{set.equipment}</Text>
-                            <Text style={[styles.titleTxt, { fontSize: 12, color: "#999" }]}>Target: {set.target}</Text>
+                            <Text style={[styles.titleTxt, { fontSize: 12, color: '#999' }]}>
+                              {set.equipment}
+                            </Text>
+                            <Text style={[styles.titleTxt, { fontSize: 12, color: '#999' }]}>
+                              Target: {set.target}
+                            </Text>
                           </View>
                         </View>
                       </TouchableOpacity>
