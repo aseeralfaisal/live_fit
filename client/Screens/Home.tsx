@@ -12,7 +12,7 @@ import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../redux/hooks'
 import axios from 'axios'
 import { GET_USER_INFO } from '../Queries/GET_USER_INFO'
-import { changeBmi } from '../redux/states/bmiSlice'
+import { changeBmi, setMassIndexMethod } from '../redux/states/bmiSlice'
 import { bmiColors } from '../Reusables/bmiColors'
 import { fillColor } from '../Reusables/fillColor'
 // import { BASE_URI } from '@env'
@@ -27,12 +27,13 @@ type navigationList = {
 
 export default function Home() {
   const dispatch = useDispatch()
-  const bmi = useAppSelector((state) => state.bmi.bmi)
   const userName = useAppSelector((state) => state.user.userVal)
   const navigation = useNavigation<NavigationProp<navigationList>>()
   const [fillCircle, setfillCircle] = React.useState(0)
   const userInfo = useAppSelector((state) => state.user.userInfo)
   const usingHermes = typeof HermesInternal === 'object' && HermesInternal !== null
+  const [userInfos, setUserInfos] = React.useState()
+  const massIndexMethod = useAppSelector((state) => state.bmi.massIndexMethod)
 
   const getUserInfos = async () => {
     const res = await axios.post(BASE_URI, {
@@ -43,19 +44,28 @@ export default function Home() {
     })
     return res.data.data.getUserInfo
   }
+
   React.useEffect(() => {
-    let ignore = false;
-    (async () => {
-      const userData = await getUserInfos()
-      const bmiVal = (userData.weight / Math.pow(userData.height, 2)).toFixed(2)
-      const fill = (+bmiVal / 25) * 100
-      setfillCircle(fill)
-      dispatch(changeBmi(+bmiVal.toString()))
-    })()
-    return () => {
-      ignore = true
+    const getUserInfos = async () => {
+      const res = await axios.post(BASE_URI, {
+        query: GET_USER_INFO,
+        variables: {
+          user: userName,
+        },
+      })
+      setUserInfos(res.data.data.getUserInfo)
     }
-  }, [bmi, userInfo])
+    getUserInfos()
+  }, [])
+
+  const { weight, height, bodyFat }: { weight: number; height: number; bodyFat: number } = userInfo
+  const bmiVal = weight / Math.pow(height, 2)
+  const ffmiVal = (weight * (1 - bodyFat / 100)) / Math.pow(height, 2)
+
+
+  const m = massIndexMethod === 'FFMI' ? ffmiVal : bmiVal
+  const fill = Math.floor((+m / 25) * 100)
+
 
   return (
     <View
@@ -81,7 +91,7 @@ export default function Home() {
               <AnimatedCircularProgress
                 size={80}
                 width={10}
-                fill={fillCircle}
+                fill={fill ? fill : 0}
                 tintColor={fillColor()}
                 backgroundColor='#3d5875'
               />
@@ -93,7 +103,7 @@ export default function Home() {
                   fontFamily: 'Poppins_Bold',
                   fontSize: 16,
                 }}>
-                {bmi}
+                {(massIndexMethod === 'BMI' ? bmiVal : ffmiVal).toFixed(2).toString()}
               </Text>
             </View>
             <View style={{ marginHorizontal: 10 }}>

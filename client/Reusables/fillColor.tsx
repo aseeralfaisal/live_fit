@@ -9,7 +9,7 @@ export const fillColor = () => {
     return bmiColors.overweight
   } else if (bmi < 18.5) {
     return bmiColors.underweight
-  } else {
-    return bmiColors.other
+  } else if (bmi > 35) {
+    return bmiColors.obese
   }
 }

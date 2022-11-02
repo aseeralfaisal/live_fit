@@ -125,7 +125,9 @@ export default function UserExercises() {
       console.log(err)
     }
   }
-  console.log(selectedList)
+  UserExercises.forEach(element => {
+    return console.log(element.name, element.sets)
+  });
   const deleteSet = async (exerSetId: string) => {
     try {
       const res = await axios.post(BASE_URI, {

@@ -1,15 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 export const bmiSlice = createSlice({
-  name: 'bmi',
+  name: 'BMI',
   initialState: {
-    bmi: 0,
+    massIndexMethod: 'BMI',
   },
   reducers: {
-    changeBmi: (state, action) => {
-      state.bmi = action.payload
+    setMassIndexMethod: (state, { payload }) => {
+      state.massIndexMethod = payload
     },
   },
 })
 
-export const { changeBmi } = bmiSlice.actions
+export const { setMassIndexMethod } = bmiSlice.actions

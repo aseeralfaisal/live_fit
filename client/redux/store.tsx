@@ -11,14 +11,14 @@ import { bmiSlice } from './states/bmiSlice'
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['auth', 'user'],
+  whitelist: ['bmi', 'auth', 'user'],
 }
 const reducer = combineReducers<any>({
   user: userSlice.reducer,
   workout: workoutSlice.reducer,
   nutrition: nutritionSlice.reducer,
   auth: authenticatedSlice.reducer,
-  bmi: bmiSlice.reducer
+  bmi: bmiSlice.reducer,
 })
 const persistedReducer = persistReducer(persistConfig, reducer)
 

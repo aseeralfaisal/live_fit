@@ -13,8 +13,7 @@ import {
 import Header from '../Components/Header'
 import { useColorScheme } from 'react-native-appearance'
 import { useState } from 'react'
-import { useEffect } from 'react'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import { LinearGradient } from 'expo-linear-gradient'
 import { AnimatedCircularProgress } from 'react-native-circular-progress'
 import { Btn } from '../Components/Button'
@@ -24,48 +23,66 @@ import { CHANGE_INFO } from '../Queries/CAHNGE_INFO'
 import { GET_USER_INFO } from '../Queries/GET_USER_INFO'
 import { useAppSelector } from '../redux/hooks'
 import { useDispatch } from 'react-redux'
-import { changeBmi } from '../redux/states/bmiSlice'
+import { changeBmi, setMassIndexMethod } from '../redux/states/bmiSlice'
 import { fillColor } from '../Reusables/fillColor'
+import { bmiColors } from '../Reusables/bmiColors'
+import { GradiantRoundBox } from '../Components/GradiantRoundBox'
+import MainButton from '../Components/MainButton'
 
 export default function BMI() {
   const dispatch = useDispatch()
   const userName = useAppSelector((state) => state.user.userVal)
-  let colorScheme = useColorScheme()
-  const navigation = useNavigation()
-  const [modalVisible, setModalVisible] = useState(false)
-  const bmi = useAppSelector((state) => state.bmi.bmi)
-  const [ffmi, setFfmi] = useState(0)
-  const [massIndexMethod, setMassIndexMethod] = useState('BMI')
-  const [weight, setweight] = useState('')
-  const [height, setHeight] = useState('')
-  const [bmiHealthStatus, setBmiHealthStatus] = useState('')
-  const [ffmiHealthStatus, setFfmiHealthStatus] = useState('')
-  const [fatPercentage, setFatPercentage] = useState(0)
-  const [fillCircle, setfillCircle] = useState(0)
-  const [userInfos, setUserInfos] = useState<number | null>(null)
+  let route = useRoute()
+  const massIndexMethod = useAppSelector((state) => state.bmi.massIndexMethod)
+  const [userInfo, setUserInfo] = useState<any>(0)
+  const [massIndex, setMassIndex] = useState(null)
+  const [cFill, setCFill] = useState()
 
-  const getUserInfos = async () => {
-    const res = await axios.post(BASE_URI, {
-      query: GET_USER_INFO,
-      variables: {
-        user: userName,
-      },
-    })
-    return res.data.data.getUserInfo
-  }
   React.useEffect(() => {
-    let ignore = false
-    ;(async () => {
-      const userData = await getUserInfos()
-      const bmiVal = (userData.weight / Math.pow(userData.height, 2)).toFixed(2)
-      const fill = (+bmiVal / 25) * 100
-      setfillCircle(fill)
-      dispatch(changeBmi(+bmiVal.toString()))
-    })()
-    return () => {
-      ignore = true
+    const getUserInfos = async () => {
+      const res = await axios.post(BASE_URI, {
+        query: GET_USER_INFO,
+        variables: {
+          user: userName,
+        },
+      })
+      setUserInfo(res.data.data.getUserInfo)
     }
+    getUserInfos()
   }, [])
+
+  const BMIType = ({ bgColor, title, desc }: { bgColor: string; title: string; desc: string }) => {
+    const bmiColorStyle = { width: 48, margin: 10, height: 48, borderRadius: 10 }
+    const BMIText = ({ title }: { title: string }) => {
+      return <Text style={{ fontFamily: 'Poppins', color: '#999', fontSize: 14 }}>{title}</Text>
+    }
+
+    return (
+      <View style={styles.bmiRangeStyle}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+          <View style={{ ...bmiColorStyle, backgroundColor: `${bgColor}` }}></View>
+          <View style={{ alignItems: 'flex-start' }}>
+            <Text style={{ color: '#999', fontFamily: 'Poppins_Bold', fontSize: 16 }}>{title}</Text>
+            <BMIText title={desc} />
+          </View>
+        </View>
+      </View>
+    )
+  }
+
+  const { weight, height, bodyFat }: { weight: number; height: number; bodyFat: number } = userInfo
+  const bmiVal = weight / Math.pow(height, 2)
+  const ffmiVal = (weight * (1 - bodyFat / 100)) / Math.pow(height, 2)
+
+  const changeMassIndexMethod = () => {
+    if (massIndexMethod === 'BMI') {
+      dispatch(setMassIndexMethod('FFMI'))
+    } else {
+      dispatch(setMassIndexMethod('BMI'))
+    }
+  }
+  const m = massIndexMethod === 'FFMI' ? ffmiVal : bmiVal
+  const fill = Math.floor((+m / 25) * 100)
 
   return (
     <View
@@ -86,12 +103,25 @@ export default function BMI() {
             width={20}
             fillLineCap='butt'
             lineCap='butt'
-            fill={fillCircle}
+            fill={fill ? fill : 0}
             tintColor={fillColor()} //#C58BF2
             backgroundColor='#3d5875'
           />
-          <Text style={styles.bmi}>{massIndexMethod === 'BMI' ? bmi : ffmi}</Text>
+          <Text style={styles.bmi}>
+            {(massIndexMethod === 'BMI' ? bmiVal : ffmiVal).toFixed(2).toString()}
+          </Text>
         </View>
+        <View style={{ marginBottom: 50 }}>
+          <BMIType bgColor={bmiColors.underweight} title='Underweight' desc='Greater than 18.5' />
+          <BMIType bgColor={bmiColors.healthyWeight} title='Healthy Weight' desc='Between 18.5 to 24.9' />
+          <BMIType bgColor={bmiColors.overweight} title='Over Weight' desc='Between 25 to 29.9' />
+          <BMIType bgColor={bmiColors.obese} title='Obese' desc='Greater than 30' />
+        </View>
+        <MainButton
+          title={massIndexMethod === 'BMI' ? 'Change to FFMI Mode' : 'Change to BMI Mode'}
+          width={300}
+          onPress={changeMassIndexMethod}
+        />
       </View>
     </View>
   )
@@ -102,6 +132,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     // marginTop: 170,
   },
+  bmiRangeStyle: { flexDirection: 'column', alignItems: 'flex-start' },
   chooseMI: {
     flexDirection: 'row',
     justifyContent: 'center',
