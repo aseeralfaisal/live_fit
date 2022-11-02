@@ -15,6 +15,7 @@ import { GET_USER_INFO } from '../Queries/GET_USER_INFO'
 import { changeBmi, setMassIndexMethod } from '../redux/states/bmiSlice'
 import { bmiColors } from '../Reusables/bmiColors'
 import { fillColor } from '../Reusables/fillColor'
+import { setUserInfo } from '../redux/states/userSlice'
 // import { BASE_URI } from '@env'
 
 type navigationList = {
@@ -32,7 +33,7 @@ export default function Home() {
   const [fillCircle, setfillCircle] = React.useState(0)
   const userInfo = useAppSelector((state) => state.user.userInfo)
   const usingHermes = typeof HermesInternal === 'object' && HermesInternal !== null
-  const [userInfos, setUserInfos] = React.useState()
+  const BMI = useAppSelector((state) => state.bmi.bmi)
   const massIndexMethod = useAppSelector((state) => state.bmi.massIndexMethod)
 
   const getUserInfos = async () => {
@@ -53,7 +54,7 @@ export default function Home() {
           user: userName,
         },
       })
-      setUserInfos(res.data.data.getUserInfo)
+      dispatch(setUserInfo(res.data.data.getUserInfo))
     }
     getUserInfos()
   }, [])
@@ -62,10 +63,11 @@ export default function Home() {
   const bmiVal = weight / Math.pow(height, 2)
   const ffmiVal = (weight * (1 - bodyFat / 100)) / Math.pow(height, 2)
 
-
-  const m = massIndexMethod === 'FFMI' ? ffmiVal : bmiVal
-  const fill = Math.floor((+m / 25) * 100)
-
+  let massIndex = massIndexMethod === 'FFMI' ? ffmiVal : bmiVal
+  let fill = Math.floor((+massIndex / 25) * 100)
+  React.useEffect(() => {
+    dispatch(changeBmi(massIndex))
+  }, [massIndex])
 
   return (
     <View
@@ -91,7 +93,7 @@ export default function Home() {
               <AnimatedCircularProgress
                 size={80}
                 width={10}
-                fill={fill ? fill : 0}
+                fill={fill}
                 tintColor={fillColor()}
                 backgroundColor='#3d5875'
               />
@@ -103,7 +105,7 @@ export default function Home() {
                   fontFamily: 'Poppins_Bold',
                   fontSize: 16,
                 }}>
-                {(massIndexMethod === 'BMI' ? bmiVal : ffmiVal).toFixed(2).toString()}
+                {(+BMI).toFixed(2).toString()}
               </Text>
             </View>
             <View style={{ marginHorizontal: 10 }}>

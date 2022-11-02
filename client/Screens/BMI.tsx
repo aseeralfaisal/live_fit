@@ -32,11 +32,9 @@ import MainButton from '../Components/MainButton'
 export default function BMI() {
   const dispatch = useDispatch()
   const userName = useAppSelector((state) => state.user.userVal)
-  let route = useRoute()
   const massIndexMethod = useAppSelector((state) => state.bmi.massIndexMethod)
+  const BMI = useAppSelector((state) => state.bmi.bmi)
   const [userInfo, setUserInfo] = useState<any>(0)
-  const [massIndex, setMassIndex] = useState(null)
-  const [cFill, setCFill] = useState()
 
   React.useEffect(() => {
     const getUserInfos = async () => {
@@ -81,8 +79,11 @@ export default function BMI() {
       dispatch(setMassIndexMethod('BMI'))
     }
   }
-  const m = massIndexMethod === 'FFMI' ? ffmiVal : bmiVal
-  const fill = Math.floor((+m / 25) * 100)
+  const massIndex = massIndexMethod === 'FFMI' ? ffmiVal : bmiVal
+  const fill = Math.floor((+massIndex / 25) * 100)
+  React.useEffect(() => {
+    dispatch(changeBmi(massIndex))
+  }, [massIndex])
 
   return (
     <View
@@ -103,12 +104,12 @@ export default function BMI() {
             width={20}
             fillLineCap='butt'
             lineCap='butt'
-            fill={fill ? fill : 0}
+            fill={fill}
             tintColor={fillColor()} //#C58BF2
             backgroundColor='#3d5875'
           />
           <Text style={styles.bmi}>
-            {(massIndexMethod === 'BMI' ? bmiVal : ffmiVal).toFixed(2).toString()}
+            {(BMI).toFixed(2).toString()}
           </Text>
         </View>
         <View style={{ marginBottom: 50 }}>
