@@ -68,7 +68,7 @@ export const UserWorkouts = () => {
         <FlatList
           data={workouts}
           renderItem={({ item }) => {
-            const { workoutName }: any = item
+            const { workoutName } = item
             return (
               <TouchableOpacity
                 onPress={() => {

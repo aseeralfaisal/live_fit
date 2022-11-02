@@ -32,6 +32,7 @@ import BackgroundJob from 'react-native-background-actions'
 import MainButton from '../Components/MainButton'
 import { ListTitle } from '../Components/ListTitle'
 import { BASE_URI } from '../URI'
+import DoneWorkout from '../Components/popups/DoneWorkout'
 
 export default function UserExercises() {
   const dispatch = useDispatch()
@@ -49,6 +50,7 @@ export default function UserExercises() {
   const repsInputRef = React.useRef<any>(null)
   const [timer, setTimer] = React.useState(0)
   const [listLoader, setListLoader] = React.useState(true)
+  const [doneWorkoutPopup, setDoneWorkoutPopup] = React.useState(false)
 
   const workoutTimer = async (taskData: any) => {
     const { delay } = taskData
@@ -125,9 +127,9 @@ export default function UserExercises() {
       console.log(err)
     }
   }
-  UserExercises.forEach(element => {
+  UserExercises.forEach((element) => {
     return console.log(element.name, element.sets)
-  });
+  })
   const deleteSet = async (exerSetId: string) => {
     try {
       const res = await axios.post(BASE_URI, {
@@ -179,10 +181,12 @@ export default function UserExercises() {
       }
     } else {
       await BackgroundJob.stop()
+      setDoneWorkoutPopup(true)
       console.log('Stop background service')
     }
   }
 
+  console.log(UserExercises)
   return (
     <>
       <View
@@ -200,6 +204,7 @@ export default function UserExercises() {
             borderRadius: 12,
             flex: 1,
           }}>
+          <DoneWorkout doneWorkoutPopup={doneWorkoutPopup} setDoneWorkoutPopup={setDoneWorkoutPopup} />
           {!listLoader ? (
             <FlatList
               scrollEnabled
@@ -256,9 +261,13 @@ export default function UserExercises() {
                               backgroundColor='#eee'
                             />
                           </View>
-                          <Text style={[styles.titleTxt, { marginLeft: 15, color: '#555' }]}>
-                            {set.name.split(' ')[0]} {set.name.split(' ')[1]} {set.name.split(' ')[2]}
-                          </Text>
+                          <View style={{ marginHorizontal: 15 }}>
+                            <Text style={[styles.titleTxt, { color: '#555' }]}>
+                              {set.name.split(' ')[0]} {set.name.split(' ')[1]} {set.name.split(' ')[2]}
+                            </Text>
+                            <Text style={[styles.titleTxt, { fontSize: 12, color: "#999" }]}>{set.equipment}</Text>
+                            <Text style={[styles.titleTxt, { fontSize: 12, color: "#999" }]}>Target: {set.target}</Text>
+                          </View>
                         </View>
                       </TouchableOpacity>
                       {exerciseId === set.id && (
@@ -301,12 +310,6 @@ export default function UserExercises() {
                                     }}>
                                     <TouchableOpacity
                                       style={{ alignItems: 'center' }}
-                                      // onPress={() => {
-                                      //   console.log(
-                                      //     selectedList.some((a: { _id: string }) => a._id === item._id)
-                                      //   )
-                                      //   console.log(set.sets.length)
-                                      // }}
                                       onLongPress={() => deleteSet(item._id)}>
                                       <TextInput
                                         textAlign='center'

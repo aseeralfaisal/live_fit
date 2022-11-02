@@ -117,11 +117,7 @@ export default function TargetExercise() {
         <Header CreateUpdateWorkout={CreateUpdateWorkout} setPopup={setPopup} />
         {popup ? (
           <>
-            <InfoChangePopup
-              CreateUpdateWorkout={CreateUpdateWorkout}
-              popup={popup}
-              setPopup={setPopup}
-            />
+            <InfoChangePopup CreateUpdateWorkout={CreateUpdateWorkout} popup={popup} setPopup={setPopup} />
           </>
         ) : null}
         <View style={[styles.input, { borderColor: inputBorderColor, borderWidth: 1 }]}>
@@ -215,10 +211,18 @@ export default function TargetExercise() {
                                     }}
                                   />
                                 </View>
-                                <Text style={[styles.titleTxt, { marginLeft: 15, color: '#555' }]}>
-                                  {item.name.split(' ')[0]} {item.name.split(' ')[1]}{' '}
-                                  {item.name.split(' ')[2]}
-                                </Text>
+                                <View style={{ marginHorizontal: 15 }}>
+                                  <Text style={[styles.titleTxt, { color: '#555' }]}>
+                                    {item.name.split(' ')[0]} {item.name.split(' ')[1]}{' '}
+                                    {item.name.split(' ')[2]}
+                                  </Text>
+                                  <Text style={[styles.titleTxt, { fontSize: 12, color: '#999' }]}>
+                                    {item.equipment}
+                                  </Text>
+                                  <Text style={[styles.titleTxt, { fontSize: 12, color: '#999' }]}>
+                                    Target: {item.target}
+                                  </Text>
+                                </View>
                               </View>
                             </View>
                           </TouchableOpacity>
