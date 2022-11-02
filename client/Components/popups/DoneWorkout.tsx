@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../../redux/hooks'
 import DoneWorkoutSVG from '../../assets/doneWorkout.svg'
 import { TextInput } from 'react-native-gesture-handler'
+import MainButton from '../MainButton'
 
 type objectsType = {
   title: string
@@ -17,7 +18,7 @@ const DoneWorkout = ({ setDoneWorkoutPopup, doneWorkoutPopup }: any) => {
   const UserExercises = useAppSelector((state) => state.workout.UserExercises)
 
   const ListTitle = ({ title, title2, width }: any) => {
-    const textStyle = {
+    const titleStyle: any = {
       width: width !== 'default' ? width : 80,
       height: 20,
       marginTop: 5,
@@ -37,10 +38,8 @@ const DoneWorkout = ({ setDoneWorkoutPopup, doneWorkoutPopup }: any) => {
           alignItems: 'flex-start',
           paddingHorizontal: 12,
         }}>
-        <Text style={textStyle}>{title}</Text>
-        <Text style={textStyle}>{title2}</Text>
-        {/* <TextInput placeholder={title} editable={false} placeholderTextColor='#fff' style={textStyle} />
-        <TextInput placeholder={title2} editable={false} placeholderTextColor='#fff' style={textStyle} /> */}
+        <Text style={titleStyle}>{title}</Text>
+        <Text style={titleStyle}>{title2}</Text>
       </View>
     )
   }
@@ -55,7 +54,7 @@ const DoneWorkout = ({ setDoneWorkoutPopup, doneWorkoutPopup }: any) => {
                 <Text style={styles.title}>Finished Workout</Text>
                 <View style={{ marginVertical: 25, alignItems: 'center' }}>
                   <DoneWorkoutSVG />
-                  <Text style={[styles.titleTxt, { marginVertical: 16 }]}>Good job</Text>
+                  <Text style={styles.goodJobText}>You did a good job</Text>
                   <View>
                     <View style={{ marginVertical: 16 }}>
                       <ListTitle title='Exercises' title2='Sets' />
@@ -128,6 +127,12 @@ const styles = StyleSheet.create({
     height: 50,
     borderBottomWidth: 1,
     borderColor: '#ccc',
+  },
+  goodJobText: {
+    fontFamily: 'Poppins_Bold',
+    color: '#777',
+    fontSize: 14,
+    marginVertical: 20,
   },
   titleTxt: {
     fontFamily: 'Poppins_Bold',
