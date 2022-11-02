@@ -97,7 +97,9 @@ export default function Calories() {
           },
         })
         .then((res) => {
-          setFoodStack(res.data.data.getNutritionByDate)
+          const data = res.data.data.getNutritionByDate
+          console.log(userName, formattedDate, res.data)
+          setFoodStack(data)
         })
         .catch((err) => console.warn(err))
     }

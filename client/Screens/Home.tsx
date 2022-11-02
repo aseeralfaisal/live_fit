@@ -59,9 +59,11 @@ export default function Home() {
     getUserInfos()
   }, [])
 
-  const { weight, height, bodyFat }: { weight: number; height: number; bodyFat: number } = userInfo
-  const bmiVal = weight / Math.pow(height, 2)
-  const ffmiVal = (weight * (1 - bodyFat / 100)) / Math.pow(height, 2)
+  const weight = userInfo?.weight
+  const height = userInfo?.height
+  const bodyFat = userInfo?.bodyFat
+  const bmiVal = userInfo && weight / Math.pow(height, 2)
+  const ffmiVal = userInfo && (weight * (1 - bodyFat / 100)) / Math.pow(height, 2)
 
   let massIndex = massIndexMethod === 'FFMI' ? ffmiVal : bmiVal
   let fill = Math.floor((+massIndex / 25) * 100)
@@ -97,16 +99,17 @@ export default function Home() {
                 tintColor={fillColor()}
                 backgroundColor='#3d5875'
               />
-              <Text
-                style={{
-                  position: 'absolute',
-                  marginTop: 27,
-                  color: '#fff',
-                  fontFamily: 'Poppins_Bold',
-                  fontSize: 16,
-                }}>
-                {(+BMI).toFixed(2).toString()}
-              </Text>
+              
+                <Text
+                  style={{
+                    position: 'absolute',
+                    marginTop: 27,
+                    color: '#fff',
+                    fontFamily: 'Poppins_Bold',
+                    fontSize: 16,
+                  }}>
+                  {(+BMI).toFixed(2).toString()}
+                </Text>
             </View>
             <View style={{ marginHorizontal: 10 }}>
               <Text style={[styles.topbarText, { fontWeight: 'bold' }]}>Mass Index</Text>

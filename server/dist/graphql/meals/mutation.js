@@ -131,7 +131,7 @@ const meals = {
     getNutritionByDate(_, { dateString, userName }) {
         return __awaiter(this, void 0, void 0, function* () {
             const date = new Date(dateString).toISOString().split('T')[0];
-            const response = yield Meal.findOne({ date: date, userName: userName });
+            const response = yield Meal.findOne({ dateString, userName });
             return response;
         });
     },

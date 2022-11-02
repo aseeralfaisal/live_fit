@@ -184,13 +184,13 @@ export default function About() {
         )}
         <View style={{ alignItems: 'center' }}>
           <TouchableOpacity onPress={() => pressEvent('calorieGoal')}>
-            <AboutListTile title='Calorie Goal' value={userInfo ? userInfo.calorieGoal + ' cal' : ''} />
+            <AboutListTile title='Calorie Goal' value={userInfo ? userInfo?.calorieGoal + ' cal' : ''} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => pressEvent('height')}>
             <AboutListTile title='Height' value={userInfo?.height ? userInfo?.height + ' m' : ''} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => pressEvent('weight')}>
-            <AboutListTile title='Weight' value={userInfo?.weight ? userInfo.weight + ' kg' : ''} />
+            <AboutListTile title='Weight' value={userInfo?.weight ? userInfo?.weight + ' kg' : ''} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => pressEvent('bodyFat')}>
             <AboutListTile title='BodyFat' value={userInfo?.bodyFat ? userInfo.bodyFat + ' %' : ''} />

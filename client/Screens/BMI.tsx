@@ -68,9 +68,8 @@ export default function BMI() {
     )
   }
 
-  const { weight, height, bodyFat }: { weight: number; height: number; bodyFat: number } = userInfo
-  const bmiVal = weight / Math.pow(height, 2)
-  const ffmiVal = (weight * (1 - bodyFat / 100)) / Math.pow(height, 2)
+  const bmiVal = userInfo?.weight / Math.pow(userInfo?.height, 2)
+  const ffmiVal = (userInfo?.weight * (1 - userInfo?.bodyFat / 100)) / Math.pow(userInfo?.height, 2)
 
   const changeMassIndexMethod = () => {
     if (massIndexMethod === 'BMI') {
