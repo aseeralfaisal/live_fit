@@ -104,7 +104,7 @@ export default function BMI() {
             width={20}
             fillLineCap='butt'
             lineCap='butt'
-            fill={fill}
+            fill={fill ? fill : 0}
             tintColor={fillColor()} //#C58BF2
             backgroundColor='#3d5875'
           />

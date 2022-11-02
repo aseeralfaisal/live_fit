@@ -93,7 +93,7 @@ export default function Home() {
               <AnimatedCircularProgress
                 size={80}
                 width={10}
-                fill={fill}
+                fill={fill ? fill : 0}
                 tintColor={fillColor()}
                 backgroundColor='#3d5875'
               />
