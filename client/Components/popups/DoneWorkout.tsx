@@ -15,7 +15,7 @@ const Wrapper = ({ elements }: any) => {
 
 const DoneWorkout = ({ setDoneWorkoutPopup, doneWorkoutPopup }: any) => {
   const dispatch = useDispatch()
-  const UserExercises = useAppSelector((state) => state.workout.UserExercises)
+  const selectedList = useAppSelector((state) => state.workout.selectedList)
 
   const ListTitle = ({ title, title2, width }: any) => {
     const titleStyle: any = {
@@ -43,6 +43,7 @@ const DoneWorkout = ({ setDoneWorkoutPopup, doneWorkoutPopup }: any) => {
       </View>
     )
   }
+  // console.log('SELECTED LIST', selectedList)
 
   return (
     <>
@@ -52,42 +53,57 @@ const DoneWorkout = ({ setDoneWorkoutPopup, doneWorkoutPopup }: any) => {
             elements={
               <>
                 <Text style={styles.title}>Finished Workout</Text>
-                <View style={{ marginVertical: 25, alignItems: 'center' }}>
+                <View style={{ marginVertical: 25, alignItems: 'center', flex: 1 }}>
                   <DoneWorkoutSVG />
                   <Text style={styles.goodJobText}>You did a good job</Text>
                   <View>
                     <View style={{ marginVertical: 16 }}>
                       <ListTitle title='Exercises' title2='Sets' />
                     </View>
-                    <FlatList
-                      data={UserExercises}
-                      renderItem={({ item }) => {
-                        return (
-                          <>
-                            {item.sets.length !== 0 && (
-                              <View
-                                style={{
-                                  flexDirection: 'row',
-                                  justifyContent: 'space-between',
-                                  marginHorizontal: 10,
-                                }}>
-                                <View>
-                                  <Text style={[styles.titleTxt, { color: '#555' }]}>
-                                    {item.name.split(' ')[0]} {item.name.split(' ')[1]}{' '}
-                                    {item.name.split(' ')[2]}
-                                  </Text>
-                                  <Text style={[styles.titleTxt, { fontSize: 12, color: '#999' }]}>
-                                    Target: {item.target}
+                    <View style={{ flex: 1 }}>
+                      <FlatList
+                        scrollEnabled
+                        showsVerticalScrollIndicator
+                        data={selectedList}
+                        renderItem={({ item }) => {
+                          return (
+                            <>
+                              {item?.sets?.length !== 0 && (
+                                <View
+                                  style={{
+                                    flexDirection: 'row',
+                                    justifyContent: 'space-between',
+                                    marginHorizontal: 10,
+                                    flex: 1,
+                                  }}>
+                                  <View>
+                                    <Text style={[styles.titleTxt, { color: '#555' }]}>
+                                      {item?.name.split(' ')[0]} {item?.name.split(' ')[1]}{' '}
+                                      {item?.name.split(' ')[2]}
+                                    </Text>
+                                    <Text style={[styles.titleTxt, { fontSize: 12, color: '#999' }]}>
+                                      Target: {item.target}
+                                    </Text>
+                                  </View>
+                                  <Text style={[styles.titleTxt, { marginLeft: 140 }]}>
+                                    {item?.sets.length}
                                   </Text>
                                 </View>
-                                <Text style={[styles.titleTxt, { marginLeft: 140 }]}>{item.sets.length}</Text>
-                              </View>
-                            )}
-                          </>
-                        )
-                      }}
-                    />
+                              )}
+                            </>
+                          )
+                        }}
+                      />
+                    </View>
                   </View>
+                  <MainButton
+                    title='Done Workout'
+                    width={300}
+                    onPress={() => {
+                      setDoneWorkoutPopup(false)
+                    }}
+                    horizontalMargin='default'
+                  />
                 </View>
               </>
             }

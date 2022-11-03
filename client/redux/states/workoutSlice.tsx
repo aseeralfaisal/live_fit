@@ -36,9 +36,13 @@ export const workoutSlice = createSlice({
     },
     setSelectedList: (state: any, action) => {
       const { payload } = action
-      const found = state.selectedList.some(({ _id }: { _id: string }) => _id === payload._id)
+      const found = state.selectedList.some(
+        (set: { item: { _id: string } }) => set.item._id === payload.item._id
+      )
       if (found) {
-        state.selectedList = state.selectedList.filter(({ _id }: { _id: string }) => _id !== payload._id)
+        state.selectedList = state.selectedList.filter(
+          (set: { item: { _id: string } }) => set.item._id !== payload.item._id
+        )
       } else {
         state.selectedList = [...state.selectedList, payload]
       }
@@ -57,5 +61,5 @@ export const {
   setWorkoutNameUserInput,
   setSelectedList,
   setExerciseId,
-  changeSelectedList
+  changeSelectedList,
 } = workoutSlice.actions
