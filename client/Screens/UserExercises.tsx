@@ -146,7 +146,7 @@ export default function UserExercises() {
   const selectedExerciseList = (item: object, setName: string) => {
     dispatch(setSelectedList({ setName, item }))
   }
-  const options = {
+  const bgTaskOption = {
     taskName: 'workoutTimer',
     taskTitle: 'LiveFit Timer',
     taskDesc: 'Workout time',
@@ -167,7 +167,7 @@ export default function UserExercises() {
     playing = !playing
     if (playing) {
       try {
-        await BackgroundJob.start(workoutTimer, options)
+        await BackgroundJob.start(workoutTimer, bgTaskOption)
         console.log('Successful start!')
       } catch (e) {
         console.log('Error', e)
@@ -179,7 +179,19 @@ export default function UserExercises() {
     }
   }
 
-  console.log(selectedList.find((set) => set.setName === 'archer push up'))
+  const selectedBgColor = (item: { _id: string }, index: number) => {
+    return selectedList.find((set: { item: { _id: string } }) => set.item._id === item._id)
+      ? '#90EEBB'
+      : index % 2 === 0
+      ? '#00000000'
+      : '#92A3FD22'
+  }
+
+  const checkMarkSource = (item: { _id: string }) => {
+    return selectedList.find((set: { item: { _id: string } }) => set.item._id === item._id)
+      ? require('../assets/icons/done.png')
+      : require('../assets/icons/not_done.png')
+  }
 
   return (
     <>
@@ -298,13 +310,7 @@ export default function UserExercises() {
                                         flexDirection: 'row',
                                         justifyContent: 'space-around',
                                         alignItems: 'center',
-                                        backgroundColor: selectedList.find(
-                                          ({ _id }: { _id: string }) => _id === item._id
-                                        )
-                                          ? '#90EEBB'
-                                          : index % 2 === 0
-                                          ? '#00000000'
-                                          : '#92A3FD22',
+                                        backgroundColor: selectedBgColor(item, index),
                                         marginVertical: 5,
                                         borderRadius: 8,
                                       }}>
@@ -353,11 +359,7 @@ export default function UserExercises() {
                                         onPress={() => selectedExerciseList(item, set.name)}>
                                         <View style={{ width: 36, height: 25 }}>
                                           <Image
-                                            source={
-                                              selectedList.find((set) => set.item._id === item._id)
-                                                ? require('../assets/icons/done.png')
-                                                : require('../assets/icons/not_done.png')
-                                            }
+                                            source={checkMarkSource(item)}
                                             style={{
                                               width: 22,
                                               height: 22,
