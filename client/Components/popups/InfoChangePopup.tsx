@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useRoute } from '@react-navigation/native'
-import { Modal, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Keyboard, Modal, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { useDispatch } from 'react-redux'
 import { useAppSelector } from '../../redux/hooks'
 import { setWorkoutNameUserInput } from '../../redux/states/workoutSlice'
@@ -51,6 +51,10 @@ const InfoChangePopup = ({ popup, setPopup, CreateUpdateWorkout, type }: any) =>
       </TouchableOpacity>
     )
   }
+
+  const keyboardType = () => (routeName === 'About' ? 'numeric' : 'default')
+  const placeholder = () => (routeName === 'About' ? `Change ${popupTitle}...` : 'Workout Name...')
+
   return (
     <>
       <Modal transparent animationType='slide' visible={popup}>
@@ -66,8 +70,8 @@ const InfoChangePopup = ({ popup, setPopup, CreateUpdateWorkout, type }: any) =>
                 <Text style={styles.title}>{routeName === 'About' ? popupTitle : 'Your Workout Name'}</Text>
                 <View style={{ marginVertical: 25 }}>
                   <TextInput
-                    keyboardType={routeName === 'About' ? 'numeric' : 'default'}
-                    placeholder={routeName === 'About' ? `Change ${popupTitle}...` : 'Workout Name...'}
+                    keyboardType={keyboardType()}
+                    placeholder={placeholder()}
                     placeholderTextColor='#bbb'
                     value={inputValue}
                     onChangeText={(txt) => dispatch(setWorkoutNameUserInput(txt))}
