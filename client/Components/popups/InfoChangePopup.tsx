@@ -66,7 +66,7 @@ const InfoChangePopup = ({ popup, setPopup, CreateUpdateWorkout, type }: any) =>
                 <Text style={styles.title}>{routeName === 'About' ? popupTitle : 'Your Workout Name'}</Text>
                 <View style={{ marginVertical: 25 }}>
                   <TextInput
-                    keyboardType='numeric'
+                    keyboardType={routeName === 'About' ? 'numeric' : 'default'}
                     placeholder={routeName === 'About' ? `Change ${popupTitle}...` : 'Workout Name...'}
                     placeholderTextColor='#bbb'
                     value={inputValue}

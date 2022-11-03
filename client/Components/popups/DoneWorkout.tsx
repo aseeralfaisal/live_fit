@@ -43,7 +43,6 @@ const DoneWorkout = ({ setDoneWorkoutPopup, doneWorkoutPopup }: any) => {
       </View>
     )
   }
-  // console.log('SELECTED LIST', selectedList)
 
   return (
     <>
