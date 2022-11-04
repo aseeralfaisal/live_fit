@@ -41,8 +41,7 @@ export default function Calories() {
   const [servingSize, setServingSize] = React.useState('100g')
   const [foodStack, setFoodStack] = useState<any>([])
   const todaysDate = useAppSelector((state) => state.nutrition.todaysDate)
-  const formattedDate =
-    todaysDate && `${todaysDate.getFullYear()}-${todaysDate.getMonth() + 1}-${todaysDate.getDate()}`
+  const formattedDate = `${todaysDate.getFullYear()}-${todaysDate.getMonth() + 1}-${todaysDate.getDate()}`
   const resultPopup = useAppSelector((state) => state.nutrition.resultPopup)
   const calorieGoal = useAppSelector((state) => state.user.userInfo.calorieGoal)
   const userName = useAppSelector((state) => state.user.userVal)
@@ -107,6 +106,7 @@ export default function Calories() {
       ignore = true
     }
   }, [todaysDate, resultPopup, refreshCaloriePage])
+  console.log(formattedDate)
 
   const removeFoodItem = async (food: string, type: string) => {
     await axios.post(BASE_URI, {
