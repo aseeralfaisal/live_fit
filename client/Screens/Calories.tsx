@@ -106,7 +106,6 @@ export default function Calories() {
       ignore = true
     }
   }, [todaysDate, resultPopup, refreshCaloriePage])
-  console.log(formattedDate)
 
   const removeFoodItem = async (food: string, type: string) => {
     await axios.post(BASE_URI, {
@@ -129,6 +128,15 @@ export default function Calories() {
   foodStack && foodStack?.dinner?.forEach((el: { calories: number }) => (dinnerSum += el.calories))
   const totalConsumed = breakFastSum + lunchSum + snackSum + dinnerSum
 
+  const foodSearchRef = React.useRef<any>()
+  const routeParams = route?.params
+  const paramSearch = routeParams?.search
+  React.useEffect(() => {
+    if (paramSearch) {
+      foodSearchRef && foodSearchRef.current.focus()
+    }
+  }, [paramSearch])
+
   return (
     <>
       <View
@@ -139,6 +147,7 @@ export default function Calories() {
         <View style={{ alignItems: 'center', marginTop: 30 }}>
           <View style={[styles.input, { borderColor: inputBorderColor, flexDirection: 'row' }]}>
             <TextInput
+              ref={foodSearchRef}
               onFocus={() => setInputBorderColor('#92A3FD')}
               onBlur={() => setInputBorderColor('#ccc')}
               value={foodSeachVal}

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { NavigationContainer } from '@react-navigation/native'
+import { NavigationContainer, useNavigation } from '@react-navigation/native'
 import Home from './Screens/Home'
 import { Image, View, TouchableOpacity } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -12,6 +12,7 @@ import Calories from './Screens/Calories'
 
 export default function TabScreen() {
   const Tab = createBottomTabNavigator<any>()
+  const nav = useNavigation()
 
   React.useEffect(() => {
     NavigationBar.setBackgroundColorAsync('white')
@@ -89,7 +90,13 @@ export default function TabScreen() {
           tabBarShowLabel: false,
           headerShown: false,
           tabBarIcon: ({ color }) => (
-            <TouchableOpacity activeOpacity={0.8}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={() => {
+                nav.navigate('Cals', {
+                  search: true,
+                })
+              }}>
               <Image
                 source={require('./assets/icons/search.png')}
                 style={{
