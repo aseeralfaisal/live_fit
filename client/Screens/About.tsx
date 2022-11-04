@@ -85,8 +85,8 @@ export default function About() {
     let aboutTitle = ''
     if (type === 'calorieGoal') {
       aboutTitle = `Calorie Goal`
-    } else if(type === "bodyFat"){
-      aboutTitle = "Set Body Fat"
+    } else if (type === 'bodyFat') {
+      aboutTitle = 'Set Body Fat'
     } else {
       aboutTitle = type
     }

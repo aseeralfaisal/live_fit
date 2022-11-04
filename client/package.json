@@ -65,6 +65,7 @@
     "react-native-paper": "^4.12.1",
     "react-native-progress": "^5.0.0",
     "react-native-safe-area-context": "3.3.2",
+    "react-native-skeleton-placeholder": "^5.2.3",
     "react-native-svg": "12.1.1",
     "react-native-web": "0.17.1",
     "react-redux": "^8.0.2",

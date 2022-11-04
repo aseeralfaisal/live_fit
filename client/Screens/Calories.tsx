@@ -44,7 +44,7 @@ export default function Calories() {
   const formattedDate =
     todaysDate && `${todaysDate.getFullYear()}-${todaysDate.getMonth() + 1}-${todaysDate.getDate()}`
   const resultPopup = useAppSelector((state) => state.nutrition.resultPopup)
-  const nutritionResult = useAppSelector((state) => state.nutrition.nutritionResult)
+  const calorieGoal = useAppSelector((state) => state.user.userInfo.calorieGoal)
   const userName = useAppSelector((state) => state.user.userVal)
   const [refreshCaloriePage, setRefreshCaloriePage] = useState(false)
 
@@ -127,7 +127,7 @@ export default function Calories() {
   foodStack && foodStack?.lunch?.forEach((el: { calories: number }) => (lunchSum += el.calories))
   foodStack && foodStack?.snack?.forEach((el: { calories: number }) => (snackSum += el.calories))
   foodStack && foodStack?.dinner?.forEach((el: { calories: number }) => (dinnerSum += el.calories))
-  const totalConsumed = (breakFastSum + lunchSum + snackSum + dinnerSum).toFixed(2)
+  const totalConsumed = breakFastSum + lunchSum + snackSum + dinnerSum
 
   return (
     <>
@@ -195,9 +195,9 @@ export default function Calories() {
                 marginTop: -88,
                 color: '#3d5875',
                 fontFamily: 'Poppins_Bold',
-                fontSize: 25,
+                fontSize: 22,
               }}>
-              {totalConsumed}
+              {(+calorieGoal - +totalConsumed).toFixed(2)}
             </Text>
           </View>
           <Text
@@ -208,7 +208,7 @@ export default function Calories() {
               fontFamily: 'Poppins',
               color: '#3d5875',
             }}>
-            Total Consumed
+            Remaining Calories
           </Text>
           <FlatList
             data={mealsData}

@@ -4,6 +4,7 @@ import { useAppSelector } from '../../redux/hooks'
 import DoneWorkoutSVG from '../../assets/doneWorkout.svg'
 import { TextInput } from 'react-native-gesture-handler'
 import MainButton from '../MainButton'
+import { useEffect, useState } from 'react'
 
 type objectsType = {
   title: string
@@ -16,8 +17,9 @@ const Wrapper = ({ elements }: any) => {
 const DoneWorkout = ({ setDoneWorkoutPopup, doneWorkoutPopup }: any) => {
   const dispatch = useDispatch()
   const selectedList = useAppSelector((state) => state.workout.selectedList)
+  const UserExercises = useAppSelector((state) => state.workout.UserExercises)
 
-  const ListTitle = ({ title, title2, width }: any) => {
+  const ListTitle = ({ title, title2, title3, width }: any) => {
     const titleStyle: any = {
       width: width !== 'default' ? width : 80,
       height: 20,
@@ -34,12 +36,14 @@ const DoneWorkout = ({ setDoneWorkoutPopup, doneWorkoutPopup }: any) => {
           borderRadius: 5,
           height: 30,
           flexDirection: 'row',
-          justifyContent: 'space-between',
+          justifyContent: 'space-around',
           alignItems: 'flex-start',
           paddingHorizontal: 12,
+          width: 300,
         }}>
         <Text style={titleStyle}>{title}</Text>
         <Text style={titleStyle}>{title2}</Text>
+        <Text style={titleStyle}>{title3}</Text>
       </View>
     )
   }
@@ -55,15 +59,24 @@ const DoneWorkout = ({ setDoneWorkoutPopup, doneWorkoutPopup }: any) => {
                 <View style={{ marginVertical: 25, alignItems: 'center', flex: 1 }}>
                   <DoneWorkoutSVG />
                   <Text style={styles.goodJobText}>You did a good job</Text>
+                  <MainButton
+                    title='Done Workout'
+                    width={300}
+                    onPress={() => {
+                      setDoneWorkoutPopup(false)
+                    }}
+                    horizontalMargin='default'
+                  />
                   <View>
                     <View style={{ marginVertical: 16 }}>
-                      <ListTitle title='Exercises' title2='Sets' />
+                      <ListTitle title='Exercises' title2='Reps' title3='W (KG)' />
                     </View>
                     <View style={{ flex: 1 }}>
                       <FlatList
                         scrollEnabled
                         showsVerticalScrollIndicator
                         data={selectedList}
+                        keyExtractor={(_, idx) => idx.toString()}
                         renderItem={({ item }) => {
                           return (
                             <>
@@ -75,18 +88,27 @@ const DoneWorkout = ({ setDoneWorkoutPopup, doneWorkoutPopup }: any) => {
                                     marginHorizontal: 10,
                                     flex: 1,
                                   }}>
-                                  <View>
-                                    <Text style={[styles.titleTxt, { color: '#555' }]}>
-                                      {item?.name.split(' ')[0]} {item?.name.split(' ')[1]}{' '}
-                                      {item?.name.split(' ')[2]}
-                                    </Text>
-                                    <Text style={[styles.titleTxt, { fontSize: 12, color: '#999' }]}>
-                                      Target: {item.target}
-                                    </Text>
-                                  </View>
-                                  <Text style={[styles.titleTxt, { marginLeft: 140 }]}>
-                                    {item?.sets.length}
+                                  <Text
+                                    ellipsizeMode='clip'
+                                    style={[styles.titleTxt, { color: '#555', width: 100 }]}>
+                                    {/* {item?.setName.split(' ')[0]}  */}
+                                    {item?.setName.split(' ')[1]} {item?.setName.split(' ')[2]}
                                   </Text>
+                                  <Text style={[styles.titleTxt, { color: '#555', width: 60 }]}>
+                                    {item.item.reps}
+                                  </Text>
+                                  <Text style={[styles.titleTxt, { color: '#555', marginRight: 30 }]}>
+                                    {item.item.weight}
+                                  </Text>
+                                  {/* <View>
+                                    <Text style={[styles.titleTxt, { color: '#555' }]}>
+                                      {item?.setName.split(' ')[0]} {item?.setName.split(' ')[1]}{' '}
+                                      {item?.setName.split(' ')[2]}
+                                    </Text>
+                                  </View> */}
+                                  {/* <Text style={[styles.titleTxt, { marginLeft: 140 }]}>
+                                    {item?.sets.length}
+                                  </Text> */}
                                 </View>
                               )}
                             </>
@@ -95,14 +117,6 @@ const DoneWorkout = ({ setDoneWorkoutPopup, doneWorkoutPopup }: any) => {
                       />
                     </View>
                   </View>
-                  <MainButton
-                    title='Done Workout'
-                    width={300}
-                    onPress={() => {
-                      setDoneWorkoutPopup(false)
-                    }}
-                    horizontalMargin='default'
-                  />
                 </View>
               </>
             }
